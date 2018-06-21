@@ -32,7 +32,7 @@ namespace SentinelConnector
         public string GetRequest(string requestType, string requestString) 
         {
 
-            return "";
+            return "Hey you tryed activate! =)";
         }
     }
 }
