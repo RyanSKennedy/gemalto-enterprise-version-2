@@ -26,6 +26,7 @@ namespace TestConsoleUtility
 
                 case "2":
                     Console.WriteLine("Let's try doing activation..." + Environment.NewLine);
+                    Console.WriteLine(emsClass.GetRequest("GET", "productkey.ws"));
                     break;
 
                 case "0":
