@@ -1,0 +1,12 @@
+**/.DS_Store
+SentinelConnector/SentinelConnector/bin/
+
+SentinelConnector/SentinelConnector/obj/
+
+SentinelConnector/\.vs/
+
+TestConsoleUtility/\.vs/
+
+TestConsoleUtility/TestConsoleUtility/bin/
+
+TestConsoleUtility/TestConsoleUtility/obj/
