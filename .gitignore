@@ -1,26 +1,28 @@
-**/.DS_Store
+# SentinelConnector dll
+.vs
 SentinelConnector/SentinelConnector/bin/
-
 SentinelConnector/SentinelConnector/obj/
 
-SentinelConnector/\.vs/
-
-TestConsoleUtility/\.vs/
-
+# TestConsoleUtility for testing SentinelConnector dll under Mac
+.vs
 TestConsoleUtility/TestConsoleUtility/bin/
-
 TestConsoleUtility/TestConsoleUtility/obj/
 
-Enterprise/\.vs/
-
+# Enterprise Win GUI Sample
+.vs
 Enterprise/Enterprise/bin/
-
-Enterprise/Enterprise/libs/
-
 Enterprise/Enterprise/obj/
-
+Enterprise/Enterprise/libs/
 Enterprise/Enterprise/Resources/
 
+# Extention
 *.dll
-
 *.exe
+*.log
+*.png
+*.pdb
+*.sln
+*.hvc
+
+# Mac
+**/.DS_Store
