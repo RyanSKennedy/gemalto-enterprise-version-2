@@ -16,13 +16,14 @@ Enterprise/Enterprise/libs/
 Enterprise/Enterprise/Resources/
 
 # Extention
-*.dll
-*.exe
-*.log
-*.png
-*.pdb
-*.sln
-*.hvc
+**/*.dll
+**/*.exe
+**/*.log
+**/*.png
+**/*.pdb
+**/*.sln
+**/*.hvc
+**/*.cache
 
 # Mac
 **/.DS_Store
