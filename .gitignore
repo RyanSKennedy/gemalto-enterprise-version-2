@@ -10,3 +10,17 @@ TestConsoleUtility/\.vs/
 TestConsoleUtility/TestConsoleUtility/bin/
 
 TestConsoleUtility/TestConsoleUtility/obj/
+
+Enterprise/\.vs/
+
+Enterprise/Enterprise/bin/
+
+Enterprise/Enterprise/libs/
+
+Enterprise/Enterprise/obj/
+
+Enterprise/Enterprise/Resources/
+
+*.dll
+
+*.exe

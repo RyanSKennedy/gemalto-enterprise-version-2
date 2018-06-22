@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <!-- FormMain -->
+  <FormMain>Предприятие</FormMain>
+  <buttonAccounting>Бухгалтерия</buttonAccounting>
+  <buttonStock>Склад</buttonStock>
+  <buttonStaff>Кадры</buttonStaff>
+  <buttonAbout>О программе</buttonAbout>
+  <labelComponents>Компоненты:</labelComponents>
+  <labelAccounting>Требуется FID 1</labelAccounting>
+  <labelStock>Требуется FID 2</labelStock>
+  <labelStaff>Требуется FID 3</labelStaff>
+  <!-- FormAbout -->
+  <FormAbout>О программе</FormAbout>
+  <buttonActivatePK>Go</buttonActivatePK>
+  <buttonGetUpdateByKeyID>Проверить</buttonGetUpdateByKeyID>
+  <buttonGetUpdateForApp>Запросить обновление для программы</buttonGetUpdateForApp>
+  <labelUpdateType>Активация/Обновление:</labelUpdateType>
+  <labelLicenseInfo>О лицензии:</labelLicenseInfo>
+  <labelCurrentVersion>Текущая версия приложения:</labelCurrentVersion>
+  <radioButtonByPK>Через PK:</radioButtonByPK>
+  <radioButtonByKeyID>Для существующего ключа:</radioButtonByKeyID>
+  <!-- FormConfigInfo -->
+  <FormConfigInfo>Настройки</FormConfigInfo>
+  <labelCurrentSettings>Используемые настройки:</labelCurrentSettings>
+  <labelLogsState>Логи:</labelLogsState>
+  <labelLanguageState>Язык:</labelLanguageState>
+</configuration>

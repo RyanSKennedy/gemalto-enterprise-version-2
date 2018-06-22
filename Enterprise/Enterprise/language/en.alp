@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <!-- FormMain -->
+  <FormMain>Entrprise</FormMain>
+  <buttonAccounting>Accounting</buttonAccounting>
+  <buttonStock>Stock</buttonStock>
+  <buttonStaff>Staff</buttonStaff>
+  <buttonAbout>About</buttonAbout>
+  <labelComponents>Components:</labelComponents>
+  <labelAccounting>Required FID 1</labelAccounting>
+  <labelStock>Required FID 2</labelStock>
+  <labelStaff>Required FID 3</labelStaff>
+  <!-- FormAbout -->
+  <FormAbout>About</FormAbout>
+  <buttonActivatePK>Go</buttonActivatePK>
+  <buttonGetUpdateByKeyID>Check</buttonGetUpdateByKeyID>
+  <buttonGetUpdateForApp>Request update for app</buttonGetUpdateForApp>
+  <labelUpdateType>Activate/Update:</labelUpdateType>
+  <labelLicenseInfo>License info:</labelLicenseInfo>
+  <labelCurrentVersion>Current version application:</labelCurrentVersion>
+  <radioButtonByPK>By PK:</radioButtonByPK>
+  <radioButtonByKeyID>For exist key:</radioButtonByKeyID>
+  <!-- FormConfigInfo -->
+  <FormConfigInfo>Settings</FormConfigInfo>
+  <labelCurrentSettings>Current settings:</labelCurrentSettings>
+  <labelLogsState>Logs:</labelLogsState>
+  <labelLanguageState>Language:</labelLanguageState>
+</configuration>

@@ -1,0 +1,28 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="Enterprise.settings" GeneratedClassName="enterprise">
+  <Profiles />
+  <Settings>
+    <Setting Name="emsUrl" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:8080/ems</Value>
+    </Setting>
+    <Setting Name="enableLogs" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="language" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">ru</Value>
+    </Setting>
+    <Setting Name="vendorCode" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="scope" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">&lt;haspscope&gt;
+   &lt;feature id="1"/&gt;
+   &lt;feature id="2"/&gt;
+   &lt;feature id="3"/&gt;
+&lt;/haspscope&gt;</Value>
+    </Setting>
+    <Setting Name="format" Type="System.String" Scope="Application">
+      <Value Profile="(Default)" />
+    </Setting>
+  </Settings>
+</SettingsFile>
