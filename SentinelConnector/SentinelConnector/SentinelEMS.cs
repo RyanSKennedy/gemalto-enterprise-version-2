@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Net.Http;
 
 namespace SentinelConnector
 {
     public class SentinelEMSClass
     {
         private string emsUrl;
+        private string connectionType;
         private string hostName;
         private string port;
         private string startDir;
@@ -13,15 +15,18 @@ namespace SentinelConnector
 
         public SentinelEMSClass(string url)
         {
-            int n = url.IndexOf("//");
-            string tmpUrl = url.Remove(0, n + 2);
-            string[] tmpMass = tmpUrl.Split(new char[] { ':', '/' });
-            emsUrl = url;
-            hostName = tmpMass[0];
-            port = tmpMass[1];
-            startDir = tmpMass[2];
-            emsVersion = tmpMass[3];
-            requestType = tmpMass[4];
+            string tmpUrl = url.Replace(":", "/");
+            tmpUrl = tmpUrl.Replace("///", "/");
+            string[] tmpMass = tmpUrl.Split('/');
+
+            connectionType = tmpMass[0];
+            hostName = tmpMass[1];
+            port = tmpMass[2];
+            startDir = tmpMass[3];
+            emsVersion = tmpMass[4];
+            requestType = tmpMass[5];
+
+            emsUrl = connectionType + "://" + hostName + ":" + port + "/" + startDir + "/" + emsVersion + "/" + requestType + "/";
         }
 
         public string SayHello() 
@@ -29,10 +34,47 @@ namespace SentinelConnector
             return "Hi Man!";
         }
 
-        public string GetRequest(string requestType, string requestString) 
+        public string GetRequest(string requestType, string requestString, object requestData) 
         {
+            string fullRequestUrl = urlBuilder(requestString);
 
-            return "Hey you tryed activate! =)";
+
+            switch (requestType) {
+                case "GET":
+                    break;
+
+                case "PUT":
+                    break;
+
+                case "POST":
+                    break;
+
+                case "DELETE":
+                    break;
+
+                default:
+                    // Передали в качестве типа запроса что-то невразумительное
+                    break;
+            }
+
+            return "Hey you tryed do HTTP request! Good boy! =)";
+        }
+
+        public string LoginByPK(string productKeyString) 
+        {
+            string requestResponse = "";
+            requestResponse = GetRequest("POST", "loginByProductKey.ws", productKeyString);
+
+            return requestResponse;
+        }
+
+        private string urlBuilder(string reqSubStr) 
+        {
+            string fullUrl = "";
+
+            fullUrl = emsUrl + reqSubStr;
+
+            return fullUrl;
         }
     }
 }
