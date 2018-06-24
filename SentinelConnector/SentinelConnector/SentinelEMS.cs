@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Net;
 using System.Net.Http;
+using System.Collections.Generic;
 
 namespace SentinelConnector
 {
@@ -29,17 +32,20 @@ namespace SentinelConnector
             emsUrl = connectionType + "://" + hostName + ":" + port + "/" + startDir + "/" + emsVersion + "/" + requestType + "/";
         }
 
-        public string SayHello() 
+        public string SayHello()
         {
             return "Hi Man!";
         }
 
-        public string GetRequest(string requestType, string requestString, object requestData) 
+        private string GetRequest(string rType, string rString, KeyValuePair<string, string> rData, string rContent = "") 
         {
-            string fullRequestUrl = urlBuilder(requestString);
+            string fullRequestUrl = urlBuilder(rString);
+            HttpClient request = new HttpClient();
+            HttpResponseMessage response;
+            string responseStr = "";
 
-
-            switch (requestType) {
+            switch (rType)
+            {
                 case "GET":
                     break;
 
@@ -47,6 +53,16 @@ namespace SentinelConnector
                     break;
 
                 case "POST":
+                    try
+                    {
+                        var content = new FormUrlEncodedContent(new[] { rData });
+                        response = request.PostAsync(fullRequestUrl, content).Result;
+                        responseStr = response.StatusCode.ToString();
+                    } catch (System.AggregateException e) {
+                        responseStr = e.InnerException.InnerException.Message;
+                    } catch (HttpRequestException hE) {
+                        responseStr = hE.Message;
+                    }
                     break;
 
                 case "DELETE":
@@ -57,15 +73,14 @@ namespace SentinelConnector
                     break;
             }
 
-            return "Hey you tryed do HTTP request! Good boy! =)";
+            return responseStr;
         }
 
         public string LoginByPK(string productKeyString) 
         {
-            string requestResponse = "";
-            requestResponse = GetRequest("POST", "loginByProductKey.ws", productKeyString);
+            var loginParams = new KeyValuePair<string, string>("productKey", productKeyString);
 
-            return requestResponse;
+            return GetRequest("POST", "loginByProductKey.ws", loginParams);
         }
 
         private string urlBuilder(string reqSubStr) 
