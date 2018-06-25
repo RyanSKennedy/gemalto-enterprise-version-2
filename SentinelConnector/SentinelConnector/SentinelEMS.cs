@@ -2,12 +2,21 @@
 using System.Threading.Tasks;
 using System.Net;
 using System.Net.Http;
+using System.Xml.Linq;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using System.Text;
 
 namespace SentinelConnector
 {
     public class SentinelEMSClass
     {
+        private struct currentRequest
+        {
+            public string key;
+            public string value;
+        }
+
         private string emsUrl;
         private string connectionType;
         private string hostName;
@@ -15,6 +24,7 @@ namespace SentinelConnector
         private string startDir;
         private string emsVersion;
         private string requestType;
+        private currentRequest cRequest;
 
         public SentinelEMSClass(string url)
         {
@@ -37,59 +47,168 @@ namespace SentinelConnector
             return "Hi Man!";
         }
 
-        private string GetRequest(string rType, string rString, KeyValuePair<string, string> rData, string rContent = "") 
-        {
-            string fullRequestUrl = urlBuilder(rString);
-            HttpClient request = new HttpClient();
-            HttpResponseMessage response;
-            string responseStr = "";
-
-            switch (rType)
-            {
-                case "GET":
-                    break;
-
-                case "PUT":
-                    break;
-
-                case "POST":
-                    try
-                    {
-                        var content = new FormUrlEncodedContent(new[] { rData });
-                        response = request.PostAsync(fullRequestUrl, content).Result;
-                        responseStr = response.StatusCode.ToString();
-                    } catch (System.AggregateException e) {
-                        responseStr = e.InnerException.InnerException.Message;
-                    } catch (HttpRequestException hE) {
-                        responseStr = hE.Message;
-                    }
-                    break;
-
-                case "DELETE":
-                    break;
-
-                default:
-                    // Передали в качестве типа запроса что-то невразумительное
-                    break;
-            }
-
-            return responseStr;
-        }
-
-        public string LoginByPK(string productKeyString) 
-        {
-            var loginParams = new KeyValuePair<string, string>("productKey", productKeyString);
-
-            return GetRequest("POST", "loginByProductKey.ws", loginParams);
-        }
-
-        private string urlBuilder(string reqSubStr) 
+        private string UrlBuilder(string reqSubStr) 
         {
             string fullUrl = "";
 
             fullUrl = emsUrl + reqSubStr;
 
             return fullUrl;
+        }
+
+        public string GetRequest(string rString, KeyValuePair<string, string> rData = new KeyValuePair<string, string>())
+        {
+            string fullRequestUrl = UrlBuilder(rString);
+            var patterns = new[] { 
+                @"login.ws",
+                @"loginByProductKey.ws",
+                @"productKey/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}.ws",
+                @"productKey/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/activation.ws"
+            };
+            Regex regex;
+            cRequest = new currentRequest();
+
+            foreach (string p in patterns) {
+                regex = new Regex(p);
+
+                if (regex.IsMatch(rString)) {
+                    if (p.Contains("activation")) {
+                        cRequest.key = "activation";
+                        cRequest.value = rString.Split('/')[1];
+                    } else {
+                        cRequest.key = (p.Contains("/")) ? p.Split('/')[0] : p;
+                        cRequest.value = (rString.Contains("/")) ? rString.Split('/')[1] : rString;
+                    }
+                    break;
+                }
+            }
+
+            HttpClient request = new HttpClient();
+            HttpResponseMessage response;
+            string responseStr = "";
+
+            switch (cRequest.key)
+            {
+                case "login.ws":
+                    try
+                    {
+                        var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
+                        response = request.PostAsync(fullRequestUrl, content).Result;
+                        responseStr = response.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (System.AggregateException e)
+                    {
+                        responseStr = e.InnerException.InnerException.Message;
+                    }
+                    catch (HttpRequestException hE)
+                    {
+                        responseStr = hE.Message;
+                    }
+                    break;
+
+                case "loginByProductKey.ws":
+                    try
+                    {
+                        var content = new FormUrlEncodedContent(new[] { rData });
+                        response = request.PostAsync(fullRequestUrl, content).Result;
+                        responseStr = response.StatusCode.ToString();
+                    }
+                    catch (System.AggregateException e)
+                    {
+
+                        responseStr = e.InnerException.InnerException.Message;
+
+                    }
+                    catch (HttpRequestException hE)
+                    {
+                        responseStr = hE.Message;
+                    }
+                    break;
+
+                case "productKey":
+                    try
+                    {
+                        var content = new FormUrlEncodedContent(new[] { rData });
+                        response = request.PostAsync(UrlBuilder("loginByProductKey.ws"), content).Result;
+                        responseStr = response.StatusCode.ToString();
+                    }
+                    catch (System.AggregateException e)
+                    {
+                        responseStr = e.InnerException.InnerException.Message;
+                    }
+                    catch (HttpRequestException hE)
+                    {
+                        responseStr = hE.Message;
+                    }
+
+                    if (responseStr == "OK")
+                    {
+                        try
+                        {
+                            response = request.GetAsync(fullRequestUrl).Result;
+                            responseStr = response.Content.ReadAsStringAsync().Result;
+                        }
+                        catch (System.AggregateException e)
+                        {
+                            responseStr = e.InnerException.InnerException.Message + " | in get info request after login by PK.";
+                        }
+                        catch (HttpRequestException hE)
+                        {
+                            responseStr = hE.Message + " | in get info request after login by PK.";
+                        }
+                    }
+                    else
+                    {
+                        responseStr += " | in request login by PK.";
+                    }
+                    break;
+
+                case "activation":
+                    try
+                    {
+                        var content = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("productKey", cRequest.value) });
+                        response = request.PostAsync(UrlBuilder("loginByProductKey.ws"), content).Result;
+                        responseStr = response.StatusCode.ToString();
+                    }
+                    catch (System.AggregateException e)
+                    {
+                        responseStr = e.InnerException.InnerException.Message;
+                    }
+                    catch (HttpRequestException hE)
+                    {
+                        responseStr = hE.Message;
+                    }
+
+                    if (responseStr == "OK")
+                    {
+                        try
+                        {
+                            var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
+                            response = request.PostAsync(fullRequestUrl, content).Result;
+                            responseStr = response.Content.ReadAsStringAsync().Result;
+                        }
+                        catch (System.AggregateException e)
+                        {
+                            responseStr = e.InnerException.InnerException.Message + " | in activate request after login by PK.";
+                        }
+                        catch (HttpRequestException hE)
+                        {
+                            responseStr = hE.Message + " | in activate request after login by PK.";
+                        }
+                    }
+                    else
+                    {
+                        responseStr += " | in request login by PK.";
+                    }
+                    break;
+
+                default:
+                    // Передали в качестве запроса что-то невразумительное
+                    responseStr += "Something whrong...";
+                    break;
+            }
+
+            return responseStr;
         }
     }
 }
