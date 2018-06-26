@@ -62,6 +62,7 @@ namespace SentinelConnector
             var patterns = new[] { 
                 @"login.ws",
                 @"loginByProductKey.ws",
+                @"activation/target.ws",
                 @"productKey/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}.ws",
                 @"productKey/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/activation.ws"
             };
@@ -72,9 +73,12 @@ namespace SentinelConnector
                 regex = new Regex(p);
 
                 if (regex.IsMatch(rString)) {
-                    if (p.Contains("activation")) {
-                        cRequest.key = "activation";
+                    if (p.Contains("activation.ws")) {
+                        cRequest.key = "activation.ws";
                         cRequest.value = rString.Split('/')[1];
+                    } else if (p.Contains("target.ws")) {
+                        cRequest.key = "target.ws";
+                        cRequest.value = (rString.Contains("/")) ? rString.Split('/')[1] : rString;
                     } else {
                         cRequest.key = (p.Contains("/")) ? p.Split('/')[0] : p;
                         cRequest.value = (rString.Contains("/")) ? rString.Split('/')[1] : rString;
@@ -85,7 +89,7 @@ namespace SentinelConnector
 
             HttpClient request = new HttpClient();
             HttpResponseMessage response;
-            string responseStr = "";
+            string responseStr = "Incorrect request...";
 
             switch (cRequest.key)
             {
@@ -163,7 +167,7 @@ namespace SentinelConnector
                     }
                     break;
 
-                case "activation":
+                case "activation.ws":
                     try
                     {
                         var content = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("productKey", cRequest.value) });
@@ -202,9 +206,25 @@ namespace SentinelConnector
                     }
                     break;
 
+                case "target.ws":
+                    try {
+                        var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
+                        response = request.PostAsync(fullRequestUrl, content).Result;
+                        responseStr = response.Content.ReadAsStringAsync().Result;
+                    }
+                    catch (System.AggregateException e)
+                    {
+                        responseStr = e.InnerException.InnerException.Message + " | in get update by C2V request.";
+                    }
+                    catch (HttpRequestException hE)
+                    {
+                        responseStr = hE.Message + " | in get update by C2V request.";
+                    }
+                    break;
+
                 default:
                     // Передали в качестве запроса что-то невразумительное
-                    responseStr += "Something whrong...";
+                    responseStr += " | Something whrong...";
                     break;
             }
 

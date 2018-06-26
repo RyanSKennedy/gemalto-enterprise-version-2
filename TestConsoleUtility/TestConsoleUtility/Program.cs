@@ -42,12 +42,15 @@ namespace TestConsoleUtility
                                "</activationInput>" +
                             "</activation>";
 
+            string targetXml = "";
+
             string action = "";
             Console.WriteLine("Input: " + Environment.NewLine +
                               "1 - for login by PK request;" + Environment.NewLine +
                               "2 - for send ativation request;" + Environment.NewLine +
                               "3 - for get info about ProductKey after login;" + Environment.NewLine +
                               "4 - for ISV login request;" + Environment.NewLine +
+                              "5 - for update request via C2V;" + Environment.NewLine +
                               "0 - for Exit." + Environment.NewLine);
 
             action = Console.ReadLine();
@@ -72,6 +75,11 @@ namespace TestConsoleUtility
                 case "4":
                     Console.WriteLine("Let's try doing ISV login..." + Environment.NewLine);
                     Console.WriteLine(emsClass.GetRequest("login.ws", new KeyValuePair<string, string>("authenticationDetail", authXml)) + Environment.NewLine);
+                    break;
+
+                case "5":
+                    Console.WriteLine("Let's try get update via C2V..." + Environment.NewLine);
+                    Console.WriteLine(emsClass.GetRequest("activation/target.ws", new KeyValuePair<string, string>("targetXml", targetXml)) + Environment.NewLine);
                     break;
 
                 case "0":
