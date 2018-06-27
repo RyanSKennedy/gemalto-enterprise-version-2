@@ -31,7 +31,7 @@ namespace Enterprise
             {
                 if ((myStream = sf.OpenFile()) != null)
                 {
-                    //-------------------------------- Save C2V ----------------------------------
+                    //-------------------------------- Save V2C ----------------------------------
 
                     try {
                         if ((myStream = sf.OpenFile()) != null)
