@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<activation>
+   <activationInput>
+      <activationAttribute>
+         <attributeValue><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+ <hasp_info>
+   <host_fingerprint>MXhJSYmNpjnybwMQmXCmqPiNEj1XJk6XGATACNudoCILIEUrZc/
+z14yWKbGXxi6iKDbiEQtnVdXiVHoOE1XumZZjF+Qy</host_fingerprint>
+ </hasp_info>]]> </attributeValue>
+         <attributeName>C2V</attributeName>         
+      </activationAttribute>
+      <comments>New Comments Added By Web Services</comments>
+   </activationInput>
+</activation>
