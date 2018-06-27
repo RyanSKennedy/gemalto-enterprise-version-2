@@ -25,4 +25,8 @@
   <labelCurrentSettings>Current settings:</labelCurrentSettings>
   <labelLogsState>Logs:</labelLogsState>
   <labelLanguageState>Language:</labelLanguageState>
+  <!-- FormLicense -->
+  <FormLicense>License</FormLicense>
+  <labelLicense>License:</labelLicense>
+  <linkLabelSaveV2C>Save V2C</linkLabelSaveV2C>
 </configuration>

@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="emsUrl" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">http://localhost:8080/ems</Value>
+      <Value Profile="(Default)">http://localhost:8080/ems/v78/ws</Value>
     </Setting>
     <Setting Name="enableLogs" Type="System.Boolean" Scope="Application">
       <Value Profile="(Default)">True</Value>

@@ -101,6 +101,7 @@
             this.buttonActivatePK.TabIndex = 5;
             this.buttonActivatePK.Text = "Go";
             this.buttonActivatePK.UseVisualStyleBackColor = true;
+            this.buttonActivatePK.Click += new System.EventHandler(this.buttonActivatePK_Click);
             // 
             // buttonGetUpdateByKeyID
             // 
@@ -111,6 +112,7 @@
             this.buttonGetUpdateByKeyID.TabIndex = 6;
             this.buttonGetUpdateByKeyID.Text = "Check";
             this.buttonGetUpdateByKeyID.UseVisualStyleBackColor = true;
+            this.buttonGetUpdateByKeyID.Click += new System.EventHandler(this.buttonGetUpdateByKeyID_Click);
             // 
             // labelLicenseInfo
             // 

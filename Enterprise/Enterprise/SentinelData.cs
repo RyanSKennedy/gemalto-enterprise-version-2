@@ -40,7 +40,7 @@ namespace Enterprise
 		                                            "</product>" +
                                                 "</hasp>" +
                                             "</haspformat>";
-        public static string emsUrl = "http://localhost:8080/ems";
+        public static string emsUrl = "http://localhost:8080/ems/v78/ws";
 
         public static bool logIsEnabled = true;
 

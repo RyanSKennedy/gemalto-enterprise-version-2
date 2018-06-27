@@ -203,6 +203,5 @@ namespace Enterprise
             if (appSettings.enableLogs) Log.Write("Открываем окно \"О программе\"");
             AboutWindow.ShowDialog();
         }
-
     }
 }

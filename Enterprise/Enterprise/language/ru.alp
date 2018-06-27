@@ -25,4 +25,8 @@
   <labelCurrentSettings>Используемые настройки:</labelCurrentSettings>
   <labelLogsState>Логи:</labelLogsState>
   <labelLanguageState>Язык:</labelLanguageState>
+  <!-- FormLicense -->
+  <FormLicense>Лицензия</FormLicense>
+  <labelLicense>Лицензия:</labelLicense>
+  <linkLabelSaveV2C>Сохранить V2C</linkLabelSaveV2C>
 </configuration>

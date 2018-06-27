@@ -26,7 +26,7 @@ namespace Enterprise.settings {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8080/ems")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8080/ems/v78/ws")]
         public string emsUrl {
             get {
                 return ((string)(this["emsUrl"]));
