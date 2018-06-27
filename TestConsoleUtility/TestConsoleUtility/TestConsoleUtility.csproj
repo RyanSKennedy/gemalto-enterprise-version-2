@@ -8,4 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\SentinelConnector\SentinelConnector\SentinelConnector.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="xml\" />
+  </ItemGroup>
 </Project>
