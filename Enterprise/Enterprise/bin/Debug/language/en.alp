@@ -6,6 +6,7 @@
   <buttonStock>Stock</buttonStock>
   <buttonStaff>Staff</buttonStaff>
   <buttonAbout>About</buttonAbout>
+  <buttonConfigInfo>Settings</buttonConfigInfo>
   <labelComponents>Components:</labelComponents>
   <labelAccounting>Required FID 1</labelAccounting>
   <labelStock>Required FID 2</labelStock>
