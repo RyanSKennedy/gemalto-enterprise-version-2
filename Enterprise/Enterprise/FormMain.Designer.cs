@@ -159,7 +159,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(861, 436);
+            this.ClientSize = new System.Drawing.Size(861, 449);
             this.Controls.Add(this.buttonConfigInfo);
             this.Controls.Add(this.pictureBoxLogo);
             this.Controls.Add(this.labelComponents);
@@ -171,8 +171,8 @@
             this.Controls.Add(this.buttonStock);
             this.Controls.Add(this.buttonAccounting);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.MaximumSize = new System.Drawing.Size(887, 507);
-            this.MinimumSize = new System.Drawing.Size(887, 507);
+            this.MaximumSize = new System.Drawing.Size(887, 520);
+            this.MinimumSize = new System.Drawing.Size(887, 520);
             this.Name = "FormMain";
             this.Text = "Entrprise";
             this.Load += new System.EventHandler(this.FormMain_Load);
