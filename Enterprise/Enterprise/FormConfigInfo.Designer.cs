@@ -41,15 +41,18 @@
             this.textBoxFormat = new System.Windows.Forms.TextBox();
             this.labelScope = new System.Windows.Forms.Label();
             this.labelFormat = new System.Windows.Forms.Label();
+            this.textBoxClientCall = new System.Windows.Forms.TextBox();
+            this.labelClientCall = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelCurrentSettings
             // 
             this.labelCurrentSettings.AutoSize = true;
             this.labelCurrentSettings.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelCurrentSettings.Location = new System.Drawing.Point(12, 9);
+            this.labelCurrentSettings.Location = new System.Drawing.Point(18, 14);
+            this.labelCurrentSettings.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCurrentSettings.Name = "labelCurrentSettings";
-            this.labelCurrentSettings.Size = new System.Drawing.Size(151, 20);
+            this.labelCurrentSettings.Size = new System.Drawing.Size(232, 31);
             this.labelCurrentSettings.TabIndex = 0;
             this.labelCurrentSettings.Text = "Current settings:";
             this.labelCurrentSettings.UseWaitCursor = true;
@@ -57,109 +60,120 @@
             // labelEmsUrl
             // 
             this.labelEmsUrl.AutoSize = true;
-            this.labelEmsUrl.Location = new System.Drawing.Point(13, 43);
+            this.labelEmsUrl.Location = new System.Drawing.Point(20, 67);
+            this.labelEmsUrl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelEmsUrl.Name = "labelEmsUrl";
-            this.labelEmsUrl.Size = new System.Drawing.Size(73, 17);
+            this.labelEmsUrl.Size = new System.Drawing.Size(112, 25);
             this.labelEmsUrl.TabIndex = 1;
             this.labelEmsUrl.Text = "EMS URL:";
             this.labelEmsUrl.UseWaitCursor = true;
             // 
             // textBoxEmsUrl
             // 
-            this.textBoxEmsUrl.Location = new System.Drawing.Point(113, 40);
+            this.textBoxEmsUrl.Location = new System.Drawing.Point(170, 62);
+            this.textBoxEmsUrl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxEmsUrl.Name = "textBoxEmsUrl";
             this.textBoxEmsUrl.ReadOnly = true;
-            this.textBoxEmsUrl.Size = new System.Drawing.Size(257, 22);
+            this.textBoxEmsUrl.Size = new System.Drawing.Size(384, 31);
             this.textBoxEmsUrl.TabIndex = 2;
             this.textBoxEmsUrl.UseWaitCursor = true;
             // 
             // labelLogsState
             // 
             this.labelLogsState.AutoSize = true;
-            this.labelLogsState.Location = new System.Drawing.Point(13, 71);
+            this.labelLogsState.Location = new System.Drawing.Point(20, 111);
+            this.labelLogsState.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelLogsState.Name = "labelLogsState";
-            this.labelLogsState.Size = new System.Drawing.Size(47, 17);
+            this.labelLogsState.Size = new System.Drawing.Size(71, 25);
             this.labelLogsState.TabIndex = 3;
             this.labelLogsState.Text = "Logs: ";
             this.labelLogsState.UseWaitCursor = true;
             // 
             // textBoxLogsState
             // 
-            this.textBoxLogsState.Location = new System.Drawing.Point(113, 68);
+            this.textBoxLogsState.Location = new System.Drawing.Point(170, 106);
+            this.textBoxLogsState.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxLogsState.Name = "textBoxLogsState";
             this.textBoxLogsState.ReadOnly = true;
-            this.textBoxLogsState.Size = new System.Drawing.Size(100, 22);
+            this.textBoxLogsState.Size = new System.Drawing.Size(148, 31);
             this.textBoxLogsState.TabIndex = 4;
             this.textBoxLogsState.UseWaitCursor = true;
             // 
             // labelLanguageState
             // 
             this.labelLanguageState.AutoSize = true;
-            this.labelLanguageState.Location = new System.Drawing.Point(13, 99);
+            this.labelLanguageState.Location = new System.Drawing.Point(20, 155);
+            this.labelLanguageState.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelLanguageState.Name = "labelLanguageState";
-            this.labelLanguageState.Size = new System.Drawing.Size(76, 17);
+            this.labelLanguageState.Size = new System.Drawing.Size(114, 25);
             this.labelLanguageState.TabIndex = 5;
             this.labelLanguageState.Text = "Language:";
             this.labelLanguageState.UseWaitCursor = true;
             // 
             // textBoxLanguageState
             // 
-            this.textBoxLanguageState.Location = new System.Drawing.Point(113, 96);
+            this.textBoxLanguageState.Location = new System.Drawing.Point(170, 150);
+            this.textBoxLanguageState.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxLanguageState.Name = "textBoxLanguageState";
             this.textBoxLanguageState.ReadOnly = true;
-            this.textBoxLanguageState.Size = new System.Drawing.Size(257, 22);
+            this.textBoxLanguageState.Size = new System.Drawing.Size(384, 31);
             this.textBoxLanguageState.TabIndex = 6;
             this.textBoxLanguageState.UseWaitCursor = true;
             // 
             // textBoxVendorCode
             // 
-            this.textBoxVendorCode.Location = new System.Drawing.Point(113, 124);
+            this.textBoxVendorCode.Location = new System.Drawing.Point(170, 194);
+            this.textBoxVendorCode.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxVendorCode.Multiline = true;
             this.textBoxVendorCode.Name = "textBoxVendorCode";
             this.textBoxVendorCode.ReadOnly = true;
             this.textBoxVendorCode.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxVendorCode.Size = new System.Drawing.Size(257, 77);
+            this.textBoxVendorCode.Size = new System.Drawing.Size(384, 118);
             this.textBoxVendorCode.TabIndex = 7;
             this.textBoxVendorCode.UseWaitCursor = true;
             // 
             // labelVendorCode
             // 
             this.labelVendorCode.AutoSize = true;
-            this.labelVendorCode.Location = new System.Drawing.Point(12, 127);
+            this.labelVendorCode.Location = new System.Drawing.Point(18, 198);
+            this.labelVendorCode.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelVendorCode.Name = "labelVendorCode";
-            this.labelVendorCode.Size = new System.Drawing.Size(95, 17);
+            this.labelVendorCode.Size = new System.Drawing.Size(144, 25);
             this.labelVendorCode.TabIndex = 8;
             this.labelVendorCode.Text = "VendorCode: ";
             this.labelVendorCode.UseWaitCursor = true;
             // 
             // textBoxScope
             // 
-            this.textBoxScope.Location = new System.Drawing.Point(113, 207);
+            this.textBoxScope.Location = new System.Drawing.Point(170, 323);
+            this.textBoxScope.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxScope.Multiline = true;
             this.textBoxScope.Name = "textBoxScope";
             this.textBoxScope.ReadOnly = true;
             this.textBoxScope.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxScope.Size = new System.Drawing.Size(257, 77);
+            this.textBoxScope.Size = new System.Drawing.Size(384, 118);
             this.textBoxScope.TabIndex = 9;
             this.textBoxScope.UseWaitCursor = true;
             // 
             // textBoxFormat
             // 
-            this.textBoxFormat.Location = new System.Drawing.Point(113, 290);
+            this.textBoxFormat.Location = new System.Drawing.Point(170, 453);
+            this.textBoxFormat.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxFormat.Multiline = true;
             this.textBoxFormat.Name = "textBoxFormat";
             this.textBoxFormat.ReadOnly = true;
             this.textBoxFormat.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxFormat.Size = new System.Drawing.Size(257, 77);
+            this.textBoxFormat.Size = new System.Drawing.Size(384, 118);
             this.textBoxFormat.TabIndex = 10;
             this.textBoxFormat.UseWaitCursor = true;
             // 
             // labelScope
             // 
             this.labelScope.AutoSize = true;
-            this.labelScope.Location = new System.Drawing.Point(12, 210);
+            this.labelScope.Location = new System.Drawing.Point(18, 328);
+            this.labelScope.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelScope.Name = "labelScope";
-            this.labelScope.Size = new System.Drawing.Size(56, 17);
+            this.labelScope.Size = new System.Drawing.Size(85, 25);
             this.labelScope.TabIndex = 11;
             this.labelScope.Text = "Scope: ";
             this.labelScope.UseWaitCursor = true;
@@ -167,18 +181,42 @@
             // labelFormat
             // 
             this.labelFormat.AutoSize = true;
-            this.labelFormat.Location = new System.Drawing.Point(12, 293);
+            this.labelFormat.Location = new System.Drawing.Point(18, 458);
+            this.labelFormat.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelFormat.Name = "labelFormat";
-            this.labelFormat.Size = new System.Drawing.Size(60, 17);
+            this.labelFormat.Size = new System.Drawing.Size(91, 25);
             this.labelFormat.TabIndex = 12;
             this.labelFormat.Text = "Format: ";
             this.labelFormat.UseWaitCursor = true;
             // 
+            // textBoxClientCall
+            // 
+            this.textBoxClientCall.Location = new System.Drawing.Point(170, 583);
+            this.textBoxClientCall.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxClientCall.Name = "textBoxClientCall";
+            this.textBoxClientCall.ReadOnly = true;
+            this.textBoxClientCall.Size = new System.Drawing.Size(384, 31);
+            this.textBoxClientCall.TabIndex = 14;
+            this.textBoxClientCall.UseWaitCursor = true;
+            // 
+            // labelClientCall
+            // 
+            this.labelClientCall.AutoSize = true;
+            this.labelClientCall.Location = new System.Drawing.Point(20, 588);
+            this.labelClientCall.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelClientCall.Name = "labelClientCall";
+            this.labelClientCall.Size = new System.Drawing.Size(123, 25);
+            this.labelClientCall.TabIndex = 13;
+            this.labelClientCall.Text = "SentinelUp:";
+            this.labelClientCall.UseWaitCursor = true;
+            // 
             // FormConfigInfo
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(382, 375);
+            this.ClientSize = new System.Drawing.Size(561, 609);
+            this.Controls.Add(this.textBoxClientCall);
+            this.Controls.Add(this.labelClientCall);
             this.Controls.Add(this.labelFormat);
             this.Controls.Add(this.labelScope);
             this.Controls.Add(this.textBoxFormat);
@@ -192,8 +230,9 @@
             this.Controls.Add(this.textBoxEmsUrl);
             this.Controls.Add(this.labelEmsUrl);
             this.Controls.Add(this.labelCurrentSettings);
-            this.MaximumSize = new System.Drawing.Size(400, 420);
-            this.MinimumSize = new System.Drawing.Size(400, 420);
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.MaximumSize = new System.Drawing.Size(587, 680);
+            this.MinimumSize = new System.Drawing.Size(587, 680);
             this.Name = "FormConfigInfo";
             this.ShowIcon = false;
             this.Text = "Settings";
@@ -220,5 +259,7 @@
         private System.Windows.Forms.TextBox textBoxFormat;
         private System.Windows.Forms.Label labelScope;
         private System.Windows.Forms.Label labelFormat;
+        private System.Windows.Forms.TextBox textBoxClientCall;
+        private System.Windows.Forms.Label labelClientCall;
     }
 }

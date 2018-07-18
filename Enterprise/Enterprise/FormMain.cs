@@ -20,8 +20,9 @@ namespace Enterprise
         public static string currentVersion = " v.1.0";
         public static string featureIDAccounting = "1", featureIDStock = "2", featureIDStaff = "3";
         public static string BaseDir, logFileName;
-        public static string vCode, kScope, kFormat, hInfo, eUrl;
+        public static string vCode, kScope, kFormat, hInfo, eUrl, aSentinelUpCall;
         public static bool lIsEnabled;
+        public static string curentKeyId = "";
         public static string langState;
         public static XDocument xmlKeyInfo;
         public static bool logsIsExist = false, logsDirIsExist = false, logsFileIsExist = false;
@@ -51,6 +52,36 @@ namespace Enterprise
             //============================================= 
             kScope = (appSettings.scope == "") ? SentinelData.keyScope : appSettings.scope;
             kFormat = (appSettings.format == "") ? SentinelData.keyFormat : appSettings.format;
+            //=============================================
+
+            // решаем какой SentinelUp Call использовать и откуда его брать
+            //============================================= 
+            aSentinelUpCall = "";
+            XDocument sentinelUpCallXml;
+            sentinelUpCallXml = (appSettings.sentinelUpCallData == "") ? XDocument.Parse(SentinelData.appSentinelUpCallData) : XDocument.Parse(appSettings.sentinelUpCallData);
+
+            if (sentinelUpCallXml != null)
+            {
+                aSentinelUpCall = "sentinelup" + " ";
+                foreach (XElement elSentinelUp in sentinelUpCallXml.Elements("upclient"))
+                {
+                    foreach (XElement elParam in elSentinelUp.Elements("param"))
+                    {
+                        foreach (XElement elKey in elParam.Elements("key"))
+                        {
+                            if (!elKey.Value.Contains("update") && !elKey.Value.Contains("download"))
+                            {
+                                aSentinelUpCall += elKey.Value + " ";
+                            }
+                        }
+
+                        foreach (XElement elValue in elParam.Elements("value"))
+                        {
+                            aSentinelUpCall += elValue.Value + " ";
+                        }
+                    }
+                }
+            }
             //=============================================
 
             // решаем какой EMS URL использовать и откуда его брать
@@ -156,7 +187,13 @@ namespace Enterprise
             if (xmlKeyInfo != null) {
                 foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
                 {
-                    foreach (XElement elProduct in elHasp.Elements("product"))
+                    foreach (XElement elKeyId in elHasp.Elements("id"))
+                    {
+                        if (curentKeyId == "") {
+                            curentKeyId = elKeyId.Value;
+                        }
+                    }
+                        foreach (XElement elProduct in elHasp.Elements("product"))
                     {
                         foreach (XElement elFeature in elProduct.Elements("feature"))
                         {

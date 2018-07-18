@@ -24,5 +24,29 @@
     <Setting Name="format" Type="System.String" Scope="Application">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="sentinelUpCallData" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">&lt;upclient&gt;
+    &lt;param&gt;
+        &lt;key&gt;-url&lt;/key&gt;
+        &lt;value&gt;ddkxtq.trial.sentinelcloud.com/up&lt;/value&gt;
+    &lt;/param&gt;
+    &lt;param&gt;
+        &lt;key&gt;-k&lt;/key&gt;
+        &lt;value&gt;2e546582fa03eecf7312e3832d955ea7&lt;/value&gt;
+    &lt;/param&gt;
+    &lt;param&gt;
+        &lt;key&gt;-pc&lt;/key&gt;
+        &lt;value&gt;42836411-f5d4-4ebc-b1b6-d0895505738e&lt;/value&gt;
+    &lt;/param&gt;
+    &lt;param&gt;
+        &lt;key&gt;-v&lt;/key&gt;
+        &lt;value&gt;1.0&lt;/value&gt;
+    &lt;/param&gt;
+    &lt;param&gt;
+        &lt;key&gt;-update&lt;/key&gt;
+        &lt;value&gt;-update&lt;/value&gt;
+    &lt;/param&gt;
+&lt;/upclient&gt;</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

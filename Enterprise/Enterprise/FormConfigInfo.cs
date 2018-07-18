@@ -31,6 +31,7 @@ namespace Enterprise
             textBoxVendorCode.Text = FormMain.vCode;
             textBoxScope.Text = FormMain.kScope;
             textBoxFormat.Text = FormMain.kFormat;
+            textBoxClientCall.Text = FormMain.aSentinelUpCall;
         }
 
         private void FormConfigInfo_FormClosing(object sender, FormClosingEventArgs e)

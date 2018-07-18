@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MyLogClass;
 
 namespace Enterprise
 {
@@ -44,7 +45,8 @@ namespace Enterprise
                             }
                         }
                     } catch (Exception ex) {
-                            MessageBox.Show("Ошибка записи в файл! Ошибка: " + ex);
+                        if (appSettings.enableLogs) Log.Write("Не могу сохранить V2C: " + Environment.NewLine + FormAbout.v2c + Environment.NewLine + "Ошибка: " + ex);
+                        MessageBox.Show("Ошибка записи в файл! Ошибка: " + ex);
                     }
 
                     //----------------------------------------------------------------------------

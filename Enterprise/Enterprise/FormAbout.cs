@@ -23,8 +23,8 @@ namespace Enterprise
         Size textBoxPKDefaultSize = new Size(220, 22);
         Enterprise.settings.enterprise appSettings = new settings.enterprise();
         SentinelEMSClass sentinelObject = new SentinelEMSClass(FormMain.eUrl);
-        public HaspStatus hStatusForUpdate = new HaspStatus();
-        public static string hInfoForUpdate;
+        public HaspStatus hStatus = new HaspStatus();
+        public static string hInfo;
         public static string aid = "";
         public static string v2c = "";
         public static string protectionKeyId = "";
@@ -106,26 +106,33 @@ namespace Enterprise
 
             string actXml = "";
 
-            string aScope = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
+            string aScope = (!string.IsNullOrEmpty(FormMain.curentKeyId)) ?
+                            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                             "<haspscope>" +
-                            "    <hasp type=\"HASP-HL\" >" +
-                            "        <license_manager hostname=\"localhost\" />" +
-                            "    </hasp>" +
+                                "<hasp id=\"" + FormMain.curentKeyId + "\"/>" +
+                            "</haspscope>"
+                            :
+                            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                            "<haspscope>" +
+                                "<license_manager hostname=\"localhost\"/>" +
                             "</haspscope>";
 
-            string aFormat = "<haspformat format=\"host_fingerprint\"/>";
+            string aFormat = (!string.IsNullOrEmpty(FormMain.curentKeyId)) ?
+                             "<haspformat format =\"updateinfo\"/>"
+                             :
+                             "<haspformat format=\"host_fingerprint\"/>";
 
-            hStatusForUpdate = Hasp.GetInfo(aScope, aFormat, FormMain.vCode, ref hInfoForUpdate);
-            if (HaspStatus.StatusOk != hStatusForUpdate)
+            hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode, ref hInfo);
+            if (HaspStatus.StatusOk != hStatus)
             {
-                if (appSettings.enableLogs) Log.Write("Ошибка запроса FingerPrint с PC, статус: " + hStatusForUpdate);
+                if (appSettings.enableLogs) Log.Write("Ошибка запроса C2V, статус: " + hStatus);
             }
             else
             {
-                if (appSettings.enableLogs) Log.Write("Результат выполнения запроса FingerPrint с PC, статус: " + hStatusForUpdate);
-                if (appSettings.enableLogs) Log.Write("Вывод:" + Environment.NewLine + hInfoForUpdate);
+                if (appSettings.enableLogs) Log.Write("Результат выполнения запроса C2V, статус: " + hStatus);
+                if (appSettings.enableLogs) Log.Write("Вывод:" + Environment.NewLine + hInfo);
 
-                actXml = hInfoForUpdate;
+                actXml = hInfo;
             }
 
             if (!string.IsNullOrEmpty(actXml) && Regex.IsMatch(textBoxPK.Text, @"\w{8}-\w{4}-\w{4}-\w{4}-\w{12}"))
@@ -134,24 +141,29 @@ namespace Enterprise
             }
             else
             {
-                if (appSettings.enableLogs) Log.Write("Введён не валидный ProductKey или FingerPrint..." + Environment.NewLine);
+                if (appSettings.enableLogs) Log.Write("Введён не валидный ProductKey или C2V..." + Environment.NewLine);
             }
 
-            if (!string.IsNullOrEmpty(actStatus))
+            if (!string.IsNullOrEmpty(actStatus) && !actStatus.Contains("Error"))
             {
                 XDocument licXml = XDocument.Parse(actStatus);
 
-                foreach (XElement el in licXml.Root.Elements()) {
-                    foreach (XElement elActOut in el.Elements("activationOutput")) {
-                        foreach (XElement elAid in elActOut.Elements("AID")) {
+                foreach (XElement el in licXml.Root.Elements())
+                {
+                    foreach (XElement elActOut in el.Elements("activationOutput"))
+                    {
+                        foreach (XElement elAid in elActOut.Elements("AID"))
+                        {
                             aid = (!string.IsNullOrEmpty(elAid.Value)) ? elAid.Value : aid;
                         }
 
-                        foreach (XElement elProtectionKeyId in elActOut.Elements("protectionKeyId")) {
+                        foreach (XElement elProtectionKeyId in elActOut.Elements("protectionKeyId"))
+                        {
                             protectionKeyId = (!string.IsNullOrEmpty(elProtectionKeyId.Value)) ? elProtectionKeyId.Value : protectionKeyId;
                         }
 
-                        foreach (XElement elActivationString in elActOut.Elements("activationString")) {
+                        foreach (XElement elActivationString in elActOut.Elements("activationString"))
+                        {
                             v2c = (!string.IsNullOrEmpty(elActivationString.Value)) ? elActivationString.Value : v2c;
                         }
                     }
@@ -161,27 +173,97 @@ namespace Enterprise
                 {
                     string acknowledgeXml = "";
 
-                    hStatusForUpdate = Hasp.Update(v2c, ref acknowledgeXml);
-                    if (HaspStatus.StatusOk != hStatusForUpdate)
+                    hStatus = Hasp.Update(v2c, ref acknowledgeXml);
+                    if (HaspStatus.StatusOk != hStatus)
                     {
-                        if (appSettings.enableLogs) Log.Write("Ошибка применения v2c массива с лицензией на PC, статус: " + hStatusForUpdate);
-                        if (appSettings.enableLogs) Log.Write("V2C: " + Environment.NewLine + v2c);
-                    }
-                    else
-                    {
-                        if (appSettings.enableLogs) Log.Write("Результат применения v2c массива с лицензией на PC, статус: " + hStatusForUpdate);
+                        if (appSettings.enableLogs) Log.Write("Ошибка применения V2C массива с лицензией на PC, статус: " + hStatus);
                         if (appSettings.enableLogs) Log.Write("V2C: " + Environment.NewLine + v2c);
 
                         if (appSettings.enableLogs) Log.Write("Открываем окно \"Лицензия\"");
+                        LicenseWindow.Text += " | Error";
+                        LicenseWindow.ShowDialog();
+                    }
+                    else
+                    {
+                        if (appSettings.enableLogs) Log.Write("Результат применения V2C массива с лицензией на PC, статус: " + hStatus);
+                        if (appSettings.enableLogs) Log.Write("V2C: " + Environment.NewLine + v2c);
+
+                        if (appSettings.enableLogs) Log.Write("Открываем окно \"Лицензия\"");
+                        LicenseWindow.Text += " | Successfuly";
                         LicenseWindow.ShowDialog();
                     }
                 }
+            }
+            else {
+                if (appSettings.enableLogs) Log.Write("Ответ от сервера пустой или содержит ошибку, статус: " + actStatus);
             }
         }
 
         private void buttonGetUpdateByKeyID_Click(object sender, EventArgs e)
         {
+            string actStatus = "";
 
+            string targetXml = "";
+
+            string aScope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                            "<haspscope>" +
+                                "<hasp id=\"" + FormMain.curentKeyId + "\"/>" +
+                            "</haspscope>"
+                            ;
+
+            string aFormat = "<haspformat format =\"updateinfo\"/>";
+
+            hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode, ref hInfo);
+            if (HaspStatus.StatusOk != hStatus)
+            {
+                if (appSettings.enableLogs) Log.Write("Ошибка запроса C2V, статус: " + hStatus);
+            }
+            else
+            {
+                if (appSettings.enableLogs) Log.Write("Результат выполнения запроса C2V, статус: " + hStatus);
+                if (appSettings.enableLogs) Log.Write("Вывод:" + Environment.NewLine + hInfo);
+
+                targetXml = hInfo;
+            }
+
+            if (!string.IsNullOrEmpty(targetXml))
+            {
+                actStatus = sentinelObject.GetRequest("activation/target.ws", new KeyValuePair<string, string>("targetXml", targetXml));
+            }
+
+            if (!string.IsNullOrEmpty(actStatus) && !actStatus.Contains("Error") && !actStatus.Contains("No pending update"))
+            {
+                // если ответ не пустой и не содержит ошибок, тогда пробуем его применить
+                string acknowledgeXml = "";
+                v2c = actStatus;
+                aid = "none";
+                protectionKeyId = FormMain.curentKeyId;
+
+                hStatus = Hasp.Update(v2c, ref acknowledgeXml);
+                if (HaspStatus.StatusOk != hStatus)
+                {
+                    if (appSettings.enableLogs) Log.Write("Ошибка применения V2CP массива с лицензией к ключу, статус: " + hStatus);
+                    if (appSettings.enableLogs) Log.Write("V2CP: " + Environment.NewLine + v2c);
+
+                    if (appSettings.enableLogs) Log.Write("Открываем окно \"Лицензия\"");
+                    LicenseWindow.Text += " | Error";
+                    LicenseWindow.ShowDialog();
+                }
+                else
+                {
+                    if (appSettings.enableLogs) Log.Write("Результат применения V2CP массива с лицензией к ключу, статус: " + hStatus);
+                    if (appSettings.enableLogs) Log.Write("V2CP: " + Environment.NewLine + v2c);
+
+                    if (appSettings.enableLogs) Log.Write("Открываем окно \"Лицензия\"");
+                    LicenseWindow.Text += " | Successfuly";
+                    LicenseWindow.ShowDialog();
+                }
+            } else if (actStatus.Contains("No pending update")) {
+                if (appSettings.enableLogs) Log.Write("Нет доступных для загрузки обновлений, статус: " + actStatus);
+                MessageBox.Show("Error: " + actStatus);
+            } else {
+                if (appSettings.enableLogs) Log.Write("Ответ от сервера пустой или содержит ошибку, статус: " + actStatus);
+            }
         }
     }
 }

@@ -78,5 +78,35 @@ namespace Enterprise.settings {
                 return ((string)(this["format"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<upclient>
+    <param>
+        <key>-url</key>
+        <value>ddkxtq.trial.sentinelcloud.com/up</value>
+    </param>
+    <param>
+        <key>-k</key>
+        <value>2e546582fa03eecf7312e3832d955ea7</value>
+    </param>
+    <param>
+        <key>-pc</key>
+        <value>42836411-f5d4-4ebc-b1b6-d0895505738e</value>
+    </param>
+    <param>
+        <key>-v</key>
+        <value>1.0</value>
+    </param>
+    <param>
+        <key>-update</key>
+        <value>-update</value>
+    </param>
+</upclient>")]
+        public string sentinelUpCallData {
+            get {
+                return ((string)(this["sentinelUpCallData"]));
+            }
+        }
     }
 }
