@@ -89,7 +89,7 @@ namespace SentinelConnector
 
             HttpClient request = new HttpClient();
             HttpResponseMessage response;
-            string responseStr = "Incorrect request...";
+            string responseStr = "Error: Incorrect request... | ";
 
             switch (cRequest.key)
             {
@@ -102,11 +102,11 @@ namespace SentinelConnector
                     }
                     catch (System.AggregateException e)
                     {
-                        responseStr = e.InnerException.InnerException.Message;
+                        responseStr += e.InnerException.InnerException.Message;
                     }
                     catch (HttpRequestException hE)
                     {
-                        responseStr = hE.Message;
+                        responseStr += hE.Message;
                     }
                     break;
 
@@ -120,12 +120,12 @@ namespace SentinelConnector
                     catch (System.AggregateException e)
                     {
 
-                        responseStr = e.InnerException.InnerException.Message;
+                        responseStr += e.InnerException.InnerException.Message;
 
                     }
                     catch (HttpRequestException hE)
                     {
-                        responseStr = hE.Message;
+                        responseStr += hE.Message;
                     }
                     break;
 
@@ -138,11 +138,11 @@ namespace SentinelConnector
                     }
                     catch (System.AggregateException e)
                     {
-                        responseStr = e.InnerException.InnerException.Message;
+                        responseStr += e.InnerException.InnerException.Message;
                     }
                     catch (HttpRequestException hE)
                     {
-                        responseStr = hE.Message;
+                        responseStr += hE.Message;
                     }
 
                     if (responseStr == "OK")
@@ -154,11 +154,11 @@ namespace SentinelConnector
                         }
                         catch (System.AggregateException e)
                         {
-                            responseStr = e.InnerException.InnerException.Message + " | in get info request after login by PK.";
+                            responseStr += e.InnerException.InnerException.Message + " | in get info request after login by PK.";
                         }
                         catch (HttpRequestException hE)
                         {
-                            responseStr = hE.Message + " | in get info request after login by PK.";
+                            responseStr += hE.Message + " | in get info request after login by PK.";
                         }
                     }
                     else
@@ -176,11 +176,11 @@ namespace SentinelConnector
                     }
                     catch (System.AggregateException e)
                     {
-                        responseStr = e.InnerException.InnerException.Message;
+                        responseStr += e.InnerException.InnerException.Message;
                     }
                     catch (HttpRequestException hE)
                     {
-                        responseStr = hE.Message;
+                        responseStr += hE.Message;
                     }
 
                     if (responseStr == "OK")
@@ -193,11 +193,11 @@ namespace SentinelConnector
                         }
                         catch (System.AggregateException e)
                         {
-                            responseStr = e.InnerException.InnerException.Message + " | in activate request after login by PK.";
+                            responseStr += e.InnerException.InnerException.Message + " | in activate request after login by PK.";
                         }
                         catch (HttpRequestException hE)
                         {
-                            responseStr = hE.Message + " | in activate request after login by PK.";
+                            responseStr += hE.Message + " | in activate request after login by PK.";
                         }
                     }
                     else
@@ -214,11 +214,11 @@ namespace SentinelConnector
                     }
                     catch (System.AggregateException e)
                     {
-                        responseStr = e.InnerException.InnerException.Message + " | in get update by C2V request.";
+                        responseStr += e.InnerException.InnerException.Message + " | in get update by C2V request.";
                     }
                     catch (HttpRequestException hE)
                     {
-                        responseStr = hE.Message + " | in get update by C2V request.";
+                        responseStr += hE.Message + " | in get update by C2V request.";
                     }
                     break;
 

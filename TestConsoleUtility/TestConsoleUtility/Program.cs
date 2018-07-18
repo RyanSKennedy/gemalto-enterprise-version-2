@@ -257,7 +257,9 @@ namespace TestConsoleUtility
 
             if (action.Length > 1 && (action.StartsWith('a') || action.StartsWith('l') || action.StartsWith('u')) && action.Contains("sc:") && !action.Contains("pk:"))
             {
-                string pathToFile = action.Substring(action.LastIndexOf("sc:") + 3, action.Length - action.LastIndexOf("sc:") - 4);
+                //int s = action.LastIndexOf("sc:");
+                //int ss = action.Length - action.LastIndexOf("sc:") - 5;                         
+                string pathToFile = action.Substring(action.LastIndexOf("sc:") + 5, action.Length - action.LastIndexOf("sc:") - 6);
 
                 try
                 {
