@@ -50,6 +50,7 @@
             this.buttonGetUpdateForApp.TabIndex = 0;
             this.buttonGetUpdateForApp.Text = "Request update for app";
             this.buttonGetUpdateForApp.UseVisualStyleBackColor = true;
+            this.buttonGetUpdateForApp.Click += new System.EventHandler(this.buttonGetUpdateForApp_Click);
             // 
             // labelUpdateType
             // 

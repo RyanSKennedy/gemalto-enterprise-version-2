@@ -62,7 +62,7 @@ namespace Enterprise
 
             if (sentinelUpCallXml != null)
             {
-                aSentinelUpCall = "sentinelup" + " ";
+                //aSentinelUpCall = "sentinelup" + " ";
                 foreach (XElement elSentinelUp in sentinelUpCallXml.Elements("upclient"))
                 {
                     foreach (XElement elParam in elSentinelUp.Elements("param"))

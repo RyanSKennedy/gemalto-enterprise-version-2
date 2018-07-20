@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using System.Xml;
 using System.Xml.Linq;
 using System.Threading.Tasks;
+using System.IO;
+using System.Net.Sockets;
 using System.Windows.Forms;
 using MyLogClass;
 using Aladdin.HASP;
@@ -260,9 +262,58 @@ namespace Enterprise
                 }
             } else if (actStatus.Contains("No pending update")) {
                 if (appSettings.enableLogs) Log.Write("Нет доступных для загрузки обновлений, статус: " + actStatus);
-                MessageBox.Show("Error: " + actStatus);
+                MessageBox.Show("Error: " + actStatus, "Error");
             } else {
                 if (appSettings.enableLogs) Log.Write("Ответ от сервера пустой или содержит ошибку, статус: " + actStatus);
+            }
+        }
+
+        private void buttonGetUpdateForApp_Click(object sender, EventArgs e)
+        {
+            if (appSettings.enableLogs) Log.Write("Пробуем выполнить запрос обновления для программы через upclient.exe...");
+            if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable()) {
+                MessageBox.Show("Missing or limited physical connection to network." + Environment.NewLine + "Please check your connetctions settings.", "Error: Phisichal network unavaliable...");
+                if (appSettings.enableLogs) Log.Write("Отсутствует или ограниченно физическое подключение к сети. Проверьте настройки вашего сетевого подключения.");
+                return;
+            }
+
+            bool isConnected = false;
+            using (var tcpClient = new TcpClient())
+            {
+                try {
+                    tcpClient.Connect("8.8.8.8", 443); // google
+                    isConnected = tcpClient.Connected;
+                } catch (Exception ex) {
+                    if (appSettings.enableLogs) Log.Write("Проблема с проверкой соединения с интернетом. Ошибка: " + ex.Message);
+                }
+            }
+
+            if (!isConnected) {
+                MessageBox.Show("Haven't access to the internet." + Environment.NewLine + "Please check your firewall or connection settings.", "Error: Internet access unavaliable...");
+                if (appSettings.enableLogs) Log.Write("Нет подключения к интернету. Проверьте ваш фаервол или настройки сетевого подключения.");
+            } else {
+                if (System.IO.File.Exists(FormMain.BaseDir))
+                {
+                    System.Diagnostics.ProcessStartInfo upClientConfig = new System.Diagnostics.ProcessStartInfo(FormMain.BaseDir + Path.DirectorySeparatorChar + "upclient.exe", FormMain.aSentinelUpCall);
+                    if (appSettings.enableLogs) Log.Write("Пробуем запустить upclient.exe с параметрами: " + FormMain.aSentinelUpCall);
+                    try
+                    {
+                        System.Diagnostics.Process upClientProcess = System.Diagnostics.Process.Start(upClientConfig);
+
+                        if (appSettings.enableLogs) Log.Write("Закрываем приложение перед его обновлением...");
+                        Application.Exit();
+                    }
+                    catch (Exception ex)
+                    {
+                        if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить upclient.exe, ошибка: " + ex.Message);
+                        MessageBox.Show("Error: " + ex.Message, "Error");
+                    }
+                }
+                else
+                {
+                    if (appSettings.enableLogs) Log.Write("Error: нет SentinelUp клиента в директории с обновляемым ПО.");
+                    MessageBox.Show("Error: SentinelUp Client not found in dir: " + Environment.NewLine + FormMain.BaseDir, "Error");
+                }
             }
         }
     }
