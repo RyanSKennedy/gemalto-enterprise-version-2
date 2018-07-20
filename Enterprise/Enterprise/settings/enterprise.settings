@@ -9,7 +9,7 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="language" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">ru</Value>
+      <Value Profile="(Default)" />
     </Setting>
     <Setting Name="vendorCode" Type="System.String" Scope="Application">
       <Value Profile="(Default)" />

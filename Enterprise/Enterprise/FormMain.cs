@@ -125,9 +125,9 @@ namespace Enterprise
             buttonStock.Visible = true;
             buttonStaff.Visible = false;
 
-            labelAccounting.Visible = false;
-            labelStock.Visible = false;
-            labelStaff.Visible = false;
+            labelAccounting.Visible = true;
+            labelStock.Visible = true;
+            labelStaff.Visible = true;
 
             ToolTip tButtonAccounting = new ToolTip();
             tButtonAccounting.SetToolTip(buttonAccounting, "FID = " + featureIDAccounting);
@@ -153,20 +153,23 @@ namespace Enterprise
 
                 xmlKeyInfo = XDocument.Parse(hInfo);
             }
-
-            foreach (XElement elHasp in xmlKeyInfo.Root.Elements()) {
-                foreach (XElement elProduct in elHasp.Elements("product")) {
-                    foreach (XElement elFeature in elProduct.Elements("feature"))
+            if (xmlKeyInfo != null) {
+                foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
+                {
+                    foreach (XElement elProduct in elHasp.Elements("product"))
                     {
-                        foreach (XElement elFeatureId in elFeature.Elements("id"))
+                        foreach (XElement elFeature in elProduct.Elements("feature"))
                         {
-                            buttonAccounting.Enabled = (elFeatureId.Value == featureIDAccounting) ? true : buttonAccounting.Enabled;
-                            buttonStock.Enabled = (elFeatureId.Value == featureIDStock) ? true : buttonStock.Enabled;
-                            buttonStaff.Enabled = (elFeatureId.Value == featureIDStaff) ? true : buttonStaff.Enabled;
+                            foreach (XElement elFeatureId in elFeature.Elements("id"))
+                            {
+                                buttonAccounting.Enabled = (elFeatureId.Value == featureIDAccounting) ? true : buttonAccounting.Enabled;
+                                buttonStock.Enabled = (elFeatureId.Value == featureIDStock) ? true : buttonStock.Enabled;
+                                buttonStaff.Enabled = (elFeatureId.Value == featureIDStaff) ? true : buttonStaff.Enabled;
+                            }
                         }
                     }
+                    string s = Convert.ToString(elHasp.Name);
                 }
-                string s = Convert.ToString(elHasp.Name);
             }
         }
 
@@ -179,17 +182,17 @@ namespace Enterprise
 
         private void buttonAccounting_Click(object sender, EventArgs e)
         {
-
+            MessageBox.Show("Should be run Accounting...");
         }
 
         private void buttonStock_Click(object sender, EventArgs e)
         {
-
+            MessageBox.Show("Should be run Stock...");
         }
 
         private void buttonStaff_Click(object sender, EventArgs e)
         {
-
+            MessageBox.Show("Should be run Staff...");
         }
 
         private void buttonConfigInfo_Click(object sender, EventArgs e)

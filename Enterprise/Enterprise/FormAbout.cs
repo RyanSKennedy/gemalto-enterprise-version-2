@@ -17,10 +17,10 @@ namespace Enterprise
 {
     public partial class FormAbout : Form
     {
-        Point textBoxPKWithRadioButtonPoint = new Point(128, 28);
-        Point textBoxPKDefaultPoint = new Point(12, 28);
-        Size textBoxPKWithRadioButtonSize = new Size(186, 22);
-        Size textBoxPKDefaultSize = new Size(300, 22);
+        Point textBoxPKWithRadioButtonPoint = new Point(88, 24);
+        Point textBoxPKDefaultPoint = new Point(12, 24);
+        Size textBoxPKWithRadioButtonSize = new Size(146, 22);
+        Size textBoxPKDefaultSize = new Size(220, 22);
         Enterprise.settings.enterprise appSettings = new settings.enterprise();
         SentinelEMSClass sentinelObject = new SentinelEMSClass(FormMain.eUrl);
         public HaspStatus hStatusForUpdate = new HaspStatus();

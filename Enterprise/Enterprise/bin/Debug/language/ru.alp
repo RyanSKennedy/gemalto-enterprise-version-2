@@ -6,6 +6,7 @@
   <buttonStock>Склад</buttonStock>
   <buttonStaff>Кадры</buttonStaff>
   <buttonAbout>О программе</buttonAbout>
+  <buttonConfigInfo>Настройки</buttonConfigInfo>
   <labelComponents>Компоненты:</labelComponents>
   <labelAccounting>Требуется FID 1</labelAccounting>
   <labelStock>Требуется FID 2</labelStock>
