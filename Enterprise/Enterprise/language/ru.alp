@@ -33,4 +33,10 @@
   <!-- FormMainAccounting -->
   <FormMainAccounting>Бухгалтерия</FormMainAccounting>
   <labelAccounting>Тут наша бухгалтерия</labelAccounting>
+  <!-- FormMainStock -->
+  <FormMainStock>Склад</FormMainStock>
+  <labelStock>Тут наш склад</labelStock>
+  <!-- FormMainStaff -->
+  <FormMainStaff>Кадры</FormMainStaff>
+  <labelStaff>Тут наши кадры</labelStaff>
 </configuration>

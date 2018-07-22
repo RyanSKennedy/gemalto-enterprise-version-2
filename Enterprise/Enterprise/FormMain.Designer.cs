@@ -153,6 +153,7 @@
             this.buttonConfigInfo.TabIndex = 9;
             this.buttonConfigInfo.Text = "Settings";
             this.buttonConfigInfo.UseVisualStyleBackColor = true;
+            this.buttonConfigInfo.Visible = false;
             this.buttonConfigInfo.Click += new System.EventHandler(this.buttonConfigInfo_Click);
             // 
             // FormMain

@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Xml;
 using System.Diagnostics;
 using System.IO;
 using System.Xml.Schema;
 using System.Xml.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using MyLogClass;
 using Aladdin.HASP;
@@ -215,11 +207,11 @@ namespace Enterprise
             buttonStock.Visible = true;
             buttonStaff.Visible = true;
 
-            labelAccountingFID.Visible = true;
+            labelAccountingFID.Visible = false;
             labelAccountingFID.Text += featureIdAccounting;
-            labelStockFID.Visible = true;
+            labelStockFID.Visible = false;
             labelStockFID.Text += featureIdStock;
-            labelStaffFID.Visible = true;
+            labelStaffFID.Visible = false;
             labelStaffFID.Text += featureIdStaff;
 
             ToolTip tButtonAccounting = new ToolTip();
@@ -332,6 +324,31 @@ namespace Enterprise
         private static void HandleValidationError(object src, ValidationEventArgs args)
         {
             Trace.Fail(string.Format("Invalid data format: {0}", args.Message));
+        }
+
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            if (ckey(keyData, Keys.Alt, Keys.S)) // Комбинация Alt+S
+                // Выполняем какие-либо действия
+                buttonConfigInfo_Click(this, null);
+
+            return base.ProcessDialogKey(keyData);
+        }
+        /// <summary>
+        /// Проверяет вхождение заданных комбинаций (keys) в исходную (keyData).
+        /// </summary>
+        /// <param name="keyData">Исходная комбинация.</param>
+        /// <param name="keys">Заданные комбинации.</param>
+        /// <returns>Возвращает True если все заданные комбинации входят в исходную, иначе False.</returns>
+        bool ckey(Keys keyData, params Keys[] keys)
+        {
+            if (keys == null) return false;
+
+            for (int i = 0; i < keys.Length; i++)
+                if ((keyData & keys[i]) != keys[i])
+                    return false;
+
+            return true;
         }
     }
 }

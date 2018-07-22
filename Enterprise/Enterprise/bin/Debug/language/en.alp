@@ -33,4 +33,10 @@
   <!-- FormMainAccounting -->
   <FormMainAccounting>Accounting</FormMainAccounting>
   <labelAccounting>Here is our Accounting</labelAccounting>
+  <!-- FormMainStock -->
+  <FormMainStock>Stock</FormMainStock>
+  <labelStock>Here is our Stock</labelStock>
+  <!-- FormMainStaff -->
+  <FormMainStaff>Staff</FormMainStaff>
+  <labelStaff>Here is our Staff</labelStaff>
 </configuration>

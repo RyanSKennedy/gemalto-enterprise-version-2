@@ -1,13 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
 using System.Text.RegularExpressions;
-using System.Xml;
 using System.Xml.Linq;
-using System.Threading.Tasks;
 using System.IO;
 using System.Net.Sockets;
 using System.Windows.Forms;
@@ -67,15 +62,12 @@ namespace Enterprise
             {
                 textBoxPK.Size = textBoxPKWithRadioButtonSize;
                 textBoxPK.Location = textBoxPKWithRadioButtonPoint;
-                textBoxLicenseInfo.Visible = true;
-
+                
                 radioButtonByKeyID.Visible = true;
                 radioButtonByPK.Visible = true;
 
                 buttonGetUpdateByKeyID.Visible = true;
-
-                labelLicenseInfo.Visible = true;
-
+                
                 textBoxLicenseInfo.Text = "";
                 if (FormMain.xmlKeyInfo != null) {
                     textBoxLicenseInfo.Text += FormMain.xmlKeyInfo;
@@ -315,6 +307,37 @@ namespace Enterprise
                     MessageBox.Show("Error: SentinelUp Client not found in dir: " + Environment.NewLine + FormMain.baseDir, "Error");
                 }
             }
+        }
+
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            if (ckey(keyData, Keys.Alt, Keys.L)) { // Комбинация Alt+L
+                if (labelLicenseInfo.Visible) {
+                    labelLicenseInfo.Visible = false;
+                    textBoxLicenseInfo.Visible = false;
+                } else {
+                    labelLicenseInfo.Visible = true;
+                    textBoxLicenseInfo.Visible = true;
+                }
+            }
+
+            return base.ProcessDialogKey(keyData);
+        }
+        /// <summary>
+        /// Проверяет вхождение заданных комбинаций (keys) в исходную (keyData).
+        /// </summary>
+        /// <param name="keyData">Исходная комбинация.</param>
+        /// <param name="keys">Заданные комбинации.</param>
+        /// <returns>Возвращает True если все заданные комбинации входят в исходную, иначе False.</returns>
+        bool ckey(Keys keyData, params Keys[] keys)
+        {
+            if (keys == null) return false;
+
+            for (int i = 0; i < keys.Length; i++)
+                if ((keyData & keys[i]) != keys[i])
+                    return false;
+
+            return true;
         }
     }
 }

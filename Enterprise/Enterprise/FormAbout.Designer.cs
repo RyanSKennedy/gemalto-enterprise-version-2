@@ -132,6 +132,7 @@
             this.labelLicenseInfo.Size = new System.Drawing.Size(147, 25);
             this.labelLicenseInfo.TabIndex = 7;
             this.labelLicenseInfo.Text = "License info:";
+            this.labelLicenseInfo.Visible = false;
             // 
             // textBoxLicenseInfo
             // 
@@ -143,6 +144,7 @@
             this.textBoxLicenseInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxLicenseInfo.Size = new System.Drawing.Size(535, 124);
             this.textBoxLicenseInfo.TabIndex = 8;
+            this.textBoxLicenseInfo.Visible = false;
             // 
             // labelCurrentVersion
             // 
