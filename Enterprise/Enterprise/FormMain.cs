@@ -305,7 +305,7 @@ namespace Enterprise
 
             if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Stock.exe"))
             {
-                string stockParam = "vcode:" + vCode + " kid:" + curentKeyId + " fid:" + featureIdAccounting + " api:" + aIsEnabled + " language:" + language;
+                string stockParam = "vcode:" + vCode + " kid:" + curentKeyId + " fid:" + featureIdStock + " api:" + aIsEnabled + " language:" + language;
                 System.Diagnostics.ProcessStartInfo stockConfig = new System.Diagnostics.ProcessStartInfo(FormMain.baseDir + Path.DirectorySeparatorChar + "Stock.exe", stockParam);
                 if (appSettings.enableLogs) Log.Write("Пробуем запустить Stock.exe с параметрами: " + stockParam);
                 try
@@ -329,7 +329,30 @@ namespace Enterprise
 
         private void buttonStaff_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Should be run Staff...");
+            //MessageBox.Show("Should be run Staff...");
+
+            if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Staff.exe"))
+            {
+                string staffParam = "vcode:" + vCode + " kid:" + curentKeyId + " fid:" + featureIdStaff + " api:" + aIsEnabled + " language:" + language;
+                System.Diagnostics.ProcessStartInfo staffConfig = new System.Diagnostics.ProcessStartInfo(FormMain.baseDir + Path.DirectorySeparatorChar + "Staff.exe", staffParam);
+                if (appSettings.enableLogs) Log.Write("Пробуем запустить Staff.exe с параметрами: " + staffParam);
+                try
+                {
+                    if (appSettings.enableLogs) Log.Write("Пробуем запустить приложение Staff.exe...");
+
+                    System.Diagnostics.Process staffProcess = System.Diagnostics.Process.Start(staffConfig);
+                }
+                catch (Exception ex)
+                {
+                    if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить Staff.exe, ошибка: " + ex.Message);
+                    MessageBox.Show("Error: " + ex.Message, "Error");
+                }
+            }
+            else
+            {
+                if (appSettings.enableLogs) Log.Write("Error: нет Staff.exe в директории с ПО.");
+                MessageBox.Show("Error: Staff.exe not found in dir: " + Environment.NewLine + FormMain.baseDir, "Error");
+            }
         }
 
         private void buttonConfigInfo_Click(object sender, EventArgs e)
