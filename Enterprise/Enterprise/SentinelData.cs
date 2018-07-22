@@ -32,10 +32,38 @@ namespace Enterprise
                                                          "</param>" +
                                                      "</upclient>";
         public static string keyScope = "<haspscope>" +
-                                            "<feature id=\"1\"/>" +
-                                            "<feature id=\"2\"/>" +
-                                            "<feature id=\"3\"/>" + 
+                                            "<feature>" +
+                                                "<name>Accounting</name>" +
+                                                "<id>1</id>" +
+                                            "</feature>" +
+                                            "<feature>" +
+                                                "<name>Stock</name>" +
+                                                "<id>2</id>" +
+                                            "</feature>" +
+                                            "<feature>" +
+                                                "<name>Staff</name>" +
+                                                "<id>3</id>" +
+                                            "</feature>" +
                                         "</haspscope>";
+
+        public static string keyScopeXsd = "<?xml version=\"1.0\" encoding=\"utf-16\"?>" +
+                                            "<xs:schema attributeFormDefault=\"unqualified\" elementFormDefault=\"qualified\" xmlns:xs=\"http://www.w3.org/2001/XMLSchema\">" +
+                                              "<xs:element name=\"haspscope\">" +
+                                                "<xs:complexType>" +
+                                                  "<xs:sequence>" +
+                                                    "<xs:element maxOccurs=\"unbounded\" name=\"feature\">" +
+                                                      "<xs:complexType>" +
+                                                        "<xs:sequence>" +
+                                                          "<xs:element name=\"name\" type=\"xs:string\"/>" +
+                                                          "<xs:element name=\"id\" type=\"xs:unsignedByte\"/>" +
+                                                        "</xs:sequence>" +
+                                                      "</xs:complexType>" +
+                                                    "</xs:element>" +
+                                                  "</xs:sequence>" +
+                                                "</xs:complexType>" +
+                                              "</xs:element>" +
+                                            "</xs:schema>";
+
         public static string keyFormat = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                                             "<haspformat root=\"hasp_info\">" +
                                                 "<hasp>" +
@@ -65,6 +93,8 @@ namespace Enterprise
         public static string emsUrl = "http://localhost:8080/ems/v78/ws";
 
         public static bool logIsEnabled = true;
+
+        public static bool apiIsEnabled = true;
 
         public SentinelData() {}
     }

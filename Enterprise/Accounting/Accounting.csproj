@@ -4,19 +4,20 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A44EC6A4-4841-4F7A-8C9D-635BBE945C78}</ProjectGuid>
+    <ProjectGuid>{078B73FB-7BD2-417C-814B-C2ECC6A73ABD}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>Enterprise</RootNamespace>
-    <AssemblyName>Enterprise</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <RootNamespace>Accounting</RootNamespace>
+    <AssemblyName>Accounting</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
+    <OutputPath>..\Enterprise\bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -32,10 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="hasp_net_windows">
-      <HintPath>.\hasp_net_windows.dll</HintPath>
-    </Reference>
-    <Reference Include="SentinelConnector">
-      <HintPath>.\SentinelConnector.dll</HintPath>
+      <HintPath>..\Enterprise\hasp_net_windows.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -50,56 +48,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FormConfigInfo.cs">
+    <Compile Include="FormMainAccounting.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormConfigInfo.Designer.cs">
-      <DependentUpon>FormConfigInfo.cs</DependentUpon>
+    <Compile Include="FormMainAccounting.Designer.cs">
+      <DependentUpon>FormMainAccounting.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormLicense.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormLicense.Designer.cs">
-      <DependentUpon>FormLicense.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Log.cs" />
     <Compile Include="MultiLanguage.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="MultiLanguage.designer.cs">
+    <Compile Include="MultiLanguage.Designer.cs">
       <DependentUpon>MultiLanguage.cs</DependentUpon>
     </Compile>
-    <Compile Include="SentinelData.cs" />
-    <Compile Include="FormMain.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormMain.Designer.cs">
-      <DependentUpon>FormMain.cs</DependentUpon>
-    </Compile>
-    <Compile Include="FormAbout.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormAbout.Designer.cs">
-      <DependentUpon>FormAbout.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Log.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="settings\enterprise.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <DependentUpon>enterprise.settings</DependentUpon>
-    </Compile>
-    <EmbeddedResource Include="FormConfigInfo.resx">
-      <DependentUpon>FormConfigInfo.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormLicense.resx">
-      <DependentUpon>FormLicense.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormMain.resx">
-      <DependentUpon>FormMain.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormAbout.resx">
-      <DependentUpon>FormAbout.cs</DependentUpon>
+    <EmbeddedResource Include="FormMainAccounting.resx">
+      <DependentUpon>FormMainAccounting.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -109,14 +74,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="language\en.alp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="language\ru.alp">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -126,28 +84,13 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="settings\enterprise.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>enterprise.Designer.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="apidsp_windows.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="apidsp_windows_x64.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="hasp_rt.exe">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\Enterprise_logo.png" />
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>

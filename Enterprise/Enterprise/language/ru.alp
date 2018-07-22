@@ -8,9 +8,9 @@
   <buttonAbout>О программе</buttonAbout>
   <buttonConfigInfo>Настройки</buttonConfigInfo>
   <labelComponents>Компоненты:</labelComponents>
-  <labelAccounting>Требуется FID 1</labelAccounting>
-  <labelStock>Требуется FID 2</labelStock>
-  <labelStaff>Требуется FID 3</labelStaff>
+  <labelAccountingFID>Требуется FID 1</labelAccountingFID>
+  <labelStockFID>Требуется FID 2</labelStockFID>
+  <labelStaffFID>Требуется FID 3</labelStaffFID>
   <!-- FormAbout -->
   <FormAbout>О программе</FormAbout>
   <buttonActivatePK>Go</buttonActivatePK>
@@ -30,4 +30,7 @@
   <FormLicense>Лицензия</FormLicense>
   <labelLicense>Лицензия:</labelLicense>
   <linkLabelSaveV2C>Сохранить V2C</linkLabelSaveV2C>
+  <!-- FormMainAccounting -->
+  <FormMainAccounting>Бухгалтерия</FormMainAccounting>
+  <labelAccounting>Тут наша бухгалтерия</labelAccounting>
 </configuration>

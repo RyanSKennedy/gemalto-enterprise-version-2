@@ -8,9 +8,9 @@
   <buttonAbout>About</buttonAbout>
   <buttonConfigInfo>Settings</buttonConfigInfo>
   <labelComponents>Components:</labelComponents>
-  <labelAccounting>Required FID 1</labelAccounting>
-  <labelStock>Required FID 2</labelStock>
-  <labelStaff>Required FID 3</labelStaff>
+  <labelAccountingFID>Required FID 1</labelAccountingFID>
+  <labelStockFID>Required FID 2</labelStockFID>
+  <labelStaffFID>Required FID 3</labelStaffFID>
   <!-- FormAbout -->
   <FormAbout>About</FormAbout>
   <buttonActivatePK>Go</buttonActivatePK>
@@ -30,4 +30,7 @@
   <FormLicense>License</FormLicense>
   <labelLicense>License:</labelLicense>
   <linkLabelSaveV2C>Save V2C</linkLabelSaveV2C>
+  <!-- FormMainAccounting -->
+  <FormMainAccounting>Accounting</FormMainAccounting>
+  <labelAccounting>Here is our Accounting</labelAccounting>
 </configuration>

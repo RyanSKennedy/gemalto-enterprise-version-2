@@ -59,7 +59,7 @@ namespace Enterprise
         private void FormLicense_Load(object sender, EventArgs e)
         {
             FormLicense lForm = (FormLicense)Application.OpenForms["FormLicense"];
-            bool isSetAlpFormLicense = FormMain.alp.SetLenguage(appSettings.language, FormMain.BaseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, lForm);
+            bool isSetAlpFormLicense = FormMain.alp.SetLenguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, lForm);
 
             textBoxAID.Text = FormAbout.aid;
             textBoxKeyID.Text = FormAbout.protectionKeyId;

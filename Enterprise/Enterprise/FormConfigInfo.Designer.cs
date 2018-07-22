@@ -43,6 +43,8 @@
             this.labelFormat = new System.Windows.Forms.Label();
             this.textBoxClientCall = new System.Windows.Forms.TextBox();
             this.labelClientCall = new System.Windows.Forms.Label();
+            this.textBoxApi = new System.Windows.Forms.TextBox();
+            this.labelApi = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelCurrentSettings
@@ -210,11 +212,34 @@
             this.labelClientCall.Text = "SentinelUp:";
             this.labelClientCall.UseWaitCursor = true;
             // 
+            // textBoxApi
+            // 
+            this.textBoxApi.Location = new System.Drawing.Point(170, 628);
+            this.textBoxApi.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxApi.Name = "textBoxApi";
+            this.textBoxApi.ReadOnly = true;
+            this.textBoxApi.Size = new System.Drawing.Size(384, 31);
+            this.textBoxApi.TabIndex = 16;
+            this.textBoxApi.UseWaitCursor = true;
+            // 
+            // labelApi
+            // 
+            this.labelApi.AutoSize = true;
+            this.labelApi.Location = new System.Drawing.Point(20, 633);
+            this.labelApi.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelApi.Name = "labelApi";
+            this.labelApi.Size = new System.Drawing.Size(51, 25);
+            this.labelApi.TabIndex = 15;
+            this.labelApi.Text = "API:";
+            this.labelApi.UseWaitCursor = true;
+            // 
             // FormConfigInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(561, 609);
+            this.ClientSize = new System.Drawing.Size(561, 649);
+            this.Controls.Add(this.textBoxApi);
+            this.Controls.Add(this.labelApi);
             this.Controls.Add(this.textBoxClientCall);
             this.Controls.Add(this.labelClientCall);
             this.Controls.Add(this.labelFormat);
@@ -231,8 +256,8 @@
             this.Controls.Add(this.labelEmsUrl);
             this.Controls.Add(this.labelCurrentSettings);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.MaximumSize = new System.Drawing.Size(587, 680);
-            this.MinimumSize = new System.Drawing.Size(587, 680);
+            this.MaximumSize = new System.Drawing.Size(587, 720);
+            this.MinimumSize = new System.Drawing.Size(587, 720);
             this.Name = "FormConfigInfo";
             this.ShowIcon = false;
             this.Text = "Settings";
@@ -261,5 +286,7 @@
         private System.Windows.Forms.Label labelFormat;
         private System.Windows.Forms.TextBox textBoxClientCall;
         private System.Windows.Forms.Label labelClientCall;
+        private System.Windows.Forms.TextBox textBoxApi;
+        private System.Windows.Forms.Label labelApi;
     }
 }

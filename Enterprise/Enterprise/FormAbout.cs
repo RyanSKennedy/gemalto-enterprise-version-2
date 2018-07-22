@@ -54,14 +54,14 @@ namespace Enterprise
             labelLicenseInfo.Visible = false;
 
             LicenseWindow = new FormLicense();
+
+            labelCurrentVersion.Text += FormMain.currentVersion;
         }
 
         private void FormAbout_Load(object sender, EventArgs e)
         {
-            labelCurrentVersion.Text += FormMain.currentVersion;
-
             FormAbout aForm = (FormAbout)Application.OpenForms["FormAbout"];
-            bool isSetAlpFormAbout = FormMain.alp.SetLenguage(appSettings.language, FormMain.BaseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, aForm);
+            bool isSetAlpFormAbout = FormMain.alp.SetLenguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, aForm);
 
             if (FormMain.hInfo != null && FormMain.hInfo != "")
             {
@@ -292,9 +292,9 @@ namespace Enterprise
                 MessageBox.Show("Haven't access to the internet." + Environment.NewLine + "Please check your firewall or connection settings.", "Error: Internet access unavaliable...");
                 if (appSettings.enableLogs) Log.Write("Нет подключения к интернету. Проверьте ваш фаервол или настройки сетевого подключения.");
             } else {
-                if (System.IO.File.Exists(FormMain.BaseDir))
+                if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "upclient.exe"))
                 {
-                    System.Diagnostics.ProcessStartInfo upClientConfig = new System.Diagnostics.ProcessStartInfo(FormMain.BaseDir + Path.DirectorySeparatorChar + "upclient.exe", FormMain.aSentinelUpCall);
+                    System.Diagnostics.ProcessStartInfo upClientConfig = new System.Diagnostics.ProcessStartInfo(FormMain.baseDir + Path.DirectorySeparatorChar + "upclient.exe", FormMain.aSentinelUpCall);
                     if (appSettings.enableLogs) Log.Write("Пробуем запустить upclient.exe с параметрами: " + FormMain.aSentinelUpCall);
                     try
                     {
@@ -312,7 +312,7 @@ namespace Enterprise
                 else
                 {
                     if (appSettings.enableLogs) Log.Write("Error: нет SentinelUp клиента в директории с обновляемым ПО.");
-                    MessageBox.Show("Error: SentinelUp Client not found in dir: " + Environment.NewLine + FormMain.BaseDir, "Error");
+                    MessageBox.Show("Error: SentinelUp Client not found in dir: " + Environment.NewLine + FormMain.baseDir, "Error");
                 }
             }
         }

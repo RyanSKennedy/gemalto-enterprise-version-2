@@ -44,7 +44,7 @@ namespace Enterprise.settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Ru")]
         public string language {
             get {
                 return ((string)(this["language"]));
@@ -62,8 +62,20 @@ namespace Enterprise.settings {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("<haspscope>\n   <feature id=\"1\"/>\n   <feature id=\"2\"/>\n   <feature id=\"3\"/>\n</hasp" +
-            "scope>")]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<haspscope>
+    <feature>
+        <name>Accounting</name>
+        <id>1</id>
+    </feature>
+    <feature>
+        <name>Stock</name>
+        <id>2</id>
+    </feature>
+    <feature>
+        <name>Staff</name>
+        <id>3</id>
+    </feature>
+</haspscope>")]
         public string scope {
             get {
                 return ((string)(this["scope"]));
@@ -106,6 +118,15 @@ namespace Enterprise.settings {
         public string sentinelUpCallData {
             get {
                 return ((string)(this["sentinelUpCallData"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool enableApi {
+            get {
+                return ((bool)(this["enableApi"]));
             }
         }
     }
