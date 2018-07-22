@@ -1,13 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Xml.Linq;
 using System.Windows.Forms;
 using Aladdin.HASP;
 using MyLogClass;
 
-namespace Accounting
+
+namespace Stock
 {
-    public partial class FormMainAccounting : Form
+    public partial class FormMainStock : Form
     {
         public static bool lIsEnabled, aIsEnabled;
         public static bool logsIsExist = false, logsDirIsExist = false, logsFileIsExist = false;
@@ -17,11 +20,12 @@ namespace Accounting
         public static string scope = "", format = "", info = "";
         public static string keyId = "";
         public static string vendorCode = "";
+
         public static Hasp hasp;
         public static HaspStatus status;
         public static MultiLanguage alp;
 
-        public FormMainAccounting(string[] args)
+        public FormMainStock(string[] args)
         {
             InitializeComponent();
 
@@ -76,12 +80,14 @@ namespace Accounting
             }
             //=============================================
 
-            if (lIsEnabled) Log.Write("Запускаем приложение Accounting.exe");
+            if (lIsEnabled) Log.Write("Запускаем приложение Stock.exe");
 
             if (lIsEnabled) Log.Write("Разбираем настройки приложения, переданные при его вызове...");
-            foreach (string srg in args) {
+            foreach (string srg in args)
+            {
                 string[] arg = srg.Split(':');
-                switch (arg[0]) {
+                switch (arg[0])
+                {
                     case "vcode":
                         vendorCode = arg[1];
                         break;
@@ -99,7 +105,7 @@ namespace Accounting
                         break;
 
                     case "logs":
-                        lIsEnabled = (arg[1] == "True") ? true: false;
+                        lIsEnabled = (arg[1] == "True") ? true : false;
                         break;
 
                     case "language":
@@ -108,30 +114,37 @@ namespace Accounting
                 }
             }
 
-            if (args.Length < 1) {
-                if (lIsEnabled) Log.Write("Запуск Accounting.exe производился без требуемых параметров (предположительно не из Enterprise.exe)");
+            if (args.Length < 1)
+            {
+                if (lIsEnabled) Log.Write("Запуск Stock.exe производился без требуемых параметров (предположительно не из Enterprise.exe)");
                 if (lIsEnabled) Log.Write("Пробуем читать общий файл с конфигами приложений: Enterprise.exe.config");
                 XDocument settingsXml = new XDocument();
-                if (!File.Exists(baseDir + Path.DirectorySeparatorChar + "Enterprise.exe.config")) {
+                if (!File.Exists(baseDir + Path.DirectorySeparatorChar + "Enterprise.exe.config"))
+                {
                     MessageBox.Show("File \"Enterprise.exe.config\" doesn't exist in dir:\n" + baseDir, "Error");
                     if (lIsEnabled) Log.Write("Ошибка, файл \"Enterprise.exe.config\" не найден в директории: " + baseDir);
                     Application.Exit();
-                } else {
+                }
+                else
+                {
                     settingsXml = XDocument.Load(baseDir + Path.DirectorySeparatorChar + "Enterprise.exe.config");
                 }
 
                 if (lIsEnabled) Log.Write("Парсим файл с конфигами: " + baseDir + Path.DirectorySeparatorChar + "Enterprise.exe.config");
-                foreach (XElement el in settingsXml.Root.Elements()) {
-                    foreach (XElement elEnterpriseSettingsEnterprise in el.Elements("Enterprise.settings.enterprise")) {
+                foreach (XElement el in settingsXml.Root.Elements())
+                {
+                    foreach (XElement elEnterpriseSettingsEnterprise in el.Elements("Enterprise.settings.enterprise"))
+                    {
                         foreach (XElement elSetting in elEnterpriseSettingsEnterprise.Elements("setting"))
                         {
-                            switch (elSetting.Attribute("name").Value) {
+                            switch (elSetting.Attribute("name").Value)
+                            {
                                 case "enableLogs":
-                                    lIsEnabled = (String.IsNullOrEmpty(elSetting.Value)) ? true: Convert.ToBoolean(elSetting.Value);
+                                    lIsEnabled = (String.IsNullOrEmpty(elSetting.Value)) ? true : Convert.ToBoolean(elSetting.Value);
                                     break;
 
                                 case "language":
-                                    language = (String.IsNullOrEmpty(elSetting.Value)) ? "": elSetting.Value;
+                                    language = (String.IsNullOrEmpty(elSetting.Value)) ? "" : elSetting.Value;
                                     break;
 
                                 case "vendorCode":
@@ -141,15 +154,17 @@ namespace Accounting
                                 case "scope":
                                     string scopeTmp = (String.IsNullOrEmpty(elSetting.Value)) ? "<haspscope>" +
                                                                                                     "<feature>" +
-                                                                                                        "<name>Accounting</name>" +
-                                                                                                        "<id>1</id>" +
-                                                                                                    "</feature>" +                                                                            
+                                                                                                        "<name>Stock</name>" +
+                                                                                                        "<id>2</id>" +
+                                                                                                    "</feature>" +
                                                                                                 "</haspscope>" : elSetting.Value;
                                     XDocument scopeTmpXml = XDocument.Parse(scopeTmp);
-                                    foreach (XElement elScope in scopeTmpXml.Root.Elements()) {
+                                    foreach (XElement elScope in scopeTmpXml.Root.Elements())
+                                    {
                                         foreach (XElement elFeatureName in elScope.Elements("name"))
                                         {
-                                            if (elFeatureName.Value == "Accounting") {
+                                            if (elFeatureName.Value == "Stock")
+                                            {
                                                 foreach (XElement elFeatureId in elScope.Elements("id"))
                                                 {
                                                     feature = HaspFeature.FromFeature(Convert.ToInt32(elFeatureId.Value));
@@ -169,13 +184,14 @@ namespace Accounting
             }
         }
 
-        private void FormMain_Load(object sender, EventArgs e)
+        private void FormMainStock_Load(object sender, EventArgs e)
         {
             if (lIsEnabled) Log.Write("Загружаем/применяем Language Pack к приложению");
-            FormMainAccounting mForm = (FormMainAccounting)Application.OpenForms["FormMainAccounting"];
+            FormMainStock mForm = (FormMainStock)Application.OpenForms["FormMainStock"];
             bool isSetAlpFormMain = alp.SetLenguage(language, baseDir + "\\language\\" + language + ".alp", this.Controls, mForm);
 
-            if (aIsEnabled) {
+            if (aIsEnabled)
+            {
                 if (lIsEnabled) Log.Write("Использование API включено, пробуем получить Key ID с требуемой для работы лицензией");
 
                 scope = "<haspscope>" +
@@ -192,15 +208,17 @@ namespace Accounting
                 status = Hasp.GetInfo(scope, format, vendorCode, ref info);
                 if (lIsEnabled) Log.Write("Результат выполнения функции GetInfo: " + status);
 
-                if (HaspStatus.StatusOk != status) {
+                if (HaspStatus.StatusOk != status)
+                {
                     //handle error
                     //MessageBox.Show("Error: " + status, "Error");
-                    if (lIsEnabled) Log.Write("Ключа с требуемой лицензией не найдено. Закрываем приложение Accounting.exe.");
+                    if (lIsEnabled) Log.Write("Ключа с требуемой лицензией не найдено. Закрываем приложение Stock.exe.");
                     Application.Exit();
                 }
 
                 XDocument infoXml = XDocument.Parse(info);
-                foreach (XElement el in infoXml.Root.Elements()) {
+                foreach (XElement el in infoXml.Root.Elements())
+                {
                     keyId = el.Value;
                 }
                 if (lIsEnabled) Log.Write("Найден ключ с требуемой лицензией, Key ID ключа: " + keyId);
@@ -208,7 +226,7 @@ namespace Accounting
                 if (lIsEnabled) Log.Write("Выполняем запрос лицензии с ключа: " + keyId);
                 hasp = new Hasp(feature);
 
-                scope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
+                scope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                         "<haspscope>" +
                             "<hasp id=\"" + keyId + "\"/>" +
                         "</haspscope>";
@@ -219,7 +237,7 @@ namespace Accounting
                 {
                     //handle error
                     //MessageBox.Show("Error: " + status, "Error");
-                    if (lIsEnabled) Log.Write("Ошибка подключения к лицензии в ключе. Закрываем приложение Accounting.exe.");
+                    if (lIsEnabled) Log.Write("Ошибка подключения к лицензии в ключе. Закрываем приложение Stock.exe.");
                     Application.Exit();
                 }
                 else
@@ -230,10 +248,11 @@ namespace Accounting
             }
         }
 
-        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        private void FormMainStock_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (lIsEnabled) Log.Write("Закрываем приложение Accounting.exe");
-            if (aIsEnabled) {
+            if (lIsEnabled) Log.Write("Закрываем приложение Stock.exe");
+            if (aIsEnabled)
+            {
                 if (lIsEnabled) Log.Write("Использование API включено, требуется выполнить Logout перед закрытием приложения");
 
                 status = hasp.Logout();

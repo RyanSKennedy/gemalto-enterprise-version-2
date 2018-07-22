@@ -301,7 +301,30 @@ namespace Enterprise
 
         private void buttonStock_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("Should be run Stock...");
+            //MessageBox.Show("Should be run Stock...");
+
+            if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Stock.exe"))
+            {
+                string stockParam = "vcode:" + vCode + " kid:" + curentKeyId + " fid:" + featureIdAccounting + " api:" + aIsEnabled + " language:" + language;
+                System.Diagnostics.ProcessStartInfo stockConfig = new System.Diagnostics.ProcessStartInfo(FormMain.baseDir + Path.DirectorySeparatorChar + "Stock.exe", stockParam);
+                if (appSettings.enableLogs) Log.Write("Пробуем запустить Stock.exe с параметрами: " + stockParam);
+                try
+                {
+                    if (appSettings.enableLogs) Log.Write("Пробуем запустить приложение Stock.exe...");
+
+                    System.Diagnostics.Process stockProcess = System.Diagnostics.Process.Start(stockConfig);
+                }
+                catch (Exception ex)
+                {
+                    if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить Stock.exe, ошибка: " + ex.Message);
+                    MessageBox.Show("Error: " + ex.Message, "Error");
+                }
+            }
+            else
+            {
+                if (appSettings.enableLogs) Log.Write("Error: нет Stock.exe в директории с ПО.");
+                MessageBox.Show("Error: Stock.exe not found in dir: " + Environment.NewLine + FormMain.baseDir, "Error");
+            }
         }
 
         private void buttonStaff_Click(object sender, EventArgs e)
