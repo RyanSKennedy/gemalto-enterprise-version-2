@@ -28,7 +28,7 @@
   <labelLanguageState>Язык:</labelLanguageState>
   <!-- FormLicense -->
   <FormLicense>Лицензия</FormLicense>
-  <labelLicense>Лицензия:</labelLicense>
+  <labelLicense>Вы можете сохранить лицензию тут:</labelLicense>
   <linkLabelSaveV2C>Сохранить V2C</linkLabelSaveV2C>
   <!-- FormMainAccounting -->
   <FormMainAccounting>Бухгалтерия</FormMainAccounting>

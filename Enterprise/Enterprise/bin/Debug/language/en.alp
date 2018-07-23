@@ -28,7 +28,7 @@
   <labelLanguageState>Language:</labelLanguageState>
   <!-- FormLicense -->
   <FormLicense>License</FormLicense>
-  <labelLicense>License:</labelLicense>
+  <labelLicense>You can save the license:</labelLicense>
   <linkLabelSaveV2C>Save V2C</linkLabelSaveV2C>
   <!-- FormMainAccounting -->
   <FormMainAccounting>Accounting</FormMainAccounting>

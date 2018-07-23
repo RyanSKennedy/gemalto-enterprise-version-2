@@ -12,7 +12,7 @@ namespace Enterprise
 {
     public partial class FormMain : Form
     {
-        public static string currentVersion = " v.1.0";
+        public static string currentVersion = " v.2.0";
         public static string featureIdAccounting, featureIdStock, featureIdStaff;
         public static string baseDir, logFileName;
         public static string vCode, kScope, kFormat, hInfo, eUrl, aSentinelUpCall;
@@ -58,8 +58,7 @@ namespace Enterprise
                     errorsValidating = true;
                 });
 
-                if (errorsValidating)
-                {
+                if (errorsValidating) {
                     scopeXml = XDocument.Parse(SentinelData.keyScope);
                 }
             } else {
@@ -68,16 +67,13 @@ namespace Enterprise
 
             foreach (XElement elHasp in scopeXml.Elements("haspscope")) {
                 kScope = "<haspscope>";
-                foreach (XElement elFeature in elHasp.Elements("feature"))
-                {
+                foreach (XElement elFeature in elHasp.Elements("feature")) {
                     kScope += "<feature id=\"";
-                    foreach (XElement elFeatureId in elFeature.Elements("id"))
-                    {
+                    foreach (XElement elFeatureId in elFeature.Elements("id")) {
                         kScope += elFeatureId.Value + "\"/>";
                     }
 
-                    foreach (XElement elFeatureName in elFeature.Elements("name"))
-                    {
+                    foreach (XElement elFeatureName in elFeature.Elements("name")) {
                         switch (elFeatureName.Value) {
                             case "Accounting":
                                 featureIdAccounting = elFeature.Element("id").Value;
@@ -106,22 +102,16 @@ namespace Enterprise
             XDocument sentinelUpCallXml;
             sentinelUpCallXml = (appSettings.sentinelUpCallData == "") ? XDocument.Parse(SentinelData.appSentinelUpCallData) : XDocument.Parse(appSettings.sentinelUpCallData);
 
-            if (sentinelUpCallXml != null)
-            {
-                foreach (XElement elSentinelUp in sentinelUpCallXml.Elements("upclient"))
-                {
-                    foreach (XElement elParam in elSentinelUp.Elements("param"))
-                    {
-                        foreach (XElement elKey in elParam.Elements("key"))
-                        {
-                            if (!elKey.Value.Contains("update") && !elKey.Value.Contains("download"))
-                            {
+            if (sentinelUpCallXml != null) {
+                foreach (XElement elSentinelUp in sentinelUpCallXml.Elements("upclient")) {
+                    foreach (XElement elParam in elSentinelUp.Elements("param")) {
+                        foreach (XElement elKey in elParam.Elements("key")) {
+                            if (!elKey.Value.Contains("update") && !elKey.Value.Contains("download")) {
                                 aSentinelUpCall += elKey.Value + " ";
                             }
                         }
 
-                        foreach (XElement elValue in elParam.Elements("value"))
-                        {
+                        foreach (XElement elValue in elParam.Elements("value")) {
                             aSentinelUpCall += elValue.Value + " ";
                         }
                     }
@@ -152,42 +142,28 @@ namespace Enterprise
 
             // создаём директорию (если не создана) и файл с логами
             //=============================================
-            if (System.IO.Directory.Exists(baseDir + "\\logs"))//если директория с логами есть, говорим true
-            {
+            if (System.IO.Directory.Exists(baseDir + "\\logs")) { //если директория с логами есть, говорим true
                 logsDirIsExist = true;
-            }
-            else// если нет, пробуем создать и ещё раз проверяем создалась ли 
-            {
-                try
-                {
+            } else { // если нет, пробуем создать и ещё раз проверяем создалась ли 
+                try {
                     System.IO.Directory.CreateDirectory(baseDir + "\\logs");
                     logsDirIsExist = System.IO.Directory.Exists(baseDir + "\\logs");
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Ошибка при попытке создать директорию для логов!" + Environment.NewLine + "Ошибка: " + ex);
+                } catch (Exception ex) {
+                    MessageBox.Show("Can't create dir for logs!" + Environment.NewLine + "Error: " + ex);
                 }
             }
-            if (logsDirIsExist == true)// если директория с логами есть, проверяем есть ли файл с логами если есть - используем его, если нет - создаём файл с логами 
-            {
+            if (logsDirIsExist == true) { // если директория с логами есть, проверяем есть ли файл с логами если есть - используем его, если нет - создаём файл с логами 
                 logFileName = "app.log";
 
-                if (System.IO.File.Exists(baseDir + "\\logs\\" + logFileName))// если файл с логами есть, говорим true
-                {
+                if (System.IO.File.Exists(baseDir + "\\logs\\" + logFileName)) { // если файл с логами есть, говорим true
                     logsFileIsExist = true;
-                }
-                else// если нет, пробуем создать и ещё раз проверяем создался ли 
-                {
-                    try
-                    {
-                        using (System.IO.File.Create(baseDir + "\\logs\\" + logFileName))
-                        {
+                } else { // если нет, пробуем создать и ещё раз проверяем создался ли 
+                    try {
+                        using (System.IO.File.Create(baseDir + "\\logs\\" + logFileName)) {
                             logsFileIsExist = System.IO.Directory.Exists(baseDir + "\\logs");
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        MessageBox.Show("Ошибка при попытке создать файл c логами!" + Environment.NewLine + "Ошибка: " + ex);
+                    } catch (Exception ex) {
+                        MessageBox.Show("Can't create log file!" + Environment.NewLine + "Error: " + ex);
                     }
                 }
             }
@@ -238,21 +214,17 @@ namespace Enterprise
 
                 xmlKeyInfo = XDocument.Parse(hInfo);
             }
+
             if (xmlKeyInfo != null) {
-                foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
-                {
-                    foreach (XElement elKeyId in elHasp.Elements("id"))
-                    {
+                foreach (XElement elHasp in xmlKeyInfo.Root.Elements()) {
+                    foreach (XElement elKeyId in elHasp.Elements("id")) {
                         if (curentKeyId == "") {
                             curentKeyId = elKeyId.Value;
                         }
                     }
-                        foreach (XElement elProduct in elHasp.Elements("product"))
-                    {
-                        foreach (XElement elFeature in elProduct.Elements("feature"))
-                        {
-                            foreach (XElement elFeatureId in elFeature.Elements("id"))
-                            {
+                    foreach (XElement elProduct in elHasp.Elements("product")) {
+                        foreach (XElement elFeature in elProduct.Elements("feature")) {
+                            foreach (XElement elFeatureId in elFeature.Elements("id")) {
                                 buttonAccounting.Enabled = (elFeatureId.Value == featureIdAccounting) ? true : buttonAccounting.Enabled;
                                 buttonStock.Enabled = (elFeatureId.Value == featureIdStock) ? true : buttonStock.Enabled;
                                 buttonStaff.Enabled = (elFeatureId.Value == featureIdStaff) ? true : buttonStaff.Enabled;
@@ -267,33 +239,23 @@ namespace Enterprise
         protected override void OnClosing(CancelEventArgs e)
         {
             if (appSettings.enableLogs) Log.Write("Закрываем приложение -------");
-
-            Application.Exit();
         }
 
         private void buttonAccounting_Click(object sender, EventArgs e)
         {
             //MessageBox.Show("Should be run Accounting...");
 
-            if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Accounting.exe"))
-            {
+            if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Accounting.exe")) {
                 string accountingParam = "vcode:" + vCode + " kid:" + curentKeyId + " fid:" + featureIdAccounting + " api:" + aIsEnabled + " language:" + language;
                 System.Diagnostics.ProcessStartInfo accountingConfig = new System.Diagnostics.ProcessStartInfo(FormMain.baseDir + Path.DirectorySeparatorChar + "Accounting.exe", accountingParam);
                 if (appSettings.enableLogs) Log.Write("Пробуем запустить Accounting.exe с параметрами: " + accountingParam);
-                try
-                {
-                    if (appSettings.enableLogs) Log.Write("Пробуем запустить приложение Accounting.exe...");
-
+                try {
                     System.Diagnostics.Process accountingProcess = System.Diagnostics.Process.Start(accountingConfig);
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить Accounting.exe, ошибка: " + ex.Message);
                     MessageBox.Show("Error: " + ex.Message, "Error");
                 }
-            }
-            else
-            {
+            } else {
                 if (appSettings.enableLogs) Log.Write("Error: нет Accounting.exe в директории с ПО.");
                 MessageBox.Show("Error: Accounting.exe not found in dir: " + Environment.NewLine + FormMain.baseDir, "Error");
             }
@@ -303,25 +265,17 @@ namespace Enterprise
         {
             //MessageBox.Show("Should be run Stock...");
 
-            if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Stock.exe"))
-            {
+            if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Stock.exe")) {
                 string stockParam = "vcode:" + vCode + " kid:" + curentKeyId + " fid:" + featureIdStock + " api:" + aIsEnabled + " language:" + language;
                 System.Diagnostics.ProcessStartInfo stockConfig = new System.Diagnostics.ProcessStartInfo(FormMain.baseDir + Path.DirectorySeparatorChar + "Stock.exe", stockParam);
                 if (appSettings.enableLogs) Log.Write("Пробуем запустить Stock.exe с параметрами: " + stockParam);
-                try
-                {
-                    if (appSettings.enableLogs) Log.Write("Пробуем запустить приложение Stock.exe...");
-
+                try {
                     System.Diagnostics.Process stockProcess = System.Diagnostics.Process.Start(stockConfig);
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить Stock.exe, ошибка: " + ex.Message);
                     MessageBox.Show("Error: " + ex.Message, "Error");
                 }
-            }
-            else
-            {
+            } else {
                 if (appSettings.enableLogs) Log.Write("Error: нет Stock.exe в директории с ПО.");
                 MessageBox.Show("Error: Stock.exe not found in dir: " + Environment.NewLine + FormMain.baseDir, "Error");
             }
@@ -331,25 +285,17 @@ namespace Enterprise
         {
             //MessageBox.Show("Should be run Staff...");
 
-            if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Staff.exe"))
-            {
+            if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Staff.exe")) {
                 string staffParam = "vcode:" + vCode + " kid:" + curentKeyId + " fid:" + featureIdStaff + " api:" + aIsEnabled + " language:" + language;
                 System.Diagnostics.ProcessStartInfo staffConfig = new System.Diagnostics.ProcessStartInfo(FormMain.baseDir + Path.DirectorySeparatorChar + "Staff.exe", staffParam);
                 if (appSettings.enableLogs) Log.Write("Пробуем запустить Staff.exe с параметрами: " + staffParam);
-                try
-                {
-                    if (appSettings.enableLogs) Log.Write("Пробуем запустить приложение Staff.exe...");
-
+                try {
                     System.Diagnostics.Process staffProcess = System.Diagnostics.Process.Start(staffConfig);
-                }
-                catch (Exception ex)
-                {
+                } catch (Exception ex) {
                     if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить Staff.exe, ошибка: " + ex.Message);
                     MessageBox.Show("Error: " + ex.Message, "Error");
                 }
-            }
-            else
-            {
+            } else {
                 if (appSettings.enableLogs) Log.Write("Error: нет Staff.exe в директории с ПО.");
                 MessageBox.Show("Error: Staff.exe not found in dir: " + Environment.NewLine + FormMain.baseDir, "Error");
             }

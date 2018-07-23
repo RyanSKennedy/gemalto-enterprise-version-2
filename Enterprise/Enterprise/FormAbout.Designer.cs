@@ -92,7 +92,7 @@
             // 
             // textBoxPK
             // 
-            this.textBoxPK.Location = new System.Drawing.Point(192, 49);
+            this.textBoxPK.Location = new System.Drawing.Point(195, 49);
             this.textBoxPK.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxPK.Name = "textBoxPK";
             this.textBoxPK.Size = new System.Drawing.Size(277, 31);
