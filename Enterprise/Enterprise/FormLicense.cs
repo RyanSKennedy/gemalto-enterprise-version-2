@@ -34,28 +34,21 @@ namespace Enterprise
             SaveFileDialog sf = new SaveFileDialog();
             sf.Filter = "v2c files (*.v2c)|*.v2c|All files (*.*)|*.*";
             sf.RestoreDirectory = true;
-
+            
             if (sf.ShowDialog() == DialogResult.OK) {
-                if ((myStream = sf.OpenFile()) != null) {
-                    //-------------------------------- Save V2C ----------------------------------
-
-                    try {
-                        if ((myStream = sf.OpenFile()) != null) {
-                            using (myStream) {
-                                StreamWriter createV2CFile = new StreamWriter(myStream);
-                                createV2CFile.WriteLine(FormAbout.v2c);
-                                createV2CFile.Close();
-                            }
-                        }
-                    } catch (Exception ex) {
-                        if (appSettings.enableLogs) Log.Write("Не могу сохранить V2C: " + Environment.NewLine + FormAbout.v2c + Environment.NewLine + "Ошибка: " + ex);
-                        MessageBox.Show("Saving file error: " + ex);
-                    }
-
-                    //----------------------------------------------------------------------------
-
-                    myStream.Close();
+                //-------------------------------- Save V2C ----------------------------------
+                try {
+                    if (appSettings.enableLogs) Log.Write("Пробуем сохранить V2C файл...");
+                    myStream = File.Open(sf.FileName, FileMode.OpenOrCreate, FileAccess.ReadWrite);
+                    StreamWriter createV2CFile = new StreamWriter(myStream);
+                    createV2CFile.WriteLine(FormAbout.v2c);
+                    createV2CFile.Close();
+                    if (appSettings.enableLogs) Log.Write("V2C файл сохранён успешно...");
+                } catch (Exception ex) {
+                    if (appSettings.enableLogs) Log.Write("Не могу сохранить V2C: " + Environment.NewLine + FormAbout.v2c + Environment.NewLine + "Ошибка: " + ex);
+                    MessageBox.Show("Saving file error: " + ex);
                 }
+                //----------------------------------------------------------------------------
             }
         }
 

@@ -45,7 +45,7 @@
             // 
             this.labelAID.AutoSize = true;
             this.labelAID.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelAID.Location = new System.Drawing.Point(18, 61);
+            this.labelAID.Location = new System.Drawing.Point(13, 62);
             this.labelAID.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelAID.Name = "labelAID";
             this.labelAID.Size = new System.Drawing.Size(56, 25);
@@ -67,7 +67,7 @@
             // 
             this.labelLicense.AutoSize = true;
             this.labelLicense.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelLicense.Location = new System.Drawing.Point(18, 170);
+            this.labelLicense.Location = new System.Drawing.Point(13, 170);
             this.labelLicense.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelLicense.Name = "labelLicense";
             this.labelLicense.Size = new System.Drawing.Size(285, 25);

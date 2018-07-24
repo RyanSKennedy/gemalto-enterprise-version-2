@@ -124,6 +124,18 @@ namespace Enterprise
             }
 
             if (!string.IsNullOrEmpty(actXml) && Regex.IsMatch(textBoxPK.Text, @"\w{8}-\w{4}-\w{4}-\w{4}-\w{12}")) {
+                actXml = "<activation>" +
+                               "<activationInput>" +
+                                  "<activationAttribute>" +
+                                     "<attributeValue>" +
+                                        "<![CDATA[" + actXml + "]]>" +
+                                     "</attributeValue>" +
+                                     "<attributeName>C2V</attributeName>" +
+                                  "</activationAttribute>" +
+                                  "<comments>New Comments Added By Web Services</comments>" +
+                               "</activationInput>" +
+                            "</activation>";
+
                 actStatus = sentinelObject.GetRequest("productKey/" + textBoxPK.Text + "/activation.ws", new KeyValuePair<string, string>("activationXml", actXml));
             } else {
                 if (appSettings.enableLogs) Log.Write("Введён не валидный ProductKey или C2V..." + Environment.NewLine);
@@ -131,22 +143,20 @@ namespace Enterprise
             }
 
             if (actStatus != "") {
-                if (!string.IsNullOrEmpty(actStatus) && !actStatus.Contains("Error")) {
+                if (!string.IsNullOrEmpty(actStatus) && !actStatus.Contains("Error") && !actStatus.Contains("pending")) {
                     XDocument licXml = XDocument.Parse(actStatus);
 
                     foreach (XElement el in licXml.Root.Elements()) {
-                        foreach (XElement elActOut in el.Elements("activationOutput")) {
-                            foreach (XElement elAid in elActOut.Elements("AID")) {
-                                aid = (!string.IsNullOrEmpty(elAid.Value)) ? elAid.Value : aid;
-                            }
+                        foreach (XElement elAid in el.Elements("AID")) {
+                            aid = (!string.IsNullOrEmpty(elAid.Value)) ? elAid.Value : aid;
+                        }
 
-                            foreach (XElement elProtectionKeyId in elActOut.Elements("protectionKeyId")) {
-                                protectionKeyId = (!string.IsNullOrEmpty(elProtectionKeyId.Value)) ? elProtectionKeyId.Value : protectionKeyId;
-                            }
+                        foreach (XElement elProtectionKeyId in el.Elements("protectionKeyId")) {
+                            protectionKeyId = (!string.IsNullOrEmpty(elProtectionKeyId.Value)) ? elProtectionKeyId.Value : protectionKeyId;
+                        }
 
-                            foreach (XElement elActivationString in elActOut.Elements("activationString")) {
-                                v2c = (!string.IsNullOrEmpty(elActivationString.Value)) ? elActivationString.Value : v2c;
-                            }
+                        foreach (XElement elActivationString in el.Elements("activationString")) {
+                            v2c = (!string.IsNullOrEmpty(elActivationString.Value)) ? elActivationString.Value : v2c;
                         }
                     }
 
@@ -170,7 +180,11 @@ namespace Enterprise
                             LicenseWindow.ShowDialog();
                         }
                     }
-                } else {
+                } else if (actStatus.Contains("pending")) {
+                    if (appSettings.enableLogs) Log.Write("Для ключа имеются неприменённые обновления, в начале примените эти обновления. Статус: " + actStatus);
+                    MessageBox.Show("Pending update exist for this key." + Environment.NewLine + "You should download and apply them first!", "Error");
+                }
+                else {
                     if (appSettings.enableLogs) Log.Write("Ответ от сервера пустой или содержит ошибку, статус: " + actStatus);
                     MessageBox.Show("Server response have error or empty, status: " + Environment.NewLine + actStatus, "Error");
                 }
