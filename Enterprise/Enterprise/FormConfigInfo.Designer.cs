@@ -45,6 +45,8 @@
             this.labelClientCall = new System.Windows.Forms.Label();
             this.textBoxApi = new System.Windows.Forms.TextBox();
             this.labelApi = new System.Windows.Forms.Label();
+            this.textBoxPort = new System.Windows.Forms.TextBox();
+            this.labelPort = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelCurrentSettings
@@ -233,11 +235,34 @@
             this.labelApi.Text = "API:";
             this.labelApi.UseWaitCursor = true;
             // 
+            // textBoxPort
+            // 
+            this.textBoxPort.Location = new System.Drawing.Point(170, 676);
+            this.textBoxPort.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxPort.Name = "textBoxPort";
+            this.textBoxPort.ReadOnly = true;
+            this.textBoxPort.Size = new System.Drawing.Size(384, 31);
+            this.textBoxPort.TabIndex = 18;
+            this.textBoxPort.UseWaitCursor = true;
+            // 
+            // labelPort
+            // 
+            this.labelPort.AutoSize = true;
+            this.labelPort.Location = new System.Drawing.Point(20, 681);
+            this.labelPort.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelPort.Name = "labelPort";
+            this.labelPort.Size = new System.Drawing.Size(57, 25);
+            this.labelPort.TabIndex = 17;
+            this.labelPort.Text = "Port:";
+            this.labelPort.UseWaitCursor = true;
+            // 
             // FormConfigInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(561, 649);
+            this.ClientSize = new System.Drawing.Size(561, 699);
+            this.Controls.Add(this.textBoxPort);
+            this.Controls.Add(this.labelPort);
             this.Controls.Add(this.textBoxApi);
             this.Controls.Add(this.labelApi);
             this.Controls.Add(this.textBoxClientCall);
@@ -256,8 +281,8 @@
             this.Controls.Add(this.labelEmsUrl);
             this.Controls.Add(this.labelCurrentSettings);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.MaximumSize = new System.Drawing.Size(587, 720);
-            this.MinimumSize = new System.Drawing.Size(587, 720);
+            this.MaximumSize = new System.Drawing.Size(587, 770);
+            this.MinimumSize = new System.Drawing.Size(587, 770);
             this.Name = "FormConfigInfo";
             this.ShowIcon = false;
             this.Text = "Settings";
@@ -288,5 +313,7 @@
         private System.Windows.Forms.Label labelClientCall;
         private System.Windows.Forms.TextBox textBoxApi;
         private System.Windows.Forms.Label labelApi;
+        private System.Windows.Forms.TextBox textBoxPort;
+        private System.Windows.Forms.Label labelPort;
     }
 }

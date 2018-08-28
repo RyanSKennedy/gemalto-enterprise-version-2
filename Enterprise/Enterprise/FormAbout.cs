@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using System.Linq;
 using System.IO;
 using System.Net.Sockets;
 using System.Windows.Forms;
@@ -25,7 +26,15 @@ namespace Enterprise
         public static string aid = "";
         public static string v2c = "";
         public static string protectionKeyId = "";
+        public static XDocument xmlKeysInfo;
+        public static AvaliableKeys[] avalibleKeys;
         FormLicense LicenseWindow;
+        FormKeys KeysForSelect;
+
+        public struct AvaliableKeys {
+            public string keyId;
+            public string keyType;
+        }
 
         public FormAbout()
         {
@@ -46,8 +55,8 @@ namespace Enterprise
 
             labelLicenseInfo.Visible = false;
             labelCurrentVersion.Text += FormMain.currentVersion;
-
-            //LicenseWindow = new FormLicense();
+            
+            KeysForSelect = new FormKeys();
         }
 
         private void FormAbout_Load(object sender, EventArgs e)
@@ -95,6 +104,89 @@ namespace Enterprise
             string actStatus = "";
 
             string actXml = "";
+
+            DialogResult dialogResultIfKeyIsExist = DialogResult.None, dialogResultForNewKey = DialogResult.None;
+            
+            // Проверка есть ли вообще какой-либо ключ нашей серии на ПК
+            if (string.IsNullOrEmpty(FormMain.curentKeyId)) {
+                string tScope, tFormat;
+
+                tScope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
+                            "<haspscope>" + 
+                                "<license_manager hostname=\"localhost\"/>" + 
+                            "</haspscope>";
+
+                tFormat = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
+                            "<haspformat root=\"hasp_info\">" +
+                                "<hasp>" +
+                                    "<element name=\"id\"/>" + 
+                                    "<element name=\"type\"/>" + 
+                                "</hasp>" +
+                            "</haspformat>";
+
+                hStatus = Hasp.GetInfo(tScope, tFormat, FormMain.vCode, ref hInfo);
+                if (HaspStatus.StatusOk != hStatus)
+                {
+                    if (appSettings.enableLogs) Log.Write("Ошибка запроса информации о доступных ключах, статус: " + hStatus);
+                }
+                else
+                {
+                    if (appSettings.enableLogs) Log.Write("Результат выполнения запроса информации о ключах, статус: " + hStatus);
+                    if (appSettings.enableLogs) Log.Write("Вывод:" + Environment.NewLine + hInfo);
+
+                    xmlKeysInfo = XDocument.Parse(hInfo);
+                }
+
+                if(xmlKeysInfo != null) {
+                    avalibleKeys = new AvaliableKeys[xmlKeysInfo.Root.Elements("hasp").Count()];
+                    int i = 0;
+
+                    foreach (XElement el in xmlKeysInfo.Root.Elements())
+                    {
+                        avalibleKeys[i].keyId = el.Element("id").Value;
+                        avalibleKeys[i].keyType = el.Element("type").Value;
+                        i++;
+                    }
+                }
+                
+                if (avalibleKeys.Count() > 1)
+                {
+                    if (appSettings.enableLogs) Log.Write("Открываем окно выбора ключа для записи лицензии \"Ключи\"");
+                    dialogResultIfKeyIsExist = KeysForSelect.ShowDialog();
+                    if (dialogResultIfKeyIsExist == DialogResult.Cancel)
+                    {
+                        return;
+                    } 
+                } else if (avalibleKeys.Count() == 1) {
+                    dialogResultIfKeyIsExist = MessageBox.Show("Do you want to install license in exist Key: " + Environment.NewLine + 
+                        avalibleKeys[0].keyType + " with Key ID = " + avalibleKeys[0].keyId + "?" + Environment.NewLine + 
+                        "If you chouse \"No\", license will be installed in new SL key.", 
+                        "Where should be installed license?", MessageBoxButtons.YesNoCancel);
+
+                    if (dialogResultIfKeyIsExist == DialogResult.Yes) {
+                        FormMain.curentKeyId = avalibleKeys[0].keyId;
+                    } else if (dialogResultIfKeyIsExist == DialogResult.No) {
+                        FormMain.curentKeyId = "";
+                    } else if (dialogResultIfKeyIsExist == DialogResult.Cancel) {
+                        return;
+                    }
+                }
+            }
+
+            if (FormMain.curentKeyId == "" && dialogResultIfKeyIsExist != DialogResult.No && dialogResultIfKeyIsExist != DialogResult.Cancel) {
+                dialogResultForNewKey = MessageBox.Show("Do you want to install license in New SL Key?",
+                        "Where should be installed license?", MessageBoxButtons.YesNo);
+
+                if (dialogResultForNewKey == DialogResult.Yes)
+                {
+                    FormMain.curentKeyId = "";
+                }
+                else if (dialogResultForNewKey == DialogResult.No)
+                {
+                    return;
+                }
+            }
+            // =========================================================
 
             string aScope = (!string.IsNullOrEmpty(FormMain.curentKeyId)) ?
                             "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
@@ -279,7 +371,7 @@ namespace Enterprise
             using (var tcpClient = new TcpClient())
             {
                 try {
-                    tcpClient.Connect("8.8.8.8", 443); // google
+                    tcpClient.Connect("8.8.8.8", FormMain.tPort); // google
                     isConnected = tcpClient.Connected;
                 } catch (Exception ex) {
                     if (appSettings.enableLogs) Log.Write("Проблема с проверкой соединения с интернетом. Ошибка: " + ex.Message);

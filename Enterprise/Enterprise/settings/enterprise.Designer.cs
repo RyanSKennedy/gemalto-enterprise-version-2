@@ -133,5 +133,14 @@ namespace Enterprise.settings {
                 return ((bool)(this["enableApi"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("443")]
+        public string portForTestConnection {
+            get {
+                return ((string)(this["portForTestConnection"]));
+            }
+        }
     }
 }

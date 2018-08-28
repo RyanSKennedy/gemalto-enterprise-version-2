@@ -31,10 +31,9 @@ namespace Enterprise
             XDocument kFormatXml = XDocument.Parse(FormMain.kFormat);
             textBoxFormat.Text = "";
             textBoxFormat.Text += kFormatXml;
-
             textBoxClientCall.Text = FormMain.aSentinelUpCall;
-
             textBoxApi.Text = (FormMain.aIsEnabled) ? "Enabled" : "Disabled";
+            textBoxPort.Text = FormMain.tPort.ToString();
         }
 
         private void FormConfigInfo_FormClosing(object sender, FormClosingEventArgs e)

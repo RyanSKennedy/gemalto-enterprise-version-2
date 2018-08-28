@@ -12,10 +12,11 @@ namespace Enterprise
 {
     public partial class FormMain : Form
     {
-        public static string currentVersion = " v.2.0";
+        public static string currentVersion = " v.1.0";
         public static string featureIdAccounting, featureIdStock, featureIdStaff;
         public static string baseDir, logFileName;
         public static string vCode, kScope, kFormat, hInfo, eUrl, aSentinelUpCall;
+        public static int tPort;
         public static bool lIsEnabled, aIsEnabled;
         public static string curentKeyId = "";
         public static string langState, language;
@@ -40,7 +41,12 @@ namespace Enterprise
 
             // решаем откуда брать Vendor code
             //============================================= 
-            vCode = (appSettings.vendorCode == "") ? SentinelData.vendorCode : appSettings.vendorCode;
+            vCode = (String.IsNullOrEmpty(appSettings.vendorCode)) ? SentinelData.vendorCode : appSettings.vendorCode;
+            //=============================================
+
+            // решаем откуда брать Port для проверки интернет соединения
+            //============================================= 
+            tPort = (String.IsNullOrEmpty(appSettings.portForTestConnection)) ? Convert.ToInt32(SentinelData.portForTestConnection) : Convert.ToInt32(appSettings.portForTestConnection);
             //=============================================
 
             // решаем какой Scope использовать для поиска ключа с лицензиями и откуда его брать
@@ -121,7 +127,7 @@ namespace Enterprise
 
             // решаем какой EMS URL использовать и откуда его брать
             //============================================= 
-            eUrl = (appSettings.emsUrl == "") ? SentinelData.emsUrl : appSettings.emsUrl;
+            eUrl = (String.IsNullOrEmpty(appSettings.emsUrl)) ? SentinelData.emsUrl : appSettings.emsUrl;
             //=============================================
 
             // решаем включать логирование или нет
@@ -181,7 +187,7 @@ namespace Enterprise
 
             buttonAccounting.Visible = true;
             buttonStock.Visible = true;
-            buttonStaff.Visible = true;
+            buttonStaff.Visible = false; // Видимость/невидимость этой кнопки и есть разница между версией v1 и v2 приложения Enterprise
 
             labelAccountingFID.Visible = false;
             labelAccountingFID.Text += featureIdAccounting;

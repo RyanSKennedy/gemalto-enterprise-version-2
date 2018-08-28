@@ -55,7 +55,7 @@ namespace Enterprise
                                                       "<xs:complexType>" +
                                                         "<xs:sequence>" +
                                                           "<xs:element name=\"name\" type=\"xs:string\"/>" +
-                                                          "<xs:element name=\"id\" type=\"xs:unsignedByte\"/>" +
+                                                          "<xs:element name=\"id\" type=\"xs:string\"/>" +
                                                         "</xs:sequence>" +
                                                       "</xs:complexType>" +
                                                     "</xs:element>" +
@@ -95,6 +95,8 @@ namespace Enterprise
         public static bool logIsEnabled = true;
 
         public static bool apiIsEnabled = true;
+
+        public static string portForTestConnection = "80";
 
         public SentinelData() {}
     }
