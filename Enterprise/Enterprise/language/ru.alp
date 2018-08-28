@@ -6,10 +6,11 @@
   <buttonStock>Склад</buttonStock>
   <buttonStaff>Кадры</buttonStaff>
   <buttonAbout>О программе</buttonAbout>
+  <buttonConfigInfo>Настройки</buttonConfigInfo>
   <labelComponents>Компоненты:</labelComponents>
-  <labelAccounting>Требуется FID 1</labelAccounting>
-  <labelStock>Требуется FID 2</labelStock>
-  <labelStaff>Требуется FID 3</labelStaff>
+  <labelAccountingFID>Требуется FID 1</labelAccountingFID>
+  <labelStockFID>Требуется FID 2</labelStockFID>
+  <labelStaffFID>Требуется FID 3</labelStaffFID>
   <!-- FormAbout -->
   <FormAbout>О программе</FormAbout>
   <buttonActivatePK>Go</buttonActivatePK>
@@ -25,4 +26,17 @@
   <labelCurrentSettings>Используемые настройки:</labelCurrentSettings>
   <labelLogsState>Логи:</labelLogsState>
   <labelLanguageState>Язык:</labelLanguageState>
+  <!-- FormLicense -->
+  <FormLicense>Лицензия</FormLicense>
+  <labelLicense>Вы можете сохранить лицензию тут:</labelLicense>
+  <linkLabelSaveV2C>Сохранить V2C</linkLabelSaveV2C>
+  <!-- FormMainAccounting -->
+  <FormMainAccounting>Бухгалтерия</FormMainAccounting>
+  <labelAccounting>Тут наша бухгалтерия</labelAccounting>
+  <!-- FormMainStock -->
+  <FormMainStock>Склад</FormMainStock>
+  <labelStock>Тут наш склад</labelStock>
+  <!-- FormMainStaff -->
+  <FormMainStaff>Кадры</FormMainStaff>
+  <labelStaff>Тут наши кадры</labelStaff>
 </configuration>

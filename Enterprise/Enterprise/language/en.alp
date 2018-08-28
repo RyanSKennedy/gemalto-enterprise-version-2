@@ -6,10 +6,11 @@
   <buttonStock>Stock</buttonStock>
   <buttonStaff>Staff</buttonStaff>
   <buttonAbout>About</buttonAbout>
+  <buttonConfigInfo>Settings</buttonConfigInfo>
   <labelComponents>Components:</labelComponents>
-  <labelAccounting>Required FID 1</labelAccounting>
-  <labelStock>Required FID 2</labelStock>
-  <labelStaff>Required FID 3</labelStaff>
+  <labelAccountingFID>Required FID 1</labelAccountingFID>
+  <labelStockFID>Required FID 2</labelStockFID>
+  <labelStaffFID>Required FID 3</labelStaffFID>
   <!-- FormAbout -->
   <FormAbout>About</FormAbout>
   <buttonActivatePK>Go</buttonActivatePK>
@@ -25,4 +26,17 @@
   <labelCurrentSettings>Current settings:</labelCurrentSettings>
   <labelLogsState>Logs:</labelLogsState>
   <labelLanguageState>Language:</labelLanguageState>
+  <!-- FormLicense -->
+  <FormLicense>License</FormLicense>
+  <labelLicense>You can save the license:</labelLicense>
+  <linkLabelSaveV2C>Save V2C</linkLabelSaveV2C>
+  <!-- FormMainAccounting -->
+  <FormMainAccounting>Accounting</FormMainAccounting>
+  <labelAccounting>Here is our Accounting</labelAccounting>
+  <!-- FormMainStock -->
+  <FormMainStock>Stock</FormMainStock>
+  <labelStock>Here is our Stock</labelStock>
+  <!-- FormMainStaff -->
+  <FormMainStaff>Staff</FormMainStaff>
+  <labelStaff>Here is our Staff</labelStaff>
 </configuration>

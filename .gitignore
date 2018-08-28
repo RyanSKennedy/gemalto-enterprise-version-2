@@ -13,14 +13,14 @@
 *.userprefs
 
 # Build results
-[Dd]ebug/
+[Dd]ebug/*
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
 x64/
 x86/
 bld/
-[Bb]in/
+[Bb]in/*
 [Oo]bj/
 [Ll]og/
 
@@ -330,3 +330,9 @@ ASALocalRun/
 
 # Mac
 **/.DS_Store
+
+# Un-Exclude
+!SentinelConnector/SentinelConnector/[Bb]in/[Dd]ebug/SentinelConnector.dll
+!SentinelConnector/SentinelConnector/[Bb]in/[Dd]ebug/Newtonsoft.Json.dll
+!SentinelConnector/SentinelConnector/[Bb]in/[Dd]ebug/System.Net.Http.Extensions.dll
+!SentinelConnector/SentinelConnector/[Bb]in/[Dd]ebug/System.Net.Http.Primitives.dll
