@@ -12,23 +12,27 @@ namespace Enterprise
         public static string appSentinelUpCallData = "<upclient>" +
                                                          "<param>" +
                                                              "<key>-url</key>" +
-                                                             "<value>ddkxtq.trial.sentinelcloud.com/up</value>" +
+                                                             "<value>up.sentinelcloud.com</value>" +
                                                          "</param>" +
                                                          "<param>" +
                                                              "<key>-k</key>" +
-                                                             "<value>2e546582fa03eecf7312e3832d955ea7</value>" +
+                                                             "<value>eafe87d22cc2a49793276f4141c0ebb0</value>" +
                                                          "</param>" +
                                                          "<param>" +
                                                              "<key>-pc</key>" +
-                                                             "<value>42836411-f5d4-4ebc-b1b6-d0895505738e</value>" +
+                                                             "<value>1337e5b0-fd2d-4018-8a13-a921bcbfb5d2</value>" +
                                                          "</param>" +
                                                          "<param>" +
                                                              "<key>-v</key>" +
-                                                             "<value>1.0</value>" +
+                                                             "<value>v1</value>" +
                                                          "</param>" +
                                                          "<param>" +
                                                              "<key>-update</key>" +
                                                              "<value>-update</value>" +
+                                                         "</param>" +
+                                                         "<param>" +
+                                                             "<key>-log</key>" +
+                                                             "<value>update.log</value>" +
                                                          "</param>" +
                                                      "</upclient>";
         public static string keyScope = "<haspscope>" +
@@ -96,7 +100,7 @@ namespace Enterprise
 
         public static bool apiIsEnabled = true;
 
-        public static string portForTestConnection = "80";
+        public static string portForTestConnection = "8080";
 
         public SentinelData() {}
     }
