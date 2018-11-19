@@ -124,7 +124,7 @@ namespace Enterprise
                                 "</hasp>" +
                             "</haspformat>";
 
-                hStatus = Hasp.GetInfo(tScope, tFormat, FormMain.vCode, ref hInfo);
+                hStatus = Hasp.GetInfo(tScope, tFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
                 if (HaspStatus.StatusOk != hStatus)
                 {
                     if (appSettings.enableLogs) Log.Write("Ошибка запроса информации о доступных ключах, статус: " + hStatus);
@@ -204,7 +204,7 @@ namespace Enterprise
                              :
                              "<haspformat format=\"host_fingerprint\"/>";
 
-            hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode, ref hInfo);
+            hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
             if (HaspStatus.StatusOk != hStatus) {
                 if (appSettings.enableLogs) Log.Write("Ошибка запроса C2V, статус: " + hStatus);
                 MessageBox.Show("Error in request C2V." + Environment.NewLine + "Status: " + hStatus, "Error");
@@ -235,7 +235,7 @@ namespace Enterprise
             }
 
             if (actStatus != "") {
-                if (!string.IsNullOrEmpty(actStatus) && !actStatus.Contains("Error") && !actStatus.Contains("pending")) {
+                if (!string.IsNullOrEmpty(actStatus) && !actStatus.Contains("Error") && !actStatus.Contains("error") && !actStatus.Contains("pending")) {
                     XDocument licXml = XDocument.Parse(actStatus);
 
                     foreach (XElement el in licXml.Root.Elements()) {
@@ -297,7 +297,7 @@ namespace Enterprise
 
             string aFormat = "<haspformat format =\"updateinfo\"/>";
 
-            hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode, ref hInfo);
+            hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
             if (HaspStatus.StatusOk != hStatus) {
                 if (appSettings.enableLogs) Log.Write("Ошибка запроса C2V, статус: " + hStatus);
                 MessageBox.Show("Error in request C2V." + Environment.NewLine + "Status: " + hStatus, "Error");
@@ -317,7 +317,7 @@ namespace Enterprise
             {
                 actStatus = sentinelObject.GetRequest("activation/target.ws", new KeyValuePair<string, string>("targetXml", targetXml));
 
-                if (!string.IsNullOrEmpty(actStatus) && !actStatus.Contains("Error") && !actStatus.Contains("No pending update"))
+                if (!string.IsNullOrEmpty(actStatus) && !actStatus.Contains("Error") && !actStatus.Contains("error") && !actStatus.Contains("No pending update"))
                 {
                     // если ответ не пустой и не содержит ошибок, тогда пробуем его применить
                     string acknowledgeXml = "";

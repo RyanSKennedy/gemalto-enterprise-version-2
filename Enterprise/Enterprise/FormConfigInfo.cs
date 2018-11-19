@@ -22,7 +22,7 @@ namespace Enterprise
             textBoxEmsUrl.Text = FormMain.eUrl;
             textBoxLogsState.Text = (FormMain.lIsEnabled) ? "Enabled" : "Disabled";
             textBoxLanguageState.Text = FormMain.langState;
-            textBoxVendorCode.Text = FormMain.vCode;
+            textBoxVendorCode.Text = FormMain.batchCode + ": " + Environment.NewLine + FormMain.vCode[FormMain.batchCode];
 
             XDocument kScopeXml = XDocument.Parse(FormMain.kScope);
             textBoxScope.Text = "";

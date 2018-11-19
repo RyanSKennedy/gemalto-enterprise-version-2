@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using System.Windows.Forms;
 using MyLogClass;
 using Aladdin.HASP;
+using System.Collections.Generic;
 
 namespace Enterprise
 {
@@ -15,7 +16,8 @@ namespace Enterprise
         public static string currentVersion = " v.1.0";
         public static string featureIdAccounting, featureIdStock, featureIdStaff;
         public static string baseDir, logFileName;
-        public static string vCode, kScope, kFormat, hInfo, eUrl, aSentinelUpCall;
+        public static Dictionary<string, string> vCode = new Dictionary<string, string>(1);
+        public static string batchCode, kScope, kFormat, hInfo, eUrl, aSentinelUpCall;
         public static int tPort;
         public static bool lIsEnabled, aIsEnabled;
         public static string curentKeyId = "";
@@ -41,7 +43,16 @@ namespace Enterprise
 
             // решаем откуда брать Vendor code
             //============================================= 
-            vCode = (String.IsNullOrEmpty(appSettings.vendorCode)) ? SentinelData.vendorCode : appSettings.vendorCode;
+            string tmpVCode = "", tmpBatchCode = "";
+            foreach (var el in SentinelData.vendorCode) {
+                tmpVCode = el.Value;
+                tmpBatchCode = el.Key;
+            }
+            vCode.Add((String.IsNullOrEmpty(appSettings.vendorCode)) ? tmpBatchCode : appSettings.vendorCode.Split(' ')[0], (String.IsNullOrEmpty(appSettings.vendorCode)) ? tmpVCode : appSettings.vendorCode.Split(' ')[1]);
+            foreach (var el in vCode)
+            {
+                batchCode = el.Key;
+            }
             //=============================================
 
             // решаем откуда брать Port для проверки интернет соединения
@@ -211,7 +222,7 @@ namespace Enterprise
             FormMain mForm = (FormMain)Application.OpenForms["FormMain"];
             bool isSetAlpFormMain = alp.SetLenguage(appSettings.language, baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, mForm);
 
-            hStatus = Hasp.GetInfo(kScope, kFormat, vCode, ref hInfo);
+            hStatus = Hasp.GetInfo(kScope, kFormat, vCode[batchCode], ref hInfo);
             if (HaspStatus.StatusOk != hStatus) {
                 if (appSettings.enableLogs) Log.Write("Ошибка запроса информации с ключа, статус: " + hStatus);
             } else {
@@ -252,7 +263,7 @@ namespace Enterprise
             //MessageBox.Show("Should be run Accounting...");
 
             if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Accounting.exe")) {
-                string accountingParam = "vcode:" + vCode + " kid:" + curentKeyId + " fid:" + featureIdAccounting + " api:" + aIsEnabled + " language:" + language;
+                string accountingParam = "vcode:" + vCode[batchCode] + " kid:" + curentKeyId + " fid:" + featureIdAccounting + " api:" + aIsEnabled + " language:" + language;
                 System.Diagnostics.ProcessStartInfo accountingConfig = new System.Diagnostics.ProcessStartInfo(FormMain.baseDir + Path.DirectorySeparatorChar + "Accounting.exe", accountingParam);
                 if (appSettings.enableLogs) Log.Write("Пробуем запустить Accounting.exe с параметрами: " + accountingParam);
                 try {
@@ -272,7 +283,7 @@ namespace Enterprise
             //MessageBox.Show("Should be run Stock...");
 
             if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Stock.exe")) {
-                string stockParam = "vcode:" + vCode + " kid:" + curentKeyId + " fid:" + featureIdStock + " api:" + aIsEnabled + " language:" + language;
+                string stockParam = "vcode:" + vCode[batchCode] + " kid:" + curentKeyId + " fid:" + featureIdStock + " api:" + aIsEnabled + " language:" + language;
                 System.Diagnostics.ProcessStartInfo stockConfig = new System.Diagnostics.ProcessStartInfo(FormMain.baseDir + Path.DirectorySeparatorChar + "Stock.exe", stockParam);
                 if (appSettings.enableLogs) Log.Write("Пробуем запустить Stock.exe с параметрами: " + stockParam);
                 try {
@@ -292,7 +303,7 @@ namespace Enterprise
             //MessageBox.Show("Should be run Staff...");
 
             if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Staff.exe")) {
-                string staffParam = "vcode:" + vCode + " kid:" + curentKeyId + " fid:" + featureIdStaff + " api:" + aIsEnabled + " language:" + language;
+                string staffParam = "vcode:" + vCode[batchCode] + " kid:" + curentKeyId + " fid:" + featureIdStaff + " api:" + aIsEnabled + " language:" + language;
                 System.Diagnostics.ProcessStartInfo staffConfig = new System.Diagnostics.ProcessStartInfo(FormMain.baseDir + Path.DirectorySeparatorChar + "Staff.exe", staffParam);
                 if (appSettings.enableLogs) Log.Write("Пробуем запустить Staff.exe с параметрами: " + staffParam);
                 try {
