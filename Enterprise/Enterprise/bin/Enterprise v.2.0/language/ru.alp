@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+  <!-- FormMain -->
+  <FormMain>Предприятие</FormMain>
+  <buttonAccounting>Бухгалтерия</buttonAccounting>
+  <buttonStock>Склад</buttonStock>
+  <buttonStaff>Кадры</buttonStaff>
+  <buttonAbout>О программе</buttonAbout>
+  <buttonConfigInfo>Настройки</buttonConfigInfo>
+  <labelComponents>Компоненты:</labelComponents>
+  <labelAccountingFID>Требуется FID 1</labelAccountingFID>
+  <labelStockFID>Требуется FID 2</labelStockFID>
+  <labelStaffFID>Требуется FID 3</labelStaffFID>
+  <!-- FormAbout -->
+  <FormAbout>О программе</FormAbout>
+  <buttonActivatePK>Go</buttonActivatePK>
+  <buttonGetUpdateByKeyID>Проверить</buttonGetUpdateByKeyID>
+  <buttonGetUpdateForApp>Запросить обновление для программы</buttonGetUpdateForApp>
+  <labelUpdateType>Активация/Обновление:</labelUpdateType>
+  <labelLicenseInfo>О лицензии:</labelLicenseInfo>
+  <labelCurrentVersion>Текущая версия приложения:</labelCurrentVersion>
+  <radioButtonByPK>Через PK:</radioButtonByPK>
+  <radioButtonByKeyID>Для существующего ключа:</radioButtonByKeyID>
+  <!-- FormConfigInfo -->
+  <FormConfigInfo>Настройки</FormConfigInfo>
+  <labelCurrentSettings>Используемые настройки:</labelCurrentSettings>
+  <labelLogsState>Логи:</labelLogsState>
+  <labelLanguageState>Язык:</labelLanguageState>
+  <!-- FormLicense -->
+  <FormLicense>Лицензия</FormLicense>
+  <labelLicense>Вы можете сохранить лицензию тут:</labelLicense>
+  <linkLabelSaveV2C>Сохранить V2C</linkLabelSaveV2C>
+  <!-- FormMainAccounting -->
+  <FormMainAccounting>Бухгалтерия</FormMainAccounting>
+  <labelAccounting>Тут наша бухгалтерия</labelAccounting>
+  <!-- FormMainStock -->
+  <FormMainStock>Склад</FormMainStock>
+  <labelStock>Тут наш склад</labelStock>
+  <!-- FormMainStaff -->
+  <FormMainStaff>Кадры</FormMainStaff>
+  <labelStaff>Тут наши кадры</labelStaff>
+</configuration>

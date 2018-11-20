@@ -13,7 +13,7 @@ namespace Enterprise
 {
     public partial class FormMain : Form
     {
-        public static string currentVersion = " v.1.0";
+        public static string currentVersion = " v.2.0";
         public static string featureIdAccounting, featureIdStock, featureIdStaff;
         public static string baseDir, logFileName;
         public static Dictionary<string, string> vCode = new Dictionary<string, string>(1);
@@ -21,11 +21,12 @@ namespace Enterprise
         public static int tPort;
         public static bool lIsEnabled, aIsEnabled;
         public static string curentKeyId = "";
-        public static string langState, language;
+        public static string langState, language, locale;
         public static XDocument xmlKeyInfo;
         public static bool logsIsExist = false, logsDirIsExist = false, logsFileIsExist = false;
         public static MultiLanguage alp;
         public HaspStatus hStatus = new HaspStatus();
+        public static SentinelData standartData = new SentinelData();
 
         FormAbout AboutWindow;
         FormConfigInfo ConfigInfoWindow;
@@ -48,7 +49,11 @@ namespace Enterprise
                 tmpVCode = el.Value;
                 tmpBatchCode = el.Key;
             }
-            vCode.Add((String.IsNullOrEmpty(appSettings.vendorCode)) ? tmpBatchCode : appSettings.vendorCode.Split(' ')[0], (String.IsNullOrEmpty(appSettings.vendorCode)) ? tmpVCode : appSettings.vendorCode.Split(' ')[1]);
+            if (appSettings.vendorCode.Split(' ').Length > 1) {
+                vCode.Add((String.IsNullOrEmpty(appSettings.vendorCode)) ? tmpBatchCode : appSettings.vendorCode.Split(' ')[0], (String.IsNullOrEmpty(appSettings.vendorCode)) ? tmpVCode : appSettings.vendorCode.Split(' ')[1]);
+            } else {
+                vCode.Add((String.IsNullOrEmpty(appSettings.vendorCode)) ? tmpBatchCode : "UNKNOWN", (String.IsNullOrEmpty(appSettings.vendorCode)) ? tmpVCode : appSettings.vendorCode);
+            }
             foreach (var el in vCode)
             {
                 batchCode = el.Key;
@@ -153,8 +158,9 @@ namespace Enterprise
 
             // решаем какой язык отображать в программе
             //============================================= 
-            langState = (appSettings.language != "" && (System.IO.File.Exists(baseDir + "\\language\\" + appSettings.language + ".alp"))) ? (baseDir + "\\language\\" + appSettings.language + ".alp"): "Default (English)";
+            langState = (appSettings.language != "" && (System.IO.File.Exists(baseDir + "\\language\\" + appSettings.language + ".alp"))) ? (baseDir + "\\language\\" + appSettings.language + ".alp") : "Default (English)";
             language = (appSettings.language != "") ? appSettings.language : "Default (English)";
+            locale = (appSettings.language != "") ? appSettings.language : "En";
             //=============================================
 
             // создаём директорию (если не создана) и файл с логами
@@ -198,7 +204,7 @@ namespace Enterprise
 
             buttonAccounting.Visible = true;
             buttonStock.Visible = true;
-            buttonStaff.Visible = false; // Видимость/невидимость этой кнопки и есть разница между версией v1 и v2 приложения Enterprise
+            buttonStaff.Visible = (currentVersion == " v.2.0") ? true : false; // Видимость/невидимость этой кнопки и есть разница между версией v1 и v2 приложения Enterprise
 
             labelAccountingFID.Visible = false;
             labelAccountingFID.Text += featureIdAccounting;

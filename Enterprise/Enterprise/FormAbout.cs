@@ -348,12 +348,12 @@ namespace Enterprise
                 else if (actStatus.Contains("No pending update"))
                 {
                     if (appSettings.enableLogs) Log.Write("Нет доступных для загрузки обновлений, статус: " + actStatus);
-                    MessageBox.Show("Have no pending update for download.", "Warning");
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, actStatus), "Warning"); 
                 }
                 else
                 {
                     if (appSettings.enableLogs) Log.Write("Ответ от сервера пустой или содержит ошибку, статус: " + actStatus);
-                    MessageBox.Show("Server response have error or empty, status: " + Environment.NewLine + actStatus, "Error");
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, actStatus), "Error");
                 }
             }
         }
@@ -416,6 +416,7 @@ namespace Enterprise
 
             return base.ProcessDialogKey(keyData);
         }
+
         /// <summary>
         /// Проверяет вхождение заданных комбинаций (keys) в исходную (keyData).
         /// </summary>
