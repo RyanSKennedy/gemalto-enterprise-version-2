@@ -13,13 +13,13 @@ namespace Enterprise
 {
     public partial class FormMain : Form
     {
-        public static string currentVersion = " v.1.0";
+        public static string currentVersion = " v.2.0";
         public static string featureIdAccounting, featureIdStock, featureIdStaff;
         public static string baseDir, logFileName;
         public static Dictionary<string, string> vCode = new Dictionary<string, string>(1);
         public static string batchCode, kScope, kFormat, hInfo, eUrl, aSentinelUpCall;
         public static int tPort;
-        public static bool lIsEnabled, aIsEnabled;
+        public static bool lIsEnabled, aIsEnabled, adIsEnabled;
         public static string curentKeyId = "";
         public static string langState, language, locale;
         public static XDocument xmlKeyInfo;
@@ -156,6 +156,11 @@ namespace Enterprise
             aIsEnabled = (Convert.ToString(appSettings.enableApi) == "") ? SentinelData.apiIsEnabled : appSettings.enableApi;
             //=============================================
 
+            // решаем включать отображение дополнительных данных в интерфейсе или нет
+            //============================================= 
+            adIsEnabled = (Convert.ToString(appSettings.enableDisplayAdvancedData) == "") ? SentinelData.advancedDataIsEnabled : appSettings.enableDisplayAdvancedData;
+            //=============================================
+
             // решаем какой язык отображать в программе
             //============================================= 
             langState = (appSettings.language != "" && (System.IO.File.Exists(baseDir + "\\language\\" + appSettings.language + ".alp"))) ? (baseDir + "\\language\\" + appSettings.language + ".alp") : "Default (English)";
@@ -172,7 +177,7 @@ namespace Enterprise
                     System.IO.Directory.CreateDirectory(baseDir + "\\logs");
                     logsDirIsExist = System.IO.Directory.Exists(baseDir + "\\logs");
                 } catch (Exception ex) {
-                    MessageBox.Show("Can't create dir for logs!" + Environment.NewLine + "Error: " + ex);
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Can't create dir for logs").Replace("{0}", ex.Message));
                 }
             }
             if (logsDirIsExist == true) { // если директория с логами есть, проверяем есть ли файл с логами если есть - используем его, если нет - создаём файл с логами 
@@ -186,7 +191,7 @@ namespace Enterprise
                             logsFileIsExist = System.IO.Directory.Exists(baseDir + "\\logs");
                         }
                     } catch (Exception ex) {
-                        MessageBox.Show("Can't create log file!" + Environment.NewLine + "Error: " + ex);
+                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Can't create log file").Replace("{0}", ex.Message));
                     }
                 }
             }
@@ -276,11 +281,11 @@ namespace Enterprise
                     System.Diagnostics.Process accountingProcess = System.Diagnostics.Process.Start(accountingConfig);
                 } catch (Exception ex) {
                     if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить Accounting.exe, ошибка: " + ex.Message);
-                    MessageBox.Show("Error: " + ex.Message, "Error");
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: ").Replace("{0}", ex.Message), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                 }
             } else {
                 if (appSettings.enableLogs) Log.Write("Error: нет Accounting.exe в директории с ПО.");
-                MessageBox.Show("Error: Accounting.exe not found in dir: " + Environment.NewLine + FormMain.baseDir, "Error");
+                MessageBox.Show((FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: Accounting.exe not found in dir").Replace("{0}",  FormMain.baseDir)), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
             }
         }
 
@@ -296,11 +301,11 @@ namespace Enterprise
                     System.Diagnostics.Process stockProcess = System.Diagnostics.Process.Start(stockConfig);
                 } catch (Exception ex) {
                     if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить Stock.exe, ошибка: " + ex.Message);
-                    MessageBox.Show("Error: " + ex.Message, "Error");
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: ").Replace("{0}", ex.Message), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                 }
             } else {
                 if (appSettings.enableLogs) Log.Write("Error: нет Stock.exe в директории с ПО.");
-                MessageBox.Show("Error: Stock.exe not found in dir: " + Environment.NewLine + FormMain.baseDir, "Error");
+                MessageBox.Show((FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: Stock.exe not found in dir").Replace("{0}", FormMain.baseDir)), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
             }
         }
 
@@ -316,11 +321,11 @@ namespace Enterprise
                     System.Diagnostics.Process staffProcess = System.Diagnostics.Process.Start(staffConfig);
                 } catch (Exception ex) {
                     if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить Staff.exe, ошибка: " + ex.Message);
-                    MessageBox.Show("Error: " + ex.Message, "Error");
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: ").Replace("{0}", ex.Message), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                 }
             } else {
                 if (appSettings.enableLogs) Log.Write("Error: нет Staff.exe в директории с ПО.");
-                MessageBox.Show("Error: Staff.exe not found in dir: " + Environment.NewLine + FormMain.baseDir, "Error");
+                MessageBox.Show((FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: Staff.exe not found in dir").Replace("{0}", FormMain.baseDir)), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
             }
         }
 

@@ -158,10 +158,8 @@ namespace Enterprise
                         return;
                     } 
                 } else if (avalibleKeys.Count() == 1) {
-                    dialogResultIfKeyIsExist = MessageBox.Show("Do you want to install license in exist Key: " + Environment.NewLine + 
-                        avalibleKeys[0].keyType + " with Key ID = " + avalibleKeys[0].keyId + "?" + Environment.NewLine + 
-                        "If you chouse \"No\", license will be installed in new SL key.", 
-                        "Where should be installed license?", MessageBoxButtons.YesNoCancel);
+                    dialogResultIfKeyIsExist = MessageBox.Show((FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Do you want to install license in exist Key").Replace("{0}", avalibleKeys[0].keyType).Replace("{1}", avalibleKeys[0].keyId)),
+                        FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Warning"), MessageBoxButtons.YesNoCancel);
 
                     if (dialogResultIfKeyIsExist == DialogResult.Yes) {
                         FormMain.curentKeyId = avalibleKeys[0].keyId;
@@ -174,8 +172,8 @@ namespace Enterprise
             }
 
             if (FormMain.curentKeyId == "" && dialogResultIfKeyIsExist != DialogResult.No && dialogResultIfKeyIsExist != DialogResult.Cancel) {
-                dialogResultForNewKey = MessageBox.Show("Do you want to install license in New SL Key?",
-                        "Where should be installed license?", MessageBoxButtons.YesNo);
+                dialogResultForNewKey = MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Do you want to install license in New SL Key?"),
+                        FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Warning"), MessageBoxButtons.YesNo);
 
                 if (dialogResultForNewKey == DialogResult.Yes)
                 {
@@ -207,7 +205,7 @@ namespace Enterprise
             hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
             if (HaspStatus.StatusOk != hStatus) {
                 if (appSettings.enableLogs) Log.Write("Ошибка запроса C2V, статус: " + hStatus);
-                MessageBox.Show("Error in request C2V." + Environment.NewLine + "Status: " + hStatus, "Error");
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error in request C2V"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
             } else {
                 if (appSettings.enableLogs) Log.Write("Результат выполнения запроса C2V, статус: " + hStatus);
                 if (appSettings.enableLogs) Log.Write("Вывод:" + Environment.NewLine + hInfo);
@@ -231,7 +229,7 @@ namespace Enterprise
                 actStatus = sentinelObject.GetRequest("productKey/" + textBoxPK.Text + "/activation.ws", new KeyValuePair<string, string>("activationXml", actXml));
             } else {
                 if (appSettings.enableLogs) Log.Write("Введён не валидный ProductKey или C2V..." + Environment.NewLine);
-                MessageBox.Show("Invalid ProductKey or C2V." + Environment.NewLine + "Please check it and try again.", "Error");
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Invalid ProductKey or C2V"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
             }
 
             if (actStatus != "") {
@@ -274,11 +272,11 @@ namespace Enterprise
                     }
                 } else if (actStatus.Contains("pending")) {
                     if (appSettings.enableLogs) Log.Write("Для ключа имеются неприменённые обновления, в начале примените эти обновления. Статус: " + actStatus);
-                    MessageBox.Show("Pending update exist for this key." + Environment.NewLine + "You should download and apply them first!", "Error");
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, actStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                 }
                 else {
                     if (appSettings.enableLogs) Log.Write("Ответ от сервера пустой или содержит ошибку, статус: " + actStatus);
-                    MessageBox.Show("Server response have error or empty, status: " + Environment.NewLine + actStatus, "Error");
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, actStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                 }
             }
         }
@@ -300,7 +298,7 @@ namespace Enterprise
             hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
             if (HaspStatus.StatusOk != hStatus) {
                 if (appSettings.enableLogs) Log.Write("Ошибка запроса C2V, статус: " + hStatus);
-                MessageBox.Show("Error in request C2V." + Environment.NewLine + "Status: " + hStatus, "Error");
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error in request C2V"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
             } else {
                 if (appSettings.enableLogs) Log.Write("Результат выполнения запроса C2V, статус: " + hStatus);
                 if (appSettings.enableLogs) Log.Write("C2V:" + Environment.NewLine + hInfo);
@@ -311,7 +309,6 @@ namespace Enterprise
             if (string.IsNullOrEmpty(targetXml))
             {
                 if (appSettings.enableLogs) Log.Write("C2V с ключа не получен, запрос обновления прерван.");
-                MessageBox.Show("C2V from key not received, update request interrupted.", "Error");
             }
             else
             {
@@ -348,12 +345,12 @@ namespace Enterprise
                 else if (actStatus.Contains("No pending update"))
                 {
                     if (appSettings.enableLogs) Log.Write("Нет доступных для загрузки обновлений, статус: " + actStatus);
-                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, actStatus), "Warning"); 
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "No pending update"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Warning")); 
                 }
                 else
                 {
                     if (appSettings.enableLogs) Log.Write("Ответ от сервера пустой или содержит ошибку, статус: " + actStatus);
-                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, actStatus), "Error");
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Response from server has error or empty"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                 }
             }
         }

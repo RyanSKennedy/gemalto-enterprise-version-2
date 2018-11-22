@@ -101,6 +101,8 @@ namespace Enterprise
 
         public static bool apiIsEnabled = true;
 
+        public static bool advancedDataIsEnabled = false;
+
         public static string portForTestConnection = "8080";
 
         public SentinelData() {
@@ -203,6 +205,26 @@ namespace Enterprise
             errors.Add("HaspDotNetDllBroken", new Dictionary<string, string> { { "Ru", ".NET DLL найдена сломанной." }, { "En", ".NET DLL found broken." } });
             errors.Add("NotImplemented", new Dictionary<string, string> { { "Ru", "Запрошенная функция не была реализована." + Environment.NewLine + "ИЛИ" + Environment.NewLine + "В случае API-диспетчера API-библиотека DLL слишком старая." }, { "En", "Requested function was not implemented." + Environment.NewLine + "OR" + Environment.NewLine + "In the case of the API Dispatcher, API DLL is too old" } });
             errors.Add("InternalError", new Dictionary<string, string> { { "Ru", "Внутренняя ошибка в API." }, { "En", "Internal error occurred in the API." } });
+
+            // внутренние ошибки
+            errors.Add("Invalid ProductKey or C2V", new Dictionary<string, string> { { "Ru", "Некорректный ключ активации или C2V." + Environment.NewLine + "Пожалуйста проверьте и повторите попытку." }, { "En", "Invalid ProductKey or C2V." + Environment.NewLine + "Please check it and try again." } });
+            errors.Add("Error in request C2V", new Dictionary<string, string> { { "Ru", "Ошибка запроса C2V." }, { "En", "Error in request C2V." } });
+            errors.Add("Do you want to install license in New SL Key", new Dictionary<string, string> { { "Ru", "Вы хотите установить лицензии в виде нового SL ключа?" }, { "En", "Do you want to install license in New SL Key?" } });
+            errors.Add("Do you want to install license in exist Key", new Dictionary<string, string> { { "Ru", "Хотите ли Вы установить лицензии в существующий ключ: {0} с Key ID = {1}? Если выберете \"Нет\", лицензии будут установлены в виде нового SL ключа." }, { "En", "Do you want to install license in exist Key: {0} with Key ID = {1}? If you chouse \"No\", license will be installed in new SL key." } });
+            errors.Add("No pending update", new Dictionary<string, string> { { "Ru", "Нет доступных для загрузки обновлений." }, { "En", "No pending update." } });
+            errors.Add("Response from server has error or empty", new Dictionary<string, string> { { "Ru", "Ответ от сервера пустой или содержит ошибку." }, { "En", "Response from server has error or empty." } });
+            errors.Add("Error", new Dictionary<string, string> { { "Ru", "Ошибка" }, { "En", "Error" } });
+            errors.Add("Warning", new Dictionary<string, string> { { "Ru", "Предупреждение" }, { "En", "Warning" } });
+            errors.Add("License update successfully installed", new Dictionary<string, string> { { "Ru", "Лицензия применена успешно!" }, { "En", "License update successfully installed!" } });
+            errors.Add("Update didn't installed", new Dictionary<string, string> { { "Ru", "Обновление не установлено!" }, { "En", "Update didn't installed!" } });
+            errors.Add("Saving file error", new Dictionary<string, string> { { "Ru", "Ошибка при сохранении файла: {0}" }, { "En", "Saving file error: {0}" } });
+            errors.Add("Error: Accounting.exe not found in dir", new Dictionary<string, string> { { "Ru", "Ошибка: Accounting.exe не найден в директории: {0}" }, { "En", "Error: Accounting.exe not found in dir: {0}" } });
+            errors.Add("Error: Stock.exe not found in dir", new Dictionary<string, string> { { "Ru", "Ошибка: Stock.exe не найден в директории: {0}" }, { "En", "Error: Stock.exe not found in dir: {0}" } });
+            errors.Add("Error: Staff.exe not found in dir", new Dictionary<string, string> { { "Ru", "Ошибка: Staff.exe не найден в директории: {0}" }, { "En", "Error: Staff.exe not found in dir: {0}" } });
+            errors.Add("Error: ", new Dictionary<string, string> { { "Ru", "Ошибка: {0}" }, { "En", "Error: {0}" } });
+            errors.Add("Can't create dir for logs", new Dictionary<string, string> { { "Ru", "Не получается создать директорию для логов! Ошибка: {0}" }, { "En", "Can't create dir for logs! Error: {0}" } });
+            errors.Add("Can't create log file", new Dictionary<string, string> { { "Ru", "Не получается создать файл с логами! Ошибка: {0}" }, { "En", "Can't create log file! Error: {0}" } });
+            //errors.Add("", new Dictionary<string, string> { { "Ru", "" }, { "En", "" } });
         }
 
         public string ErrorMessageReplacer(string locale, string originalError)
