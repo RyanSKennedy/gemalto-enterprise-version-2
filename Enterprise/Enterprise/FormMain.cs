@@ -13,7 +13,7 @@ namespace Enterprise
 {
     public partial class FormMain : Form
     {
-        public static string currentVersion = " v.2.0";
+        public static string currentVersion = " v.1.0";
         public static string featureIdAccounting, featureIdStock, featureIdStaff;
         public static string baseDir, logFileName;
         public static Dictionary<string, string> vCode = new Dictionary<string, string>(1);
@@ -49,11 +49,7 @@ namespace Enterprise
                 tmpVCode = el.Value;
                 tmpBatchCode = el.Key;
             }
-            if (appSettings.vendorCode.Split(' ').Length > 1) {
-                vCode.Add((String.IsNullOrEmpty(appSettings.vendorCode)) ? tmpBatchCode : appSettings.vendorCode.Split(' ')[0], (String.IsNullOrEmpty(appSettings.vendorCode)) ? tmpVCode : appSettings.vendorCode.Split(' ')[1]);
-            } else {
-                vCode.Add((String.IsNullOrEmpty(appSettings.vendorCode)) ? tmpBatchCode : "UNKNOWN", (String.IsNullOrEmpty(appSettings.vendorCode)) ? tmpVCode : appSettings.vendorCode);
-            }
+            vCode.Add(appSettings.vendorCode == null || (String.IsNullOrEmpty(appSettings.vendorCode.InnerXml)) ? tmpBatchCode : appSettings.vendorCode.GetElementsByTagName("batchCode").Item(0).InnerXml, (appSettings.vendorCode == null || String.IsNullOrEmpty(appSettings.vendorCode.InnerXml)) ? tmpVCode : appSettings.vendorCode.GetElementsByTagName("vendorCode").Item(0).InnerXml);
             foreach (var el in vCode)
             {
                 batchCode = el.Key;
@@ -69,8 +65,8 @@ namespace Enterprise
             //============================================= 
             XDocument scopeXml = new XDocument();
 
-            if (!String.IsNullOrEmpty(appSettings.scope)) {
-                scopeXml = XDocument.Parse(appSettings.scope);
+            if (!String.IsNullOrEmpty(appSettings.scope.InnerXml)) {
+                scopeXml = XDocument.Parse(appSettings.scope.InnerXml);
                 bool errorsValidating = false;
                 XmlSchemaSet schemas = new XmlSchemaSet();
                 schemas.Add(XmlSchema.Read(new StringReader(SentinelData.keyScopeXsd), HandleValidationError));
@@ -115,14 +111,14 @@ namespace Enterprise
 
             // решаем какой Format использовать для поиска ключа с лицензиями и откуда его брать
             //============================================= 
-            kFormat = (appSettings.format == "") ? SentinelData.keyFormat : appSettings.format;
+            kFormat = (appSettings.format == null || String.IsNullOrEmpty(appSettings.format.InnerXml)) ? SentinelData.keyFormat : appSettings.format.InnerXml;
             //=============================================
 
             // решаем какой SentinelUp Call использовать и откуда его брать
             //============================================= 
             aSentinelUpCall = "";
             XDocument sentinelUpCallXml;
-            sentinelUpCallXml = (appSettings.sentinelUpCallData == "") ? XDocument.Parse(SentinelData.appSentinelUpCallData) : XDocument.Parse(appSettings.sentinelUpCallData);
+            sentinelUpCallXml = (appSettings.sentinelUpCallData.InnerXml == "") ? XDocument.Parse(SentinelData.appSentinelUpCallData) : XDocument.Parse(appSettings.sentinelUpCallData.InnerXml);
 
             if (sentinelUpCallXml != null) {
                 foreach (XElement elSentinelUp in sentinelUpCallXml.Elements("upclient")) {
