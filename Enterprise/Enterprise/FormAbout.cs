@@ -64,19 +64,33 @@ namespace Enterprise
             FormAbout aForm = (FormAbout)Application.OpenForms["FormAbout"];
             bool isSetAlpFormAbout = FormMain.alp.SetLenguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, aForm);
 
-            if (!string.IsNullOrEmpty(FormMain.hInfo)) {
+            if (!string.IsNullOrEmpty(FormMain.hInfo))
+            {
                 textBoxPK.Size = textBoxPKWithRadioButtonSize;
                 textBoxPK.Location = textBoxPKWithRadioButtonPoint;
-                
+
                 radioButtonByKeyID.Visible = true;
                 radioButtonByPK.Visible = true;
 
                 buttonGetUpdateByKeyID.Visible = true;
-                
+
                 textBoxLicenseInfo.Text = "";
-                if (FormMain.xmlKeyInfo != null) {
+                if (FormMain.xmlKeyInfo != null)
+                {
                     textBoxLicenseInfo.Text += FormMain.xmlKeyInfo;
-                } 
+                }
+            }
+            else
+            {
+                textBoxPK.Size = textBoxPKDefaultSize;
+                textBoxPK.Location = textBoxPKDefaultPoint;
+
+                radioButtonByKeyID.Visible = false;
+                radioButtonByPK.Visible = false;
+
+                buttonGetUpdateByKeyID.Visible = false;
+
+                textBoxLicenseInfo.Text = "";
             }
         }
 

@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.buttonAccounting = new System.Windows.Forms.Button();
             this.buttonStock = new System.Windows.Forms.Button();
             this.buttonStaff = new System.Windows.Forms.Button();
@@ -38,6 +39,8 @@
             this.labelComponents = new System.Windows.Forms.Label();
             this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.buttonConfigInfo = new System.Windows.Forms.Button();
+            this.backgroundWorkerCheckKey = new System.ComponentModel.BackgroundWorker();
+            this.timerCheckKey = new System.Windows.Forms.Timer(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -156,6 +159,16 @@
             this.buttonConfigInfo.Visible = false;
             this.buttonConfigInfo.Click += new System.EventHandler(this.buttonConfigInfo_Click);
             // 
+            // backgroundWorkerCheckKey
+            // 
+            this.backgroundWorkerCheckKey.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerCheckKey_DoWork);
+            // 
+            // timerCheckKey
+            // 
+            this.timerCheckKey.Enabled = true;
+            this.timerCheckKey.Interval = 1000;
+            this.timerCheckKey.Tick += new System.EventHandler(this.timerCheckKey_Tick);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -195,6 +208,8 @@
         private System.Windows.Forms.Label labelComponents;
         private System.Windows.Forms.PictureBox pictureBoxLogo;
         private System.Windows.Forms.Button buttonConfigInfo;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerCheckKey;
+        private System.Windows.Forms.Timer timerCheckKey;
     }
 }
 

@@ -19,13 +19,78 @@ namespace Enterprise
         public static Dictionary<string, string> vCode = new Dictionary<string, string>(1);
         public static string batchCode, kScope, kFormat, hInfo, eUrl, aSentinelUpCall;
         public static int tPort;
-        public static bool lIsEnabled, aIsEnabled, adIsEnabled;
+        public static bool lIsEnabled, aIsEnabled, adIsEnabled, keyIsConnected = false, keyIsAlreadyConnected = false;
         public static string curentKeyId = "";
         public static string langState, language, locale;
         public static XDocument xmlKeyInfo;
         public static bool logsIsExist = false, logsDirIsExist = false, logsFileIsExist = false;
         public static MultiLanguage alp;
         public HaspStatus hStatus = new HaspStatus();
+
+        private void backgroundWorkerCheckKey_DoWork(object sender, DoWorkEventArgs e)
+        {
+            timerCheckKey.Start();
+        }
+
+        private void timerCheckKey_Tick(object sender, EventArgs e)
+        {
+            hStatus = Hasp.GetInfo(kScope, kFormat, vCode[batchCode], ref hInfo);
+            if (HaspStatus.StatusOk != hStatus)
+            {
+                if (appSettings.enableLogs) Log.Write("Ошибка запроса информации с ключа, статус: " + hStatus);
+                keyIsConnected = false;
+                keyIsAlreadyConnected = false;
+
+                buttonAccounting.Enabled = false;
+                buttonStock.Enabled = false;
+                buttonStaff.Enabled = false;
+
+                hInfo = "";
+            }
+            else
+            {
+                if (appSettings.enableLogs) Log.Write("Результат выполнения запроса информации с ключа, статус: " + hStatus);
+
+                xmlKeyInfo = XDocument.Parse(hInfo);
+                keyIsConnected = true;
+            }
+
+            if (keyIsConnected == true)
+            {
+                if (keyIsAlreadyConnected == false)
+                {
+                    if (xmlKeyInfo != null)
+                    {
+                        foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
+                        {
+                            foreach (XElement elKeyId in elHasp.Elements("id"))
+                            {
+                                if (curentKeyId == "")
+                                {
+                                    curentKeyId = elKeyId.Value;
+                                }
+                            }
+                            foreach (XElement elProduct in elHasp.Elements("product"))
+                            {
+                                foreach (XElement elFeature in elProduct.Elements("feature"))
+                                {
+                                    foreach (XElement elFeatureId in elFeature.Elements("id"))
+                                    {
+                                        buttonAccounting.Enabled = (elFeatureId.Value == featureIdAccounting) ? true : buttonAccounting.Enabled;
+                                        buttonStock.Enabled = (elFeatureId.Value == featureIdStock) ? true : buttonStock.Enabled;
+                                        buttonStaff.Enabled = (elFeatureId.Value == featureIdStaff) ? true : buttonStaff.Enabled;
+                                    }
+                                }
+                            }
+                            string s = Convert.ToString(elHasp.Name);
+                        }
+
+                        keyIsAlreadyConnected = true;
+                    }
+                }
+            }
+        }
+
         public static SentinelData standartData = new SentinelData();
 
         FormAbout AboutWindow;
@@ -229,35 +294,7 @@ namespace Enterprise
             FormMain mForm = (FormMain)Application.OpenForms["FormMain"];
             bool isSetAlpFormMain = alp.SetLenguage(appSettings.language, baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, mForm);
 
-            hStatus = Hasp.GetInfo(kScope, kFormat, vCode[batchCode], ref hInfo);
-            if (HaspStatus.StatusOk != hStatus) {
-                if (appSettings.enableLogs) Log.Write("Ошибка запроса информации с ключа, статус: " + hStatus);
-            } else {
-                if (appSettings.enableLogs) Log.Write("Результат выполнения запроса информации с ключа, статус: " + hStatus);
-                if (appSettings.enableLogs) Log.Write("Вывод:" + Environment.NewLine + hInfo);
-
-                xmlKeyInfo = XDocument.Parse(hInfo);
-            }
-
-            if (xmlKeyInfo != null) {
-                foreach (XElement elHasp in xmlKeyInfo.Root.Elements()) {
-                    foreach (XElement elKeyId in elHasp.Elements("id")) {
-                        if (curentKeyId == "") {
-                            curentKeyId = elKeyId.Value;
-                        }
-                    }
-                    foreach (XElement elProduct in elHasp.Elements("product")) {
-                        foreach (XElement elFeature in elProduct.Elements("feature")) {
-                            foreach (XElement elFeatureId in elFeature.Elements("id")) {
-                                buttonAccounting.Enabled = (elFeatureId.Value == featureIdAccounting) ? true : buttonAccounting.Enabled;
-                                buttonStock.Enabled = (elFeatureId.Value == featureIdStock) ? true : buttonStock.Enabled;
-                                buttonStaff.Enabled = (elFeatureId.Value == featureIdStaff) ? true : buttonStaff.Enabled;
-                            }
-                        }
-                    }
-                    string s = Convert.ToString(elHasp.Name);
-                }
-            }
+            backgroundWorkerCheckKey.RunWorkerAsync();
         }
 
         protected override void OnClosing(CancelEventArgs e)

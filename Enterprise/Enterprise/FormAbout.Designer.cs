@@ -43,7 +43,7 @@
             // buttonGetUpdateForApp
             // 
             this.buttonGetUpdateForApp.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonGetUpdateForApp.Location = new System.Drawing.Point(18, 311);
+            this.buttonGetUpdateForApp.Location = new System.Drawing.Point(18, 337);
             this.buttonGetUpdateForApp.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonGetUpdateForApp.Name = "buttonGetUpdateForApp";
             this.buttonGetUpdateForApp.Size = new System.Drawing.Size(623, 55);
@@ -126,7 +126,7 @@
             // 
             this.labelLicenseInfo.AutoSize = true;
             this.labelLicenseInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelLicenseInfo.Location = new System.Drawing.Point(18, 144);
+            this.labelLicenseInfo.Location = new System.Drawing.Point(18, 187);
             this.labelLicenseInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelLicenseInfo.Name = "labelLicenseInfo";
             this.labelLicenseInfo.Size = new System.Drawing.Size(147, 25);
@@ -136,20 +136,20 @@
             // 
             // textBoxLicenseInfo
             // 
-            this.textBoxLicenseInfo.Location = new System.Drawing.Point(18, 175);
+            this.textBoxLicenseInfo.Location = new System.Drawing.Point(18, 217);
             this.textBoxLicenseInfo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxLicenseInfo.Multiline = true;
             this.textBoxLicenseInfo.Name = "textBoxLicenseInfo";
             this.textBoxLicenseInfo.ReadOnly = true;
             this.textBoxLicenseInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxLicenseInfo.Size = new System.Drawing.Size(623, 124);
+            this.textBoxLicenseInfo.Size = new System.Drawing.Size(623, 110);
             this.textBoxLicenseInfo.TabIndex = 8;
             this.textBoxLicenseInfo.Visible = false;
             // 
             // labelCurrentVersion
             // 
             this.labelCurrentVersion.AutoSize = true;
-            this.labelCurrentVersion.Location = new System.Drawing.Point(18, 373);
+            this.labelCurrentVersion.Location = new System.Drawing.Point(18, 399);
             this.labelCurrentVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCurrentVersion.Name = "labelCurrentVersion";
             this.labelCurrentVersion.Size = new System.Drawing.Size(275, 25);
@@ -160,7 +160,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(654, 373);
+            this.ClientSize = new System.Drawing.Size(654, 399);
             this.Controls.Add(this.labelCurrentVersion);
             this.Controls.Add(this.textBoxLicenseInfo);
             this.Controls.Add(this.labelLicenseInfo);
@@ -172,8 +172,8 @@
             this.Controls.Add(this.labelUpdateType);
             this.Controls.Add(this.buttonGetUpdateForApp);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.MaximumSize = new System.Drawing.Size(680, 444);
-            this.MinimumSize = new System.Drawing.Size(680, 444);
+            this.MaximumSize = new System.Drawing.Size(680, 470);
+            this.MinimumSize = new System.Drawing.Size(680, 470);
             this.Name = "FormAbout";
             this.ShowIcon = false;
             this.Text = "About";
