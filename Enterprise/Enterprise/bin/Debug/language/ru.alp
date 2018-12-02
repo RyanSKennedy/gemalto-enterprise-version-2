@@ -13,7 +13,7 @@
   <labelStaffFID>Требуется FID 3</labelStaffFID>
   <!-- FormAbout -->
   <FormAbout>О программе</FormAbout>
-  <buttonActivatePK>Go</buttonActivatePK>
+  <buttonActivatePK>Выполнить</buttonActivatePK>
   <buttonGetUpdateByKeyID>Проверить</buttonGetUpdateByKeyID>
   <buttonGetUpdateForApp>Запросить обновление для программы</buttonGetUpdateForApp>
   <labelUpdateType>Активация/Обновление:</labelUpdateType>

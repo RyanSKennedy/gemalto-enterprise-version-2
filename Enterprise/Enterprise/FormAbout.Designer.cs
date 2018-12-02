@@ -46,7 +46,7 @@
             this.buttonGetUpdateForApp.Location = new System.Drawing.Point(18, 311);
             this.buttonGetUpdateForApp.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonGetUpdateForApp.Name = "buttonGetUpdateForApp";
-            this.buttonGetUpdateForApp.Size = new System.Drawing.Size(537, 55);
+            this.buttonGetUpdateForApp.Size = new System.Drawing.Size(623, 55);
             this.buttonGetUpdateForApp.TabIndex = 0;
             this.buttonGetUpdateForApp.Text = "Request update for app";
             this.buttonGetUpdateForApp.UseVisualStyleBackColor = true;
@@ -104,7 +104,7 @@
             this.buttonActivatePK.Location = new System.Drawing.Point(480, 46);
             this.buttonActivatePK.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonActivatePK.Name = "buttonActivatePK";
-            this.buttonActivatePK.Size = new System.Drawing.Size(75, 39);
+            this.buttonActivatePK.Size = new System.Drawing.Size(161, 39);
             this.buttonActivatePK.TabIndex = 5;
             this.buttonActivatePK.Text = "Go";
             this.buttonActivatePK.UseVisualStyleBackColor = true;
@@ -113,10 +113,10 @@
             // buttonGetUpdateByKeyID
             // 
             this.buttonGetUpdateByKeyID.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonGetUpdateByKeyID.Location = new System.Drawing.Point(386, 89);
+            this.buttonGetUpdateByKeyID.Location = new System.Drawing.Point(480, 89);
             this.buttonGetUpdateByKeyID.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonGetUpdateByKeyID.Name = "buttonGetUpdateByKeyID";
-            this.buttonGetUpdateByKeyID.Size = new System.Drawing.Size(170, 39);
+            this.buttonGetUpdateByKeyID.Size = new System.Drawing.Size(161, 39);
             this.buttonGetUpdateByKeyID.TabIndex = 6;
             this.buttonGetUpdateByKeyID.Text = "Check";
             this.buttonGetUpdateByKeyID.UseVisualStyleBackColor = true;
@@ -142,7 +142,7 @@
             this.textBoxLicenseInfo.Name = "textBoxLicenseInfo";
             this.textBoxLicenseInfo.ReadOnly = true;
             this.textBoxLicenseInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxLicenseInfo.Size = new System.Drawing.Size(535, 124);
+            this.textBoxLicenseInfo.Size = new System.Drawing.Size(623, 124);
             this.textBoxLicenseInfo.TabIndex = 8;
             this.textBoxLicenseInfo.Visible = false;
             // 
@@ -160,7 +160,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(561, 373);
+            this.ClientSize = new System.Drawing.Size(654, 373);
             this.Controls.Add(this.labelCurrentVersion);
             this.Controls.Add(this.textBoxLicenseInfo);
             this.Controls.Add(this.labelLicenseInfo);
@@ -172,8 +172,8 @@
             this.Controls.Add(this.labelUpdateType);
             this.Controls.Add(this.buttonGetUpdateForApp);
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.MaximumSize = new System.Drawing.Size(587, 444);
-            this.MinimumSize = new System.Drawing.Size(587, 444);
+            this.MaximumSize = new System.Drawing.Size(680, 444);
+            this.MinimumSize = new System.Drawing.Size(680, 444);
             this.Name = "FormAbout";
             this.ShowIcon = false;
             this.Text = "About";
