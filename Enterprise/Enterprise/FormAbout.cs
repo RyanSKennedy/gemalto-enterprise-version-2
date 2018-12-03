@@ -17,6 +17,8 @@ namespace Enterprise
     {
         Point textBoxPKWithRadioButtonPoint = new Point(100, 24);
         Point textBoxPKDefaultPoint = new Point(12, 24);
+        Point buttonGetTrialVisiblePoint = new Point(8, 47);
+        Point buttonGetTrialDefaultPoint = new Point(8, 70);
         Size textBoxPKWithRadioButtonSize = new Size(134, 22);
         Size textBoxPKDefaultSize = new Size(220, 22);
         Enterprise.settings.enterprise appSettings = new settings.enterprise();
@@ -73,6 +75,8 @@ namespace Enterprise
                 radioButtonByPK.Visible = true;
 
                 buttonGetUpdateByKeyID.Visible = true;
+                buttonGetTrial.Visible = false;
+                buttonGetTrial.Location = buttonGetTrialDefaultPoint;
 
                 textBoxLicenseInfo.Text = "";
                 if (FormMain.xmlKeyInfo != null)
@@ -89,6 +93,8 @@ namespace Enterprise
                 radioButtonByPK.Visible = false;
 
                 buttonGetUpdateByKeyID.Visible = false;
+                buttonGetTrial.Visible = true;
+                buttonGetTrial.Location = buttonGetTrialVisiblePoint;
 
                 textBoxLicenseInfo.Text = "";
             }
@@ -443,6 +449,47 @@ namespace Enterprise
                     return false;
 
             return true;
+        }
+
+        private void buttonGetTrial_Click(object sender, EventArgs e)
+        {
+            string trialLicense = FormMain.baseDir + Path.DirectorySeparatorChar + "trial_license";
+            if (File.Exists(trialLicense))
+            {
+                DialogResult installTrial = DialogResult.None;
+                installTrial = MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Do you want to install trial license"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Request"), MessageBoxButtons.YesNo);
+                if (installTrial == DialogResult.Yes)
+                {
+                    // применяем триальную лицензию
+                    string acknowledgeXml = "";
+                    string trialV2c = File.ReadAllText(trialLicense);
+
+                    hStatus = Hasp.Update(trialV2c, ref acknowledgeXml);
+                    if (HaspStatus.StatusOk != hStatus)
+                    {
+                        if (appSettings.enableLogs) Log.Write("Ошибка применения V2C с триальной лицензией, статус: " + hStatus);
+
+                        // error
+                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Trial license can't be applied! Error: ") + hStatus, FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+                    }
+                    else
+                    {
+                        if (appSettings.enableLogs) Log.Write("Результат применения V2C с триальной лицензией, статус: " + hStatus);
+
+                        // successfully
+                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Trial license successfully installed!"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Successfully"));
+                    }
+                }
+                else if (installTrial == DialogResult.No)
+                {
+                    // если нет, то ничего не делаем
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Not found trial license: \"trial_license\", -  in base dir"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+            }
         }
     }
 }

@@ -214,8 +214,10 @@ namespace Enterprise
             errors.Add("No pending update", new Dictionary<string, string> { { "Ru", "Нет доступных для загрузки обновлений." }, { "En", "No pending update." } });
             errors.Add("Response from server has error or empty", new Dictionary<string, string> { { "Ru", "Ответ от сервера пустой или содержит ошибку." }, { "En", "Response from server has error or empty." } });
             errors.Add("Error", new Dictionary<string, string> { { "Ru", "Ошибка" }, { "En", "Error" } });
+            errors.Add("Request", new Dictionary<string, string> { { "Ru", "Запрос" }, { "En", "Request" } });
+            errors.Add("Successfully", new Dictionary<string, string> { { "Ru", "Успешно" }, { "En", "Successfully" } });
             errors.Add("Warning", new Dictionary<string, string> { { "Ru", "Предупреждение" }, { "En", "Warning" } });
-            errors.Add("License update successfully installed", new Dictionary<string, string> { { "Ru", "Лицензия применена успешно!" }, { "En", "License update successfully installed!" } });
+            errors.Add("License update successfully", new Dictionary<string, string> { { "Ru", "Лицензия применена успешно!" }, { "En", "License update successfully installed!" } });
             errors.Add("Update didn't installed", new Dictionary<string, string> { { "Ru", "Обновление не установлено!" }, { "En", "Update didn't installed!" } });
             errors.Add("Saving file error", new Dictionary<string, string> { { "Ru", "Ошибка при сохранении файла: {0}" }, { "En", "Saving file error: {0}" } });
             errors.Add("Error: Accounting.exe not found in dir", new Dictionary<string, string> { { "Ru", "Ошибка: Accounting.exe не найден в директории: {0}" }, { "En", "Error: Accounting.exe not found in dir: {0}" } });
@@ -224,6 +226,10 @@ namespace Enterprise
             errors.Add("Error: ", new Dictionary<string, string> { { "Ru", "Ошибка: {0}" }, { "En", "Error: {0}" } });
             errors.Add("Can't create dir for logs", new Dictionary<string, string> { { "Ru", "Не получается создать директорию для логов! Ошибка: {0}" }, { "En", "Can't create dir for logs! Error: {0}" } });
             errors.Add("Can't create log file", new Dictionary<string, string> { { "Ru", "Не получается создать файл с логами! Ошибка: {0}" }, { "En", "Can't create log file! Error: {0}" } });
+            errors.Add("Not found trial license: \"trial_license\", -  in base dir", new Dictionary<string, string> { { "Ru", "Не найден файл с пробной лицензией: \"trial_license\", - в корневой директории!" }, { "En", "Not found trial license: \"trial_license\", -  in base dir!" } });
+            errors.Add("Do you want to install trial license", new Dictionary<string, string> { { "Ru", "Вы действительно хотите установить пробную лицензию?" }, { "En", "Do you want to install trial license?" } });
+            errors.Add("Trial license can't be applied! Error", new Dictionary<string, string> { { "Ru", "Пробная лицензия не применилась! Ошибка: " }, { "En", "Trial license can't be applied! Error: " } });
+            errors.Add("Trial license successfully installed", new Dictionary<string, string> { { "Ru", "Пробная лицензия применилась успешно!" }, { "En", "Trial license successfully installed!" } });
             //errors.Add("", new Dictionary<string, string> { { "Ru", "" }, { "En", "" } });
         }
 

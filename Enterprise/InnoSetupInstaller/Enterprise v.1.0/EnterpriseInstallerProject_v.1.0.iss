@@ -48,6 +48,7 @@ Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-ver
 Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.1.0\upclient.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.1.0\language\*"; DestDir: "{app}\language"; Flags: ignoreversion recursesubdirs createallsubdirs
 Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.1.0\logs\*"; DestDir: "{app}\logs"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.1.0\trial_license"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

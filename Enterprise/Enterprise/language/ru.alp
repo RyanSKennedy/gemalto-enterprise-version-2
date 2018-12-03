@@ -16,6 +16,7 @@
   <buttonActivatePK>Выполнить</buttonActivatePK>
   <buttonGetUpdateByKeyID>Проверить</buttonGetUpdateByKeyID>
   <buttonGetUpdateForApp>Запросить обновление для программы</buttonGetUpdateForApp>
+  <buttonGetTrial>Получить пробную лицензию!</buttonGetTrial>
   <labelUpdateType>Активация/Обновление:</labelUpdateType>
   <labelLicenseInfo>О лицензии:</labelLicenseInfo>
   <labelCurrentVersion>Текущая версия приложения:</labelCurrentVersion>

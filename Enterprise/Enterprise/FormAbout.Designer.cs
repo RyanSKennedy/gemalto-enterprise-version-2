@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAbout));
             this.buttonGetUpdateForApp = new System.Windows.Forms.Button();
             this.labelUpdateType = new System.Windows.Forms.Label();
             this.radioButtonByPK = new System.Windows.Forms.RadioButton();
@@ -38,6 +39,7 @@
             this.labelLicenseInfo = new System.Windows.Forms.Label();
             this.textBoxLicenseInfo = new System.Windows.Forms.TextBox();
             this.labelCurrentVersion = new System.Windows.Forms.Label();
+            this.buttonGetTrial = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonGetUpdateForApp
@@ -156,11 +158,23 @@
             this.labelCurrentVersion.TabIndex = 9;
             this.labelCurrentVersion.Text = "Current version application:";
             // 
+            // buttonGetTrial
+            // 
+            this.buttonGetTrial.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonGetTrial.Location = new System.Drawing.Point(18, 136);
+            this.buttonGetTrial.Name = "buttonGetTrial";
+            this.buttonGetTrial.Size = new System.Drawing.Size(624, 39);
+            this.buttonGetTrial.TabIndex = 10;
+            this.buttonGetTrial.Text = "Get Trial!";
+            this.buttonGetTrial.UseVisualStyleBackColor = true;
+            this.buttonGetTrial.Click += new System.EventHandler(this.buttonGetTrial_Click);
+            // 
             // FormAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(654, 399);
+            this.Controls.Add(this.buttonGetTrial);
             this.Controls.Add(this.labelCurrentVersion);
             this.Controls.Add(this.textBoxLicenseInfo);
             this.Controls.Add(this.labelLicenseInfo);
@@ -171,11 +185,11 @@
             this.Controls.Add(this.radioButtonByPK);
             this.Controls.Add(this.labelUpdateType);
             this.Controls.Add(this.buttonGetUpdateForApp);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximumSize = new System.Drawing.Size(680, 470);
             this.MinimumSize = new System.Drawing.Size(680, 470);
             this.Name = "FormAbout";
-            this.ShowIcon = false;
             this.Text = "About";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAbout_FormClosing);
             this.Load += new System.EventHandler(this.FormAbout_Load);
@@ -196,5 +210,6 @@
         private System.Windows.Forms.Label labelLicenseInfo;
         private System.Windows.Forms.TextBox textBoxLicenseInfo;
         private System.Windows.Forms.Label labelCurrentVersion;
+        private System.Windows.Forms.Button buttonGetTrial;
     }
 }

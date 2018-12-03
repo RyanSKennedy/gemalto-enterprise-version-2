@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormLicense));
             this.labelAID = new System.Windows.Forms.Label();
             this.labelKeyID = new System.Windows.Forms.Label();
             this.labelLicense = new System.Windows.Forms.Label();
@@ -143,11 +144,11 @@
             this.Controls.Add(this.labelLicense);
             this.Controls.Add(this.labelKeyID);
             this.Controls.Add(this.labelAID);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximumSize = new System.Drawing.Size(650, 257);
             this.MinimumSize = new System.Drawing.Size(650, 257);
             this.Name = "FormLicense";
-            this.ShowIcon = false;
             this.Text = "License";
             this.Load += new System.EventHandler(this.FormLicense_Load);
             this.panelContainer.ResumeLayout(false);

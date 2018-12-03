@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormConfigInfo));
             this.labelCurrentSettings = new System.Windows.Forms.Label();
             this.labelEmsUrl = new System.Windows.Forms.Label();
             this.textBoxEmsUrl = new System.Windows.Forms.TextBox();
@@ -305,11 +306,11 @@
             this.Controls.Add(this.textBoxEmsUrl);
             this.Controls.Add(this.labelEmsUrl);
             this.Controls.Add(this.labelCurrentSettings);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximumSize = new System.Drawing.Size(587, 820);
             this.MinimumSize = new System.Drawing.Size(587, 820);
             this.Name = "FormConfigInfo";
-            this.ShowIcon = false;
             this.Text = "Settings";
             this.UseWaitCursor = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormConfigInfo_FormClosing);

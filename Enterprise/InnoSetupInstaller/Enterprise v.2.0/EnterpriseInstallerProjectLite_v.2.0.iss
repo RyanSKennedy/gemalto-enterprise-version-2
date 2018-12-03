@@ -32,7 +32,7 @@ Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 
 [Files]
 Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Enterprise.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Enterprise.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Enterprise.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
