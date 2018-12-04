@@ -13,7 +13,7 @@ namespace Enterprise
 {
     public partial class FormMain : Form
     {
-        public static string currentVersion = " v.1.0";
+        public static string currentVersion = " v.2.0";
         public static string featureIdAccounting, featureIdStock, featureIdStaff;
         public static string baseDir, logFileName;
         public static Dictionary<string, string> vCode = new Dictionary<string, string>(1);
@@ -82,10 +82,32 @@ namespace Enterprise
                                     }
                                 }
                             }
-                            string s = Convert.ToString(elHasp.Name);
+                            //string s = Convert.ToString(elHasp.Name);
                         }
 
                         keyIsAlreadyConnected = true;
+                    }
+                }
+                else
+                {
+                    if (xmlKeyInfo != null)
+                    {
+                        foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
+                        {
+                            foreach (XElement elProduct in elHasp.Elements("product"))
+                            {
+                                foreach (XElement elFeature in elProduct.Elements("feature"))
+                                {
+                                    foreach (XElement elFeatureId in elFeature.Elements("id"))
+                                    {
+                                        buttonAccounting.Enabled = (elFeatureId.Value == featureIdAccounting) ? true : buttonAccounting.Enabled;
+                                        buttonStock.Enabled = (elFeatureId.Value == featureIdStock) ? true : buttonStock.Enabled;
+                                        buttonStaff.Enabled = (elFeatureId.Value == featureIdStaff) ? true : buttonStaff.Enabled;
+                                    }
+                                }
+                            }
+                            //string s = Convert.ToString(elHasp.Name);
+                        }
                     }
                 }
             }

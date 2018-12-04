@@ -70,14 +70,14 @@ namespace Enterprise
                 textBoxAID.Visible = false;
                 labelAID.Visible = false;
 
-                textBoxKeyID.Location = new System.Drawing.Point(84,56);
-                labelKeyID.Location = new System.Drawing.Point(13, 62);
+                textBoxKeyID.Location = new System.Drawing.Point(55,40);
+                labelKeyID.Location = new System.Drawing.Point(6, 46);
             } else {
                 textBoxAID.Visible = true;
                 labelAID.Visible = true;
 
-                textBoxKeyID.Location = new System.Drawing.Point(109, 113);
-                labelKeyID.Location = new System.Drawing.Point(13, 119);
+                textBoxKeyID.Location = new System.Drawing.Point(55, 52);
+                labelKeyID.Location = new System.Drawing.Point(6, 58);
             }
             
         }
