@@ -153,15 +153,23 @@ namespace Enterprise.settings {
   </param>
   <param>
     <key>-pc</key>
-    <value>1337e5b0-fd2d-4018-8a13-a921bcbfb5d2</value>
+    <value>81fb31d4-0fbd-4699-91e8-a8d89361c7f8</value>
   </param>
   <param>
     <key>-v</key>
     <value>v1</value>
   </param>
   <param>
-    <key>-update</key>
-    <value>-update</value>
+    <key>-check</key>
+    <value>-check</value>
+  </param>
+  <param>
+    <key>-st</key>
+    <value>-st</value>
+  </param>
+  <param>
+    <key>-l</key>
+    <value>en</value>
   </param>
   <param>
     <key>-log</key>

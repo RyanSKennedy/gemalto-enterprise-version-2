@@ -165,6 +165,9 @@
     <Content Include="icons\SettingsIcon.ico" />
     <Content Include="MainIcon.ico" />
     <Content Include="MainLogo.ico" />
+    <Content Include="upclient.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Enterprise_logo.png" />

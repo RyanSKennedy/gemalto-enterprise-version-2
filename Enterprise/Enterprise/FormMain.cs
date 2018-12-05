@@ -13,13 +13,14 @@ namespace Enterprise
 {
     public partial class FormMain : Form
     {
-        public static string currentVersion = " v.2.0";
+        public static string currentVersion = " v.1.0";
         public static string featureIdAccounting, featureIdStock, featureIdStaff;
         public static string baseDir, logFileName;
         public static Dictionary<string, string> vCode = new Dictionary<string, string>(1);
         public static string batchCode, kScope, kFormat, hInfo, eUrl, aSentinelUpCall;
         public static int tPort;
         public static bool lIsEnabled, aIsEnabled, adIsEnabled, keyIsConnected = false, keyIsAlreadyConnected = false;
+        public static bool buttonAccountingEnabled = false, buttonStockEnabled = false, buttonStaffEnabled = false;
         public static string curentKeyId = "";
         public static string langState, language, locale;
         public static XDocument xmlKeyInfo;
@@ -37,15 +38,29 @@ namespace Enterprise
             hStatus = Hasp.GetInfo(kScope, kFormat, vCode[batchCode], ref hInfo);
             if (HaspStatus.StatusOk != hStatus)
             {
-                if (appSettings.enableLogs) Log.Write("Ошибка запроса информации с ключа, статус: " + hStatus);
-                keyIsConnected = false;
-                keyIsAlreadyConnected = false;
+                string tmpScope = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
+                                    "<haspscope/>";
+                hStatus = Hasp.GetInfo(tmpScope, kFormat, vCode[batchCode], ref hInfo);
+                if (HaspStatus.StatusOk != hStatus)
+                {
+                    if (appSettings.enableLogs) Log.Write("Ошибка запроса информации с ключа, статус: " + hStatus);
+                    keyIsConnected = false;
+                    keyIsAlreadyConnected = false;
+                    curentKeyId = "";
 
-                buttonAccounting.Enabled = false;
-                buttonStock.Enabled = false;
-                buttonStaff.Enabled = false;
+                    buttonAccounting.Enabled = false;
+                    buttonStock.Enabled = false;
+                    buttonStaff.Enabled = false;
 
-                hInfo = "";
+                    hInfo = "";
+                }
+                else
+                {
+                    if (appSettings.enableLogs) Log.Write("Результат выполнения запроса информации с ключа, статус: " + hStatus);
+
+                    xmlKeyInfo = XDocument.Parse(hInfo);
+                    keyIsConnected = true;
+                }
             }
             else
             {
@@ -77,12 +92,16 @@ namespace Enterprise
                                     foreach (XElement elFeatureId in elFeature.Elements("id"))
                                     {
                                         buttonAccounting.Enabled = (elFeatureId.Value == featureIdAccounting) ? true : buttonAccounting.Enabled;
+                                        buttonAccountingEnabled = buttonAccounting.Enabled;
+
                                         buttonStock.Enabled = (elFeatureId.Value == featureIdStock) ? true : buttonStock.Enabled;
+                                        buttonStockEnabled = buttonStock.Enabled;
+
                                         buttonStaff.Enabled = (elFeatureId.Value == featureIdStaff) ? true : buttonStaff.Enabled;
+                                        buttonStaffEnabled = buttonStaff.Enabled;
                                     }
                                 }
                             }
-                            //string s = Convert.ToString(elHasp.Name);
                         }
 
                         keyIsAlreadyConnected = true;
@@ -106,7 +125,6 @@ namespace Enterprise
                                     }
                                 }
                             }
-                            //string s = Convert.ToString(elHasp.Name);
                         }
                     }
                 }
@@ -211,8 +229,27 @@ namespace Enterprise
                 foreach (XElement elSentinelUp in sentinelUpCallXml.Elements("upclient")) {
                     foreach (XElement elParam in elSentinelUp.Elements("param")) {
                         foreach (XElement elKey in elParam.Elements("key")) {
-                            if (!elKey.Value.Contains("update") && !elKey.Value.Contains("download")) {
-                                aSentinelUpCall += elKey.Value + " ";
+                            switch (elKey.Value) {
+                                case ("-update"):
+                                case ("-download"):
+                                case ("-execute"):
+                                case ("-check"):
+                                case ("-messages"):
+                                case ("-manager"):
+                                case ("-register"):
+                                case ("-unregister"):
+                                case ("-clean"):
+                                case ("-genconfig"):
+                                case ("-s"):
+                                case ("-r"):
+                                case ("-st"):
+                                case ("-noproxy"):
+                                case ("-em"):
+                                    break;
+
+                                default:
+                                    aSentinelUpCall += elKey.Value + " ";
+                                    break;
                             }
                         }
 

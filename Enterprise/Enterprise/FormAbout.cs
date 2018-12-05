@@ -66,7 +66,7 @@ namespace Enterprise
             FormAbout aForm = (FormAbout)Application.OpenForms["FormAbout"];
             bool isSetAlpFormAbout = FormMain.alp.SetLenguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, aForm);
 
-            if (!string.IsNullOrEmpty(FormMain.hInfo))
+            if (!string.IsNullOrEmpty(FormMain.curentKeyId) && (FormMain.buttonAccountingEnabled == true || FormMain.buttonStockEnabled == true || FormMain.buttonStaffEnabled == true))
             {
                 textBoxPK.Size = textBoxPKWithRadioButtonSize;
                 textBoxPK.Location = textBoxPKWithRadioButtonPoint;
@@ -84,8 +84,28 @@ namespace Enterprise
                     textBoxLicenseInfo.Text += FormMain.xmlKeyInfo;
                 }
             }
+            else if (!string.IsNullOrEmpty(FormMain.curentKeyId) && !(FormMain.buttonAccountingEnabled == true || FormMain.buttonStockEnabled == true || FormMain.buttonStaffEnabled == true))
+            {
+                textBoxPK.Size = textBoxPKWithRadioButtonSize;
+                textBoxPK.Location = textBoxPKWithRadioButtonPoint;
+
+                radioButtonByKeyID.Visible = true;
+                radioButtonByPK.Visible = true;
+
+                buttonGetUpdateByKeyID.Visible = true;
+                buttonGetTrial.Visible = true;
+                buttonGetTrial.Location = buttonGetTrialDefaultPoint;
+
+                textBoxLicenseInfo.Text = "";
+                if (FormMain.xmlKeyInfo != null)
+                {
+                    textBoxLicenseInfo.Text += FormMain.xmlKeyInfo;
+                }
+            }
             else
             {
+                radioButtonByPK.Checked = true;
+                
                 textBoxPK.Size = textBoxPKDefaultSize;
                 textBoxPK.Location = textBoxPKDefaultPoint;
 
@@ -406,8 +426,7 @@ namespace Enterprise
                     try {
                         System.Diagnostics.Process upClientProcess = System.Diagnostics.Process.Start(upClientConfig);
 
-                        if (appSettings.enableLogs) Log.Write("Закрываем приложение перед его обновлением...");
-                        Environment.Exit(0);
+                        ActiveForm.Close();
                     } catch (Exception ex) {
                         if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить upclient.exe, ошибка: " + ex.Message);
                         MessageBox.Show("Error: " + ex.Message, "Error");
