@@ -287,55 +287,65 @@ namespace Staff
             FormMainStaff mForm = (FormMainStaff)Application.OpenForms["FormMainStaff"];
             bool isSetAlpFormMain = alp.SetLenguage(language, baseDir + "\\language\\" + language + ".alp", this.Controls, mForm);
 
-            if (aIsEnabled) {
+            if (aIsEnabled)
+            {
                 if (lIsEnabled) Log.Write("Использование API включено, пробуем получить Key ID с требуемой для работы лицензией");
 
-                scope = "<haspscope>" +
+                if (String.IsNullOrEmpty(keyId))
+                {
+                    scope = "<haspscope>" +
                             "<feature id=\"" + feature.FeatureId.ToString() + "\"/>" +
                         "</haspscope>";
 
-                format = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                         "<haspformat root=\"hasp_info\">" +
-                             "<hasp>" +
-                                 "<element name=\"id\"/>" +
-                             "</hasp>" +
-                         "</haspformat>";
+                    format = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                             "<haspformat root=\"hasp_info\">" +
+                                 "<hasp>" +
+                                     "<element name=\"id\"/>" +
+                                 "</hasp>" +
+                             "</haspformat>";
 
-                status = Hasp.GetInfo(scope, format, vendorCode, ref info);
-                if (lIsEnabled) Log.Write("Результат выполнения функции GetInfo: " + status);
+                    status = Hasp.GetInfo(scope, format, vendorCode, ref info);
+                    if (lIsEnabled) Log.Write("Результат выполнения функции GetInfo: " + status);
 
-                if (HaspStatus.StatusOk != status) {
-                    //handle error
-                    MessageBox.Show(ErrorMessageReplacer(language, status.ToString()), ErrorMessageReplacer(language, "Error"));
-                    if (lIsEnabled) Log.Write("Ключа с требуемой лицензией не найдено. Закрываем приложение Staff.exe.");
-                    Environment.Exit(0);
-                } else {
-                    XDocument infoXml = XDocument.Parse(info);
-                    foreach (XElement el in infoXml.Root.Elements()) {
-                        keyId = el.Value;
-                    }
-
-                    if (lIsEnabled) Log.Write("Найден ключ с требуемой лицензией, Key ID ключа: " + keyId);
-
-                    if (lIsEnabled) Log.Write("Выполняем запрос лицензии с ключа: " + keyId);
-                    hasp = new Hasp(feature);
-
-                    scope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                            "<haspscope>" +
-                                "<hasp id=\"" + keyId + "\"/>" +
-                            "</haspscope>";
-
-                    status = hasp.Login(vendorCode, scope);
-                    if (lIsEnabled) Log.Write("Результат логина на лицензию в ключе: " + status);
-                    if (HaspStatus.StatusOk != status) {
+                    if (HaspStatus.StatusOk != status)
+                    {
                         //handle error
                         MessageBox.Show(ErrorMessageReplacer(language, status.ToString()), ErrorMessageReplacer(language, "Error"));
-                        if (lIsEnabled) Log.Write("Ошибка подключения к лицензии в ключе. Закрываем приложение Staff.exe.");
+                        if (lIsEnabled) Log.Write("Ключа с требуемой лицензией не найдено. Закрываем приложение Staff.exe.");
                         Environment.Exit(0);
-                    } else {
-                        //MessageBox.Show("Status: " + status, "Successfully");
-                        if (lIsEnabled) Log.Write("Требуемая лицензия обнаружена. Продолжаем работу приложения.");
                     }
+                    else
+                    {
+                        XDocument infoXml = XDocument.Parse(info);
+                        foreach (XElement el in infoXml.Root.Elements())
+                        {
+                            keyId = el.Value;
+                        }
+                        if (lIsEnabled) Log.Write("Найден ключ с требуемой лицензией, Key ID ключа: " + keyId);
+                    }
+                }
+
+                if (lIsEnabled) Log.Write("Выполняем запрос лицензии с ключа: " + keyId);
+                hasp = new Hasp(feature);
+
+                scope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                        "<haspscope>" +
+                            "<hasp id=\"" + keyId + "\"/>" +
+                        "</haspscope>";
+
+                status = hasp.Login(vendorCode, scope);
+                if (lIsEnabled) Log.Write("Результат логина на лицензию в ключе: " + status);
+                if (HaspStatus.StatusOk != status)
+                {
+                    //handle error
+                    MessageBox.Show(ErrorMessageReplacer(language, status.ToString()), ErrorMessageReplacer(language, "Error"));
+                    if (lIsEnabled) Log.Write("Ошибка подключения к лицензии в ключе. Закрываем приложение Staff.exe.");
+                    Environment.Exit(0);
+                }
+                else
+                {
+                    //MessageBox.Show("Status: " + status, "Successfully");
+                    if (lIsEnabled) Log.Write("Требуемая лицензия обнаружена. Продолжаем работу приложения.");
                 }
             }
         }

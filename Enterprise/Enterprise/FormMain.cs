@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Xml.Schema;
 using System.Xml.Linq;
+using System.Linq;
 using System.Windows.Forms;
 using MyLogClass;
 using Aladdin.HASP;
@@ -13,13 +14,13 @@ namespace Enterprise
 {
     public partial class FormMain : Form
     {
-        public static string currentVersion = " v.1.0";
+        public static string currentVersion = " v.2.0";
         public static string featureIdAccounting, featureIdStock, featureIdStaff;
         public static string baseDir, logFileName;
         public static Dictionary<string, string> vCode = new Dictionary<string, string>(1);
         public static string batchCode, kScope, kFormat, hInfo, eUrl, aSentinelUpCall;
         public static int tPort;
-        public static bool lIsEnabled, aIsEnabled, adIsEnabled, keyIsConnected = false, keyIsAlreadyConnected = false;
+        public static bool lIsEnabled, aIsEnabled, adIsEnabled, keyIsConnected = false;
         public static bool buttonAccountingEnabled = false, buttonStockEnabled = false, buttonStaffEnabled = false;
         public static string curentKeyId = "";
         public static string langState, language, locale;
@@ -35,17 +36,20 @@ namespace Enterprise
 
         private void timerCheckKey_Tick(object sender, EventArgs e)
         {
-            hStatus = Hasp.GetInfo(kScope, kFormat, vCode[batchCode], ref hInfo);
-            if (HaspStatus.StatusOk != hStatus)
+            var listKeys = GetKeyListWithPrioritySort();
+
+            if (listKeys != null && listKeys.Count() > 0)
             {
                 string tmpScope = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
-                                    "<haspscope/>";
+                                      "<haspscope>" +
+                                      "    <hasp id=\"" + listKeys[0].Key + "\" />" +
+                                      "</haspscope>";
+
                 hStatus = Hasp.GetInfo(tmpScope, kFormat, vCode[batchCode], ref hInfo);
                 if (HaspStatus.StatusOk != hStatus)
                 {
-                    if (appSettings.enableLogs) Log.Write("Ошибка запроса информации с ключа, статус: " + hStatus);
+                    if (appSettings.enableLogs) Log.Write("Ошибка запроса информации с ключа с KeyID = " + listKeys[0].Key + ", статус: " + hStatus);
                     keyIsConnected = false;
-                    keyIsAlreadyConnected = false;
                     curentKeyId = "";
 
                     buttonAccounting.Enabled = false;
@@ -56,73 +60,47 @@ namespace Enterprise
                 }
                 else
                 {
-                    if (appSettings.enableLogs) Log.Write("Результат выполнения запроса информации с ключа, статус: " + hStatus);
+                    if (appSettings.enableLogs) Log.Write("Результат выполнения запроса информации с ключа с KeyID = " + listKeys[0].Key + ", статус: " + hStatus);
 
                     xmlKeyInfo = XDocument.Parse(hInfo);
                     keyIsConnected = true;
                 }
-            }
-            else
-            {
-                if (appSettings.enableLogs) Log.Write("Результат выполнения запроса информации с ключа, статус: " + hStatus);
+            } else {
+                if (appSettings.enableLogs) Log.Write("Ошибка запроса информации с ключа с KeyID = " + listKeys[0].Key + ", статус: " + hStatus);
+                keyIsConnected = false;
+                curentKeyId = "";
 
-                xmlKeyInfo = XDocument.Parse(hInfo);
-                keyIsConnected = true;
-            }
+                buttonAccounting.Enabled = false;
+                buttonStock.Enabled = false;
+                buttonStaff.Enabled = false;
+
+                hInfo = "";
+            } 
 
             if (keyIsConnected == true)
             {
-                if (keyIsAlreadyConnected == false)
+                if (xmlKeyInfo != null)
                 {
-                    if (xmlKeyInfo != null)
+                    foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
                     {
-                        foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
+                        foreach (XElement elKeyId in elHasp.Elements("id"))
                         {
-                            foreach (XElement elKeyId in elHasp.Elements("id"))
-                            {
-                                if (curentKeyId == "")
-                                {
-                                    curentKeyId = elKeyId.Value;
-                                }
-                            }
-                            foreach (XElement elProduct in elHasp.Elements("product"))
-                            {
-                                foreach (XElement elFeature in elProduct.Elements("feature"))
-                                {
-                                    foreach (XElement elFeatureId in elFeature.Elements("id"))
-                                    {
-                                        buttonAccounting.Enabled = (elFeatureId.Value == featureIdAccounting) ? true : buttonAccounting.Enabled;
-                                        buttonAccountingEnabled = buttonAccounting.Enabled;
-
-                                        buttonStock.Enabled = (elFeatureId.Value == featureIdStock) ? true : buttonStock.Enabled;
-                                        buttonStockEnabled = buttonStock.Enabled;
-
-                                        buttonStaff.Enabled = (elFeatureId.Value == featureIdStaff) ? true : buttonStaff.Enabled;
-                                        buttonStaffEnabled = buttonStaff.Enabled;
-                                    }
-                                }
-                            }
+                            curentKeyId = elKeyId.Value;
                         }
-
-                        keyIsAlreadyConnected = true;
-                    }
-                }
-                else
-                {
-                    if (xmlKeyInfo != null)
-                    {
-                        foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
+                        foreach (XElement elProduct in elHasp.Elements("product"))
                         {
-                            foreach (XElement elProduct in elHasp.Elements("product"))
+                            foreach (XElement elFeature in elProduct.Elements("feature"))
                             {
-                                foreach (XElement elFeature in elProduct.Elements("feature"))
+                                foreach (XElement elFeatureId in elFeature.Elements("id"))
                                 {
-                                    foreach (XElement elFeatureId in elFeature.Elements("id"))
-                                    {
-                                        buttonAccounting.Enabled = (elFeatureId.Value == featureIdAccounting) ? true : buttonAccounting.Enabled;
-                                        buttonStock.Enabled = (elFeatureId.Value == featureIdStock) ? true : buttonStock.Enabled;
-                                        buttonStaff.Enabled = (elFeatureId.Value == featureIdStaff) ? true : buttonStaff.Enabled;
-                                    }
+                                    buttonAccounting.Enabled = (elFeatureId.Value == featureIdAccounting) ? true : buttonAccounting.Enabled;
+                                    buttonAccountingEnabled = buttonAccounting.Enabled;
+
+                                    buttonStock.Enabled = (elFeatureId.Value == featureIdStock) ? true : buttonStock.Enabled;
+                                    buttonStockEnabled = buttonStock.Enabled;
+
+                                    buttonStaff.Enabled = (elFeatureId.Value == featureIdStaff) ? true : buttonStaff.Enabled;
+                                    buttonStaffEnabled = buttonStaff.Enabled;
                                 }
                             }
                         }
@@ -135,7 +113,7 @@ namespace Enterprise
 
         FormAbout AboutWindow;
         FormConfigInfo ConfigInfoWindow;
-        Enterprise.settings.enterprise appSettings = new settings.enterprise();
+        static Enterprise.settings.enterprise appSettings = new settings.enterprise();
 
         public FormMain()
         {
@@ -461,6 +439,78 @@ namespace Enterprise
                     return false;
 
             return true;
+        }
+
+        // получение уже отсортированного списка доступных ключей
+        protected static List<KeyValuePair<string, int>> GetKeyListWithPrioritySort()
+        {
+            Dictionary<string, int> dicKeys = new Dictionary<string, int>();
+
+            string scope = "<?xml version =\"1.0\" encoding=\"UTF-8\" ?>" +
+                           "  <haspscope/>";
+
+            string format =
+            "<haspformat root=\"hasp_info\">" +
+            "  <hasp>" +
+            "    <attribute name=\"id\" />" +
+            "    <attribute name=\"type\" />" +
+            "    <feature>" +
+            "             <attribute name=\"id\" />" +
+            "             <attribute name=\"locked\" />" +
+            "        </feature>" +
+            "  </hasp>" +
+            "</haspformat>";
+            
+            string info = null;
+            HaspStatus status = Hasp.GetInfo(scope, format, vCode[batchCode], ref info);
+
+            if (HaspStatus.StatusOk != status)
+            {
+                //handle error
+                if (appSettings.enableLogs) Log.Write("Ошибка запроса информации с ключа во время приоритезации ключей, статус: " + status);
+
+                return null;
+            }
+
+            xmlKeyInfo = XDocument.Parse(info);
+            if (xmlKeyInfo != null)
+            {
+                // приоритеты Low number means more Higher priority
+                // 0 - аппаратный Sentinel HL с нужными FID
+                // 1 - полноценный программный Sentinel SL ключ c нужными FID
+                // 2 - триальный программный Sentinel SL ключ c нужными FID
+                // 3 - аппаратный Sentinel HL БЕЗ нужных FID
+                // 4 - полноценный программный Sentinel SL ключ БЕЗ нужных FID
+                // 5 - триальный программный Sentinel SL ключ БЕЗ нужных FID
+
+                foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
+                {
+                    int tmpPriorityCounter = (elHasp.Attribute("type").Value.Contains("HL") ? 3 : 4);
+                    bool neededFIDExist = false, isTrialKey = false;
+
+                    foreach (XElement elFeature in elHasp.Elements("feature"))
+                    {
+                        if (elFeature.Attribute("id").Value == featureIdAccounting || elFeature.Attribute("id").Value == featureIdStock || elFeature.Attribute("id").Value == featureIdStaff) neededFIDExist = true;
+                        if (elFeature.Attribute("locked").Value.Contains("false")) isTrialKey = true;
+                    }
+
+                    tmpPriorityCounter += (neededFIDExist ? -3 : 0);
+                    tmpPriorityCounter += (isTrialKey ? 1 : 0);
+
+                    dicKeys.Add(elHasp.Attribute("id").Value, tmpPriorityCounter);
+                }
+            }
+
+            var listKeys = dicKeys.ToList();
+            listKeys.Sort(
+            delegate (KeyValuePair<string, int> pair1,
+                KeyValuePair<string, int> pair2)
+                {
+                    return pair1.Value.CompareTo(pair2.Value);
+                }
+            );
+
+            return listKeys;
         }
     }
 }
