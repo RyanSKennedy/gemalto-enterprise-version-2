@@ -8,6 +8,7 @@ using System.Linq;
 using System.Windows.Forms;
 using MyLogClass;
 using Aladdin.HASP;
+using SentinelSettings;
 using System.Collections.Generic;
 
 namespace Enterprise
@@ -109,7 +110,7 @@ namespace Enterprise
             }
         }
 
-        public static SentinelData standartData = new SentinelData();
+        public static SentinelSettings.SentinelData standartData; 
 
         FormAbout AboutWindow;
         FormConfigInfo ConfigInfoWindow;
@@ -125,10 +126,22 @@ namespace Enterprise
             baseDir = System.IO.Path.GetDirectoryName(a.Location);
             //=============================================
 
+            // решаем какой язык отображать в программе
+            //============================================= 
+            langState = (appSettings.language != "" && (System.IO.File.Exists(baseDir + "\\language\\" + appSettings.language + ".alp"))) ? (baseDir + "\\language\\" + appSettings.language + ".alp") : "Default (English)";
+            language = (appSettings.language != "") ? appSettings.language : "Default (English)";
+            locale = (appSettings.language != "") ? appSettings.language : "En";
+            //=============================================
+
+            // Инициализируем экземпляр класса со стандартными настройками
+            //============================================= 
+            standartData = new SentinelSettings.SentinelData(langState);
+            //=============================================
+
             // решаем откуда брать Vendor code
             //============================================= 
             string tmpVCode = "", tmpBatchCode = "";
-            foreach (var el in SentinelData.vendorCode) {
+            foreach (var el in SentinelSettings.SentinelData.vendorCode) {
                 tmpVCode = el.Value;
                 tmpBatchCode = el.Key;
             }
@@ -141,7 +154,7 @@ namespace Enterprise
 
             // решаем откуда брать Port для проверки интернет соединения
             //============================================= 
-            tPort = (String.IsNullOrEmpty(appSettings.portForTestConnection)) ? Convert.ToInt32(SentinelData.portForTestConnection) : Convert.ToInt32(appSettings.portForTestConnection);
+            tPort = (String.IsNullOrEmpty(appSettings.portForTestConnection)) ? Convert.ToInt32(SentinelSettings.SentinelData.portForTestConnection) : Convert.ToInt32(appSettings.portForTestConnection);
             //=============================================
 
             // решаем какой Scope использовать для поиска ключа с лицензиями и откуда его брать
@@ -152,7 +165,7 @@ namespace Enterprise
                 scopeXml = XDocument.Parse(appSettings.scope.InnerXml);
                 bool errorsValidating = false;
                 XmlSchemaSet schemas = new XmlSchemaSet();
-                schemas.Add(XmlSchema.Read(new StringReader(SentinelData.keyScopeXsd), HandleValidationError));
+                schemas.Add(XmlSchema.Read(new StringReader(SentinelSettings.SentinelData.keyScopeXsd), HandleValidationError));
 
                 scopeXml.Validate(schemas, (o, e) =>
                 {
@@ -160,10 +173,10 @@ namespace Enterprise
                 });
 
                 if (errorsValidating) {
-                    scopeXml = XDocument.Parse(SentinelData.keyScope);
+                    scopeXml = XDocument.Parse(SentinelSettings.SentinelData.keyScope);
                 }
             } else {
-                scopeXml = XDocument.Parse(SentinelData.keyScope);
+                scopeXml = XDocument.Parse(SentinelSettings.SentinelData.keyScope);
             }
 
             foreach (XElement elHasp in scopeXml.Elements("haspscope")) {
@@ -194,14 +207,14 @@ namespace Enterprise
 
             // решаем какой Format использовать для поиска ключа с лицензиями и откуда его брать
             //============================================= 
-            kFormat = (appSettings.format == null || String.IsNullOrEmpty(appSettings.format.InnerXml)) ? SentinelData.keyFormat : appSettings.format.InnerXml;
+            kFormat = (appSettings.format == null || String.IsNullOrEmpty(appSettings.format.InnerXml)) ? SentinelSettings.SentinelData.keyFormat : appSettings.format.InnerXml;
             //=============================================
 
             // решаем какой SentinelUp Call использовать и откуда его брать
             //============================================= 
             aSentinelUpCall = "";
             XDocument sentinelUpCallXml;
-            sentinelUpCallXml = (appSettings.sentinelUpCallData.InnerXml == "") ? XDocument.Parse(SentinelData.appSentinelUpCallData) : XDocument.Parse(appSettings.sentinelUpCallData.InnerXml);
+            sentinelUpCallXml = (appSettings.sentinelUpCallData.InnerXml == "") ? XDocument.Parse(SentinelSettings.SentinelData.appSentinelUpCallData) : XDocument.Parse(appSettings.sentinelUpCallData.InnerXml);
 
             if (sentinelUpCallXml != null) {
                 foreach (XElement elSentinelUp in sentinelUpCallXml.Elements("upclient")) {
@@ -241,29 +254,22 @@ namespace Enterprise
 
             // решаем какой EMS URL использовать и откуда его брать
             //============================================= 
-            eUrl = (String.IsNullOrEmpty(appSettings.emsUrl)) ? SentinelData.emsUrl : appSettings.emsUrl;
+            eUrl = (String.IsNullOrEmpty(appSettings.emsUrl)) ? SentinelSettings.SentinelData.emsUrl : appSettings.emsUrl;
             //=============================================
 
             // решаем включать логирование или нет
             //============================================= 
-            lIsEnabled = (Convert.ToString(appSettings.enableLogs) == "") ? SentinelData.logIsEnabled : appSettings.enableLogs;
+            lIsEnabled = (Convert.ToString(appSettings.enableLogs) == "") ? SentinelSettings.SentinelData.logIsEnabled : appSettings.enableLogs;
             //=============================================
 
             // решаем включать использование API в запускаемых exe или нет
             //============================================= 
-            aIsEnabled = (Convert.ToString(appSettings.enableApi) == "") ? SentinelData.apiIsEnabled : appSettings.enableApi;
+            aIsEnabled = (Convert.ToString(appSettings.enableApi) == "") ? SentinelSettings.SentinelData.apiIsEnabled : appSettings.enableApi;
             //=============================================
 
             // решаем включать отображение дополнительных данных в интерфейсе или нет
             //============================================= 
-            adIsEnabled = (Convert.ToString(appSettings.enableDisplayAdvancedData) == "") ? SentinelData.advancedDataIsEnabled : appSettings.enableDisplayAdvancedData;
-            //=============================================
-
-            // решаем какой язык отображать в программе
-            //============================================= 
-            langState = (appSettings.language != "" && (System.IO.File.Exists(baseDir + "\\language\\" + appSettings.language + ".alp"))) ? (baseDir + "\\language\\" + appSettings.language + ".alp") : "Default (English)";
-            language = (appSettings.language != "") ? appSettings.language : "Default (English)";
-            locale = (appSettings.language != "") ? appSettings.language : "En";
+            adIsEnabled = (Convert.ToString(appSettings.enableDisplayAdvancedData) == "") ? SentinelSettings.SentinelData.advancedDataIsEnabled : appSettings.enableDisplayAdvancedData;
             //=============================================
 
             // создаём директорию (если не создана) и файл с логами

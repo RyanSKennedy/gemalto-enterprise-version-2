@@ -399,7 +399,7 @@ namespace Enterprise
         {
             if (appSettings.enableLogs) Log.Write("Пробуем выполнить запрос обновления для программы через upclient.exe...");
             if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable()) {
-                MessageBox.Show("Missing or limited physical connection to network." + Environment.NewLine + "Please check your connetctions settings.", "Error: Phisichal network unavaliable...");
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Missing or limited physical connection to network"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: Physical network unavailable"));
                 if (appSettings.enableLogs) Log.Write("Отсутствует или ограниченно физическое подключение к сети. Проверьте настройки вашего сетевого подключения.");
                 return;
             }
@@ -417,7 +417,7 @@ namespace Enterprise
 
             if (!isConnected) {
                 if (appSettings.enableLogs) Log.Write("Нет подключения к интернету. Проверьте ваш фаервол или настройки сетевого подключения.");
-                MessageBox.Show("Haven't access to the internet." + Environment.NewLine + "Please check your firewall or connection settings.", "Error: Internet access unavaliable...");
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Haven't access to the internet."), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: Internet access unavailable"));
             }
             else {
                 if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "upclient.exe")) {
@@ -429,11 +429,11 @@ namespace Enterprise
                         ActiveForm.Close();
                     } catch (Exception ex) {
                         if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить upclient.exe, ошибка: " + ex.Message);
-                        MessageBox.Show("Error: " + ex.Message, "Error");
+                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: ").Replace("{0}", ex.Message), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                     }
                 } else {
                     if (appSettings.enableLogs) Log.Write("Error: нет SentinelUp клиента в директории с обновляемым ПО.");
-                    MessageBox.Show("Error: SentinelUp Client not found in dir: " + Environment.NewLine + FormMain.baseDir, "Error");
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: SentinelUp Client not found in dir:").Replace("{0}", FormMain.baseDir), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                 }
             }
         }
