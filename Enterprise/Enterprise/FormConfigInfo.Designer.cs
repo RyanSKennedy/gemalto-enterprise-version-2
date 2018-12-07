@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormConfigInfo));
             this.labelCurrentSettings = new System.Windows.Forms.Label();
             this.labelEmsUrl = new System.Windows.Forms.Label();
             this.textBoxEmsUrl = new System.Windows.Forms.TextBox();
@@ -47,6 +48,8 @@
             this.labelApi = new System.Windows.Forms.Label();
             this.textBoxPort = new System.Windows.Forms.TextBox();
             this.labelPort = new System.Windows.Forms.Label();
+            this.textBoxAdvancedData = new System.Windows.Forms.TextBox();
+            this.labelAdvancedData = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelCurrentSettings
@@ -256,11 +259,34 @@
             this.labelPort.Text = "Port:";
             this.labelPort.UseWaitCursor = true;
             // 
+            // textBoxAdvancedData
+            // 
+            this.textBoxAdvancedData.Location = new System.Drawing.Point(170, 725);
+            this.textBoxAdvancedData.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxAdvancedData.Name = "textBoxAdvancedData";
+            this.textBoxAdvancedData.ReadOnly = true;
+            this.textBoxAdvancedData.Size = new System.Drawing.Size(384, 31);
+            this.textBoxAdvancedData.TabIndex = 20;
+            this.textBoxAdvancedData.UseWaitCursor = true;
+            // 
+            // labelAdvancedData
+            // 
+            this.labelAdvancedData.AutoSize = true;
+            this.labelAdvancedData.Location = new System.Drawing.Point(20, 730);
+            this.labelAdvancedData.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelAdvancedData.Name = "labelAdvancedData";
+            this.labelAdvancedData.Size = new System.Drawing.Size(100, 25);
+            this.labelAdvancedData.TabIndex = 19;
+            this.labelAdvancedData.Text = "AdvData:";
+            this.labelAdvancedData.UseWaitCursor = true;
+            // 
             // FormConfigInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(561, 699);
+            this.ClientSize = new System.Drawing.Size(561, 749);
+            this.Controls.Add(this.textBoxAdvancedData);
+            this.Controls.Add(this.labelAdvancedData);
             this.Controls.Add(this.textBoxPort);
             this.Controls.Add(this.labelPort);
             this.Controls.Add(this.textBoxApi);
@@ -280,11 +306,11 @@
             this.Controls.Add(this.textBoxEmsUrl);
             this.Controls.Add(this.labelEmsUrl);
             this.Controls.Add(this.labelCurrentSettings);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.MaximumSize = new System.Drawing.Size(587, 770);
-            this.MinimumSize = new System.Drawing.Size(587, 770);
+            this.MaximumSize = new System.Drawing.Size(587, 820);
+            this.MinimumSize = new System.Drawing.Size(587, 820);
             this.Name = "FormConfigInfo";
-            this.ShowIcon = false;
             this.Text = "Settings";
             this.UseWaitCursor = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormConfigInfo_FormClosing);
@@ -315,5 +341,7 @@
         private System.Windows.Forms.Label labelApi;
         private System.Windows.Forms.TextBox textBoxPort;
         private System.Windows.Forms.Label labelPort;
+        private System.Windows.Forms.TextBox textBoxAdvancedData;
+        private System.Windows.Forms.Label labelAdvancedData;
     }
 }

@@ -37,9 +37,9 @@
             this.labelStaff.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelStaff.Location = new System.Drawing.Point(98, 96);
             this.labelStaff.Name = "labelStaff";
-            this.labelStaff.Size = new System.Drawing.Size(265, 37);
+            this.labelStaff.Size = new System.Drawing.Size(88, 37);
             this.labelStaff.TabIndex = 2;
-            this.labelStaff.Text = "Here is our Staff";
+            this.labelStaff.Text = "Staff";
             // 
             // FormMainStaff
             // 

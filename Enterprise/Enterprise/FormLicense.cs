@@ -21,10 +21,10 @@ namespace Enterprise
 
             if (isSuccess) {
                 labelUpdateStatus.ForeColor = System.Drawing.Color.Green;
-                labelUpdateStatus.Text = "License update successfully!";
+                labelUpdateStatus.Text = FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "License update successfully");
             } else {
                 labelUpdateStatus.ForeColor = System.Drawing.Color.Red;
-                labelUpdateStatus.Text = "Update didn't installing!";
+                labelUpdateStatus.Text = FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Update didn't installing");
             }
         }
 
@@ -46,7 +46,7 @@ namespace Enterprise
                     if (appSettings.enableLogs) Log.Write("V2C файл сохранён успешно...");
                 } catch (Exception ex) {
                     if (appSettings.enableLogs) Log.Write("Не могу сохранить V2C: " + Environment.NewLine + FormAbout.v2c + Environment.NewLine + "Ошибка: " + ex);
-                    MessageBox.Show("Saving file error: " + ex);
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Saving file error: {0}").Replace("{0}", ex.ToString()));
                 }
                 //----------------------------------------------------------------------------
             }
@@ -65,6 +65,21 @@ namespace Enterprise
 
             textBoxAID.Text = FormAbout.aid;
             textBoxKeyID.Text = FormAbout.protectionKeyId;
+
+            if (FormMain.adIsEnabled == false) {
+                textBoxAID.Visible = false;
+                labelAID.Visible = false;
+
+                textBoxKeyID.Location = new System.Drawing.Point(55,40);
+                labelKeyID.Location = new System.Drawing.Point(6, 46);
+            } else {
+                textBoxAID.Visible = true;
+                labelAID.Visible = true;
+
+                textBoxKeyID.Location = new System.Drawing.Point(55, 52);
+                labelKeyID.Location = new System.Drawing.Point(6, 58);
+            }
+            
         }
     }
 }

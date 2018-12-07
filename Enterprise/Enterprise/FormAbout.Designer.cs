@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormAbout));
             this.buttonGetUpdateForApp = new System.Windows.Forms.Button();
             this.labelUpdateType = new System.Windows.Forms.Label();
             this.radioButtonByPK = new System.Windows.Forms.RadioButton();
@@ -38,15 +39,16 @@
             this.labelLicenseInfo = new System.Windows.Forms.Label();
             this.textBoxLicenseInfo = new System.Windows.Forms.TextBox();
             this.labelCurrentVersion = new System.Windows.Forms.Label();
+            this.buttonGetTrial = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // buttonGetUpdateForApp
             // 
             this.buttonGetUpdateForApp.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonGetUpdateForApp.Location = new System.Drawing.Point(18, 311);
+            this.buttonGetUpdateForApp.Location = new System.Drawing.Point(18, 337);
             this.buttonGetUpdateForApp.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonGetUpdateForApp.Name = "buttonGetUpdateForApp";
-            this.buttonGetUpdateForApp.Size = new System.Drawing.Size(537, 55);
+            this.buttonGetUpdateForApp.Size = new System.Drawing.Size(623, 55);
             this.buttonGetUpdateForApp.TabIndex = 0;
             this.buttonGetUpdateForApp.Text = "Request update for app";
             this.buttonGetUpdateForApp.UseVisualStyleBackColor = true;
@@ -104,7 +106,7 @@
             this.buttonActivatePK.Location = new System.Drawing.Point(480, 46);
             this.buttonActivatePK.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonActivatePK.Name = "buttonActivatePK";
-            this.buttonActivatePK.Size = new System.Drawing.Size(75, 39);
+            this.buttonActivatePK.Size = new System.Drawing.Size(161, 39);
             this.buttonActivatePK.TabIndex = 5;
             this.buttonActivatePK.Text = "Go";
             this.buttonActivatePK.UseVisualStyleBackColor = true;
@@ -113,10 +115,10 @@
             // buttonGetUpdateByKeyID
             // 
             this.buttonGetUpdateByKeyID.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonGetUpdateByKeyID.Location = new System.Drawing.Point(386, 89);
+            this.buttonGetUpdateByKeyID.Location = new System.Drawing.Point(480, 89);
             this.buttonGetUpdateByKeyID.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.buttonGetUpdateByKeyID.Name = "buttonGetUpdateByKeyID";
-            this.buttonGetUpdateByKeyID.Size = new System.Drawing.Size(170, 39);
+            this.buttonGetUpdateByKeyID.Size = new System.Drawing.Size(161, 39);
             this.buttonGetUpdateByKeyID.TabIndex = 6;
             this.buttonGetUpdateByKeyID.Text = "Check";
             this.buttonGetUpdateByKeyID.UseVisualStyleBackColor = true;
@@ -126,7 +128,7 @@
             // 
             this.labelLicenseInfo.AutoSize = true;
             this.labelLicenseInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.labelLicenseInfo.Location = new System.Drawing.Point(18, 144);
+            this.labelLicenseInfo.Location = new System.Drawing.Point(18, 187);
             this.labelLicenseInfo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelLicenseInfo.Name = "labelLicenseInfo";
             this.labelLicenseInfo.Size = new System.Drawing.Size(147, 25);
@@ -136,31 +138,43 @@
             // 
             // textBoxLicenseInfo
             // 
-            this.textBoxLicenseInfo.Location = new System.Drawing.Point(18, 175);
+            this.textBoxLicenseInfo.Location = new System.Drawing.Point(18, 217);
             this.textBoxLicenseInfo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxLicenseInfo.Multiline = true;
             this.textBoxLicenseInfo.Name = "textBoxLicenseInfo";
             this.textBoxLicenseInfo.ReadOnly = true;
             this.textBoxLicenseInfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBoxLicenseInfo.Size = new System.Drawing.Size(535, 124);
+            this.textBoxLicenseInfo.Size = new System.Drawing.Size(623, 110);
             this.textBoxLicenseInfo.TabIndex = 8;
             this.textBoxLicenseInfo.Visible = false;
             // 
             // labelCurrentVersion
             // 
             this.labelCurrentVersion.AutoSize = true;
-            this.labelCurrentVersion.Location = new System.Drawing.Point(18, 373);
+            this.labelCurrentVersion.Location = new System.Drawing.Point(18, 399);
             this.labelCurrentVersion.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelCurrentVersion.Name = "labelCurrentVersion";
             this.labelCurrentVersion.Size = new System.Drawing.Size(275, 25);
             this.labelCurrentVersion.TabIndex = 9;
             this.labelCurrentVersion.Text = "Current version application:";
             // 
+            // buttonGetTrial
+            // 
+            this.buttonGetTrial.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonGetTrial.Location = new System.Drawing.Point(18, 136);
+            this.buttonGetTrial.Name = "buttonGetTrial";
+            this.buttonGetTrial.Size = new System.Drawing.Size(624, 39);
+            this.buttonGetTrial.TabIndex = 10;
+            this.buttonGetTrial.Text = "Get Trial!";
+            this.buttonGetTrial.UseVisualStyleBackColor = true;
+            this.buttonGetTrial.Click += new System.EventHandler(this.buttonGetTrial_Click);
+            // 
             // FormAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(561, 373);
+            this.ClientSize = new System.Drawing.Size(654, 399);
+            this.Controls.Add(this.buttonGetTrial);
             this.Controls.Add(this.labelCurrentVersion);
             this.Controls.Add(this.textBoxLicenseInfo);
             this.Controls.Add(this.labelLicenseInfo);
@@ -171,11 +185,11 @@
             this.Controls.Add(this.radioButtonByPK);
             this.Controls.Add(this.labelUpdateType);
             this.Controls.Add(this.buttonGetUpdateForApp);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.MaximumSize = new System.Drawing.Size(587, 444);
-            this.MinimumSize = new System.Drawing.Size(587, 444);
+            this.MaximumSize = new System.Drawing.Size(680, 470);
+            this.MinimumSize = new System.Drawing.Size(680, 470);
             this.Name = "FormAbout";
-            this.ShowIcon = false;
             this.Text = "About";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAbout_FormClosing);
             this.Load += new System.EventHandler(this.FormAbout_Load);
@@ -196,5 +210,6 @@
         private System.Windows.Forms.Label labelLicenseInfo;
         private System.Windows.Forms.TextBox textBoxLicenseInfo;
         private System.Windows.Forms.Label labelCurrentVersion;
+        private System.Windows.Forms.Button buttonGetTrial;
     }
 }

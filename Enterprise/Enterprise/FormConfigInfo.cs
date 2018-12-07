@@ -34,6 +34,7 @@ namespace Enterprise
             textBoxClientCall.Text = FormMain.aSentinelUpCall;
             textBoxApi.Text = (FormMain.aIsEnabled) ? "Enabled" : "Disabled";
             textBoxPort.Text = FormMain.tPort.ToString();
+            textBoxAdvancedData.Text = (FormMain.adIsEnabled) ? "Enabled" : "Disabled";
         }
 
         private void FormConfigInfo_FormClosing(object sender, FormClosingEventArgs e)

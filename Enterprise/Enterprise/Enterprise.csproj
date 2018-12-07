@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>MainIcon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="hasp_net_windows">
       <HintPath>.\hasp_net_windows.dll</HintPath>
@@ -74,7 +77,11 @@
     <Compile Include="MultiLanguage.designer.cs">
       <DependentUpon>MultiLanguage.cs</DependentUpon>
     </Compile>
-    <Compile Include="SentinelData.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -112,14 +119,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-    </Compile>
     <None Include="language\en.alp">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -139,6 +141,9 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>enterprise.Designer.cs</LastGenOutput>
     </None>
+    <None Include="trial_license">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -153,11 +158,25 @@
     <Content Include="hasp_rt.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="icons\AboutIcon.ico" />
+    <Content Include="icons\LicenseIcon.ico" />
+    <Content Include="icons\MainIcon.ico" />
+    <Content Include="icons\SettingsIcon.ico" />
+    <Content Include="MainIcon.ico" />
+    <Content Include="MainLogo.ico" />
+    <Content Include="upclient.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Enterprise_logo.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SentinelSettings\SentinelSettings.csproj">
+      <Project>{817df159-cb75-4fd7-910d-797b8f52191e}</Project>
+      <Name>SentinelSettings</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

@@ -30,24 +30,25 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 
 [Files]
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Accounting.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\apidsp_windows.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\apidsp_windows_x64.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Enterprise.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Enterprise.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_net_windows.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_rt.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_windows_110659.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_windows_demo.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_windows_x64_110659.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_windows_x64_demo.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\haspvlib_110659.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\SentinelConnector.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Staff.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Stock.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\upclient.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\language\*"; DestDir: "{app}\language"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\logs\*"; DestDir: "{app}\logs"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Accounting.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\apidsp_windows.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\apidsp_windows_x64.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Enterprise.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Enterprise.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_net_windows.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_rt.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_windows_110659.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_windows_demo.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_windows_x64_110659.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_windows_x64_demo.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\haspvlib_110659.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\SentinelConnector.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Staff.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Stock.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\upclient.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\language\*"; DestDir: "{app}\language"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\logs\*"; DestDir: "{app}\logs"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\trial_license"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

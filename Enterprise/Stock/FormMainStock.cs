@@ -11,6 +11,7 @@ namespace Stock
 {
     public partial class FormMainStock : Form
     {
+        public static SentinelSettings.SentinelData standartData;
         public static bool lIsEnabled, aIsEnabled;
         public static bool logsIsExist = false, logsDirIsExist = false, logsFileIsExist = false;
         public static string language;
@@ -45,7 +46,7 @@ namespace Stock
                     System.IO.Directory.CreateDirectory(baseDir + "\\logs");
                     logsDirIsExist = System.IO.Directory.Exists(baseDir + "\\logs");
                 } catch (Exception ex) {
-                    MessageBox.Show("Can't create dir for logs!" + Environment.NewLine + "Error: " + ex);
+                    MessageBox.Show(standartData.ErrorMessageReplacer(language, "Can't create dir for logs").Replace("{0}", ex.Message));
                 }
             }
 
@@ -60,7 +61,7 @@ namespace Stock
                             logsFileIsExist = System.IO.Directory.Exists(baseDir + "\\logs");
                         }
                     } catch (Exception ex) {
-                        MessageBox.Show("Can't create log file!" + Environment.NewLine + "Error: " + ex);
+                        MessageBox.Show(standartData.ErrorMessageReplacer(language, "Can't create log file").Replace("{0}", ex.Message));
                     }
                 }
             }
@@ -102,7 +103,7 @@ namespace Stock
                 if (lIsEnabled) Log.Write("Пробуем читать общий файл с конфигами приложений: Enterprise.exe.config");
                 XDocument settingsXml = new XDocument();
                 if (!File.Exists(baseDir + Path.DirectorySeparatorChar + "Enterprise.exe.config")) {
-                    MessageBox.Show("File \"Enterprise.exe.config\" doesn't exist in dir:\n" + baseDir, "Error");
+                    MessageBox.Show(standartData.ErrorMessageReplacer(language, "File \"Enterprise.exe.config\" doesn't exist in dir"), standartData.ErrorMessageReplacer(language, "Error"));
                     if (lIsEnabled) Log.Write("Ошибка, файл \"Enterprise.exe.config\" не найден в директории: " + baseDir);
                     Environment.Exit(0);
                 } else {
@@ -123,7 +124,16 @@ namespace Stock
                                     break;
 
                                 case "vendorCode":
-                                    vendorCode = (String.IsNullOrEmpty(elSetting.Value)) ? "AzIceaqfA1hX5wS+M8cGnYh5ceevUnOZIzJBbXFD6dgf3tBkb9cvUF/Tkd/iKu2fsg9wAysYKw7RMAsVvIp4KcXle/v1RaXrLVnNBJ2H2DmrbUMOZbQUFXe698qmJsqNpLXRA367xpZ54i8kC5DTXwDhfxWTOZrBrh5sRKHcoVLumztIQjgWh37AzmSd1bLOfUGI0xjAL9zJWO3fRaeB0NS2KlmoKaVT5Y04zZEc06waU2r6AU2Dc4uipJqJmObqKM+tfNKAS0rZr5IudRiC7pUwnmtaHRe5fgSI8M7yvypvm+13Wm4Gwd4VnYiZvSxf8ImN3ZOG9wEzfyMIlH2+rKPUVHI+igsqla0Wd9m7ZUR9vFotj1uYV0OzG7hX0+huN2E/IdgLDjbiapj1e2fKHrMmGFaIvI6xzzJIQJF9GiRZ7+0jNFLKSyzX/K3JAyFrIPObfwM+y+zAgE1sWcZ1YnuBhICyRHBhaJDKIZL8MywrEfB2yF+R3k9wFG1oN48gSLyfrfEKuB/qgNp+BeTruWUk0AwRE9XVMUuRbjpxa4YA67SKunFEgFGgUfHBeHJTivvUl0u4Dki1UKAT973P+nXy2O0u239If/kRpNUVhMg8kpk7s8i6Arp7l/705/bLCx4kN5hHHSXIqkiG9tHdeNV8VYo5+72hgaCx3/uVoVLmtvxbOIvo120uTJbuLVTvT8KtsOlb3DxwUrwLzaEMoAQAFk6Q9bNipHxfkRQER4kR7IYTMzSoW5mxh3H9O8Ge5BqVeYMEW36q9wnOYfxOLNw6yQMf8f9sJN4KhZty02xm707S7VEfJJ1KNq7b5pP/3RjE0IKtB2gE6vAPRvRLzEohu0m7q1aUp8wAvSiqjZy7FLaTtLEApXYvLvz6PEJdj4TegCZugj7c8bIOEqLXmloZ6EgVnjQ7/ttys7VFITB3mazzFiyQuKf4J6+b/a/Y" : elSetting.Value.Split(' ')[1];
+                                    string tmpVCode = "";
+                                    if (elSetting.Value.Split(' ').Length > 1)
+                                    {
+                                        tmpVCode = elSetting.Value.Split(' ')[1];
+                                    }
+                                    else
+                                    {
+                                        tmpVCode = elSetting.Value.Split(' ')[0];
+                                    }
+                                    vendorCode = (String.IsNullOrEmpty(elSetting.Value)) ? "AzIceaqfA1hX5wS+M8cGnYh5ceevUnOZIzJBbXFD6dgf3tBkb9cvUF/Tkd/iKu2fsg9wAysYKw7RMAsVvIp4KcXle/v1RaXrLVnNBJ2H2DmrbUMOZbQUFXe698qmJsqNpLXRA367xpZ54i8kC5DTXwDhfxWTOZrBrh5sRKHcoVLumztIQjgWh37AzmSd1bLOfUGI0xjAL9zJWO3fRaeB0NS2KlmoKaVT5Y04zZEc06waU2r6AU2Dc4uipJqJmObqKM+tfNKAS0rZr5IudRiC7pUwnmtaHRe5fgSI8M7yvypvm+13Wm4Gwd4VnYiZvSxf8ImN3ZOG9wEzfyMIlH2+rKPUVHI+igsqla0Wd9m7ZUR9vFotj1uYV0OzG7hX0+huN2E/IdgLDjbiapj1e2fKHrMmGFaIvI6xzzJIQJF9GiRZ7+0jNFLKSyzX/K3JAyFrIPObfwM+y+zAgE1sWcZ1YnuBhICyRHBhaJDKIZL8MywrEfB2yF+R3k9wFG1oN48gSLyfrfEKuB/qgNp+BeTruWUk0AwRE9XVMUuRbjpxa4YA67SKunFEgFGgUfHBeHJTivvUl0u4Dki1UKAT973P+nXy2O0u239If/kRpNUVhMg8kpk7s8i6Arp7l/705/bLCx4kN5hHHSXIqkiG9tHdeNV8VYo5+72hgaCx3/uVoVLmtvxbOIvo120uTJbuLVTvT8KtsOlb3DxwUrwLzaEMoAQAFk6Q9bNipHxfkRQER4kR7IYTMzSoW5mxh3H9O8Ge5BqVeYMEW36q9wnOYfxOLNw6yQMf8f9sJN4KhZty02xm707S7VEfJJ1KNq7b5pP/3RjE0IKtB2gE6vAPRvRLzEohu0m7q1aUp8wAvSiqjZy7FLaTtLEApXYvLvz6PEJdj4TegCZugj7c8bIOEqLXmloZ6EgVnjQ7/ttys7VFITB3mazzFiyQuKf4J6+b/a/Y" : tmpVCode;
                                     break;
 
                                 case "scope":
@@ -161,54 +171,65 @@ namespace Stock
             FormMainStock mForm = (FormMainStock)Application.OpenForms["FormMainStock"];
             bool isSetAlpFormMain = alp.SetLenguage(language, baseDir + "\\language\\" + language + ".alp", this.Controls, mForm);
 
-            if (aIsEnabled) {
+            if (aIsEnabled)
+            {
                 if (lIsEnabled) Log.Write("Использование API включено, пробуем получить Key ID с требуемой для работы лицензией");
 
-                scope = "<haspscope>" +
+                if (String.IsNullOrEmpty(keyId))
+                {
+                    scope = "<haspscope>" +
                             "<feature id=\"" + feature.FeatureId.ToString() + "\"/>" +
                         "</haspscope>";
 
-                format = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                         "<haspformat root=\"hasp_info\">" +
-                             "<hasp>" +
-                                 "<element name=\"id\"/>" +
-                             "</hasp>" +
-                         "</haspformat>";
+                    format = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                             "<haspformat root=\"hasp_info\">" +
+                                 "<hasp>" +
+                                     "<element name=\"id\"/>" +
+                                 "</hasp>" +
+                             "</haspformat>";
 
-                status = Hasp.GetInfo(scope, format, vendorCode, ref info);
-                if (lIsEnabled) Log.Write("Результат выполнения функции GetInfo: " + status);
+                    status = Hasp.GetInfo(scope, format, vendorCode, ref info);
+                    if (lIsEnabled) Log.Write("Результат выполнения функции GetInfo: " + status);
 
-                if (HaspStatus.StatusOk != status) {
-                    //handle error
-                    MessageBox.Show(status.ToString(), "Error");
-                    if (lIsEnabled) Log.Write("Ключа с требуемой лицензией не найдено. Закрываем приложение Stock.exe.");
-                    Environment.Exit(0);
-                } else {
-                    XDocument infoXml = XDocument.Parse(info);
-                    foreach (XElement el in infoXml.Root.Elements()) {
-                        keyId = el.Value;
-                    }
-                    if (lIsEnabled) Log.Write("Найден ключ с требуемой лицензией, Key ID ключа: " + keyId);
-
-                    if (lIsEnabled) Log.Write("Выполняем запрос лицензии с ключа: " + keyId);
-                    hasp = new Hasp(feature);
-
-                    scope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                            "<haspscope>" +
-                                "<hasp id=\"" + keyId + "\"/>" +
-                            "</haspscope>";
-
-                    status = hasp.Login(vendorCode, scope);
-                    if (lIsEnabled) Log.Write("Результат логина на лицензию в ключе: " + status);
-                    if (HaspStatus.StatusOk != status) {
+                    if (HaspStatus.StatusOk != status)
+                    {
                         //handle error
-                        MessageBox.Show(status.ToString(), "Error");
-                        if (lIsEnabled) Log.Write("Ошибка подключения к лицензии в ключе. Закрываем приложение Stock.exe.");
+                        MessageBox.Show(standartData.ErrorMessageReplacer(language, status.ToString()), standartData.ErrorMessageReplacer(language, "Error"));
+                        if (lIsEnabled) Log.Write("Ключа с требуемой лицензией не найдено. Закрываем приложение Stock.exe.");
                         Environment.Exit(0);
-                    } else {
-                        //MessageBox.Show("Status: " + status, "Successfully");
-                        if (lIsEnabled) Log.Write("Требуемая лицензия обнаружена. Продолжаем работу приложения.");
                     }
+                    else
+                    {
+                        XDocument infoXml = XDocument.Parse(info);
+                        foreach (XElement el in infoXml.Root.Elements())
+                        {
+                            keyId = el.Value;
+                        }
+                        if (lIsEnabled) Log.Write("Найден ключ с требуемой лицензией, Key ID ключа: " + keyId);
+                    }
+                }
+
+                if (lIsEnabled) Log.Write("Выполняем запрос лицензии с ключа: " + keyId);
+                hasp = new Hasp(feature);
+
+                scope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                        "<haspscope>" +
+                            "<hasp id=\"" + keyId + "\"/>" +
+                        "</haspscope>";
+
+                status = hasp.Login(vendorCode, scope);
+                if (lIsEnabled) Log.Write("Результат логина на лицензию в ключе: " + status);
+                if (HaspStatus.StatusOk != status)
+                {
+                    //handle error
+                    MessageBox.Show(standartData.ErrorMessageReplacer(language, status.ToString()), standartData.ErrorMessageReplacer(language, "Error"));
+                    if (lIsEnabled) Log.Write("Ошибка подключения к лицензии в ключе. Закрываем приложение Stock.exe.");
+                    Environment.Exit(0);
+                }
+                else
+                {
+                    //MessageBox.Show("Status: " + status, "Successfully");
+                    if (lIsEnabled) Log.Write("Требуемая лицензия обнаружена. Продолжаем работу приложения.");
                 }
             }
         }

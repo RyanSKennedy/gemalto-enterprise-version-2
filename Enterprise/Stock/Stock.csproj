@@ -88,5 +88,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SentinelSettings\SentinelSettings.csproj">
+      <Project>{817df159-cb75-4fd7-910d-797b8f52191e}</Project>
+      <Name>SentinelSettings</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

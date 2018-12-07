@@ -17,6 +17,8 @@ namespace Enterprise
     {
         Point textBoxPKWithRadioButtonPoint = new Point(100, 24);
         Point textBoxPKDefaultPoint = new Point(12, 24);
+        Point buttonGetTrialVisiblePoint = new Point(8, 47);
+        Point buttonGetTrialDefaultPoint = new Point(8, 70);
         Size textBoxPKWithRadioButtonSize = new Size(134, 22);
         Size textBoxPKDefaultSize = new Size(220, 22);
         Enterprise.settings.enterprise appSettings = new settings.enterprise();
@@ -64,19 +66,57 @@ namespace Enterprise
             FormAbout aForm = (FormAbout)Application.OpenForms["FormAbout"];
             bool isSetAlpFormAbout = FormMain.alp.SetLenguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, aForm);
 
-            if (!string.IsNullOrEmpty(FormMain.hInfo)) {
+            if (!string.IsNullOrEmpty(FormMain.curentKeyId) && (FormMain.buttonAccountingEnabled == true || FormMain.buttonStockEnabled == true || FormMain.buttonStaffEnabled == true))
+            {
                 textBoxPK.Size = textBoxPKWithRadioButtonSize;
                 textBoxPK.Location = textBoxPKWithRadioButtonPoint;
-                
+
                 radioButtonByKeyID.Visible = true;
                 radioButtonByPK.Visible = true;
 
                 buttonGetUpdateByKeyID.Visible = true;
-                
+                buttonGetTrial.Visible = false;
+                buttonGetTrial.Location = buttonGetTrialDefaultPoint;
+
                 textBoxLicenseInfo.Text = "";
-                if (FormMain.xmlKeyInfo != null) {
+                if (FormMain.xmlKeyInfo != null)
+                {
                     textBoxLicenseInfo.Text += FormMain.xmlKeyInfo;
-                } 
+                }
+            }
+            else if (!string.IsNullOrEmpty(FormMain.curentKeyId) && !(FormMain.buttonAccountingEnabled == true || FormMain.buttonStockEnabled == true || FormMain.buttonStaffEnabled == true))
+            {
+                textBoxPK.Size = textBoxPKWithRadioButtonSize;
+                textBoxPK.Location = textBoxPKWithRadioButtonPoint;
+
+                radioButtonByKeyID.Visible = true;
+                radioButtonByPK.Visible = true;
+
+                buttonGetUpdateByKeyID.Visible = true;
+                buttonGetTrial.Visible = true;
+                buttonGetTrial.Location = buttonGetTrialDefaultPoint;
+
+                textBoxLicenseInfo.Text = "";
+                if (FormMain.xmlKeyInfo != null)
+                {
+                    textBoxLicenseInfo.Text += FormMain.xmlKeyInfo;
+                }
+            }
+            else
+            {
+                radioButtonByPK.Checked = true;
+                
+                textBoxPK.Size = textBoxPKDefaultSize;
+                textBoxPK.Location = textBoxPKDefaultPoint;
+
+                radioButtonByKeyID.Visible = false;
+                radioButtonByPK.Visible = false;
+
+                buttonGetUpdateByKeyID.Visible = false;
+                buttonGetTrial.Visible = true;
+                buttonGetTrial.Location = buttonGetTrialVisiblePoint;
+
+                textBoxLicenseInfo.Text = "";
             }
         }
 
@@ -158,10 +198,8 @@ namespace Enterprise
                         return;
                     } 
                 } else if (avalibleKeys.Count() == 1) {
-                    dialogResultIfKeyIsExist = MessageBox.Show("Do you want to install license in exist Key: " + Environment.NewLine + 
-                        avalibleKeys[0].keyType + " with Key ID = " + avalibleKeys[0].keyId + "?" + Environment.NewLine + 
-                        "If you chouse \"No\", license will be installed in new SL key.", 
-                        "Where should be installed license?", MessageBoxButtons.YesNoCancel);
+                    dialogResultIfKeyIsExist = MessageBox.Show((FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Do you want to install license in exist Key").Replace("{0}", avalibleKeys[0].keyType).Replace("{1}", avalibleKeys[0].keyId)),
+                        FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Warning"), MessageBoxButtons.YesNoCancel);
 
                     if (dialogResultIfKeyIsExist == DialogResult.Yes) {
                         FormMain.curentKeyId = avalibleKeys[0].keyId;
@@ -174,8 +212,8 @@ namespace Enterprise
             }
 
             if (FormMain.curentKeyId == "" && dialogResultIfKeyIsExist != DialogResult.No && dialogResultIfKeyIsExist != DialogResult.Cancel) {
-                dialogResultForNewKey = MessageBox.Show("Do you want to install license in New SL Key?",
-                        "Where should be installed license?", MessageBoxButtons.YesNo);
+                dialogResultForNewKey = MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Do you want to install license in New SL Key?"),
+                        FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Warning"), MessageBoxButtons.YesNo);
 
                 if (dialogResultForNewKey == DialogResult.Yes)
                 {
@@ -207,7 +245,7 @@ namespace Enterprise
             hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
             if (HaspStatus.StatusOk != hStatus) {
                 if (appSettings.enableLogs) Log.Write("Ошибка запроса C2V, статус: " + hStatus);
-                MessageBox.Show("Error in request C2V." + Environment.NewLine + "Status: " + hStatus, "Error");
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error in request C2V"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
             } else {
                 if (appSettings.enableLogs) Log.Write("Результат выполнения запроса C2V, статус: " + hStatus);
                 if (appSettings.enableLogs) Log.Write("Вывод:" + Environment.NewLine + hInfo);
@@ -231,7 +269,7 @@ namespace Enterprise
                 actStatus = sentinelObject.GetRequest("productKey/" + textBoxPK.Text + "/activation.ws", new KeyValuePair<string, string>("activationXml", actXml));
             } else {
                 if (appSettings.enableLogs) Log.Write("Введён не валидный ProductKey или C2V..." + Environment.NewLine);
-                MessageBox.Show("Invalid ProductKey or C2V." + Environment.NewLine + "Please check it and try again.", "Error");
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Invalid ProductKey or C2V"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
             }
 
             if (actStatus != "") {
@@ -274,11 +312,11 @@ namespace Enterprise
                     }
                 } else if (actStatus.Contains("pending")) {
                     if (appSettings.enableLogs) Log.Write("Для ключа имеются неприменённые обновления, в начале примените эти обновления. Статус: " + actStatus);
-                    MessageBox.Show("Pending update exist for this key." + Environment.NewLine + "You should download and apply them first!", "Error");
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, actStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                 }
                 else {
                     if (appSettings.enableLogs) Log.Write("Ответ от сервера пустой или содержит ошибку, статус: " + actStatus);
-                    MessageBox.Show("Server response have error or empty, status: " + Environment.NewLine + actStatus, "Error");
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, actStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                 }
             }
         }
@@ -300,7 +338,7 @@ namespace Enterprise
             hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
             if (HaspStatus.StatusOk != hStatus) {
                 if (appSettings.enableLogs) Log.Write("Ошибка запроса C2V, статус: " + hStatus);
-                MessageBox.Show("Error in request C2V." + Environment.NewLine + "Status: " + hStatus, "Error");
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error in request C2V"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
             } else {
                 if (appSettings.enableLogs) Log.Write("Результат выполнения запроса C2V, статус: " + hStatus);
                 if (appSettings.enableLogs) Log.Write("C2V:" + Environment.NewLine + hInfo);
@@ -311,7 +349,6 @@ namespace Enterprise
             if (string.IsNullOrEmpty(targetXml))
             {
                 if (appSettings.enableLogs) Log.Write("C2V с ключа не получен, запрос обновления прерван.");
-                MessageBox.Show("C2V from key not received, update request interrupted.", "Error");
             }
             else
             {
@@ -348,12 +385,12 @@ namespace Enterprise
                 else if (actStatus.Contains("No pending update"))
                 {
                     if (appSettings.enableLogs) Log.Write("Нет доступных для загрузки обновлений, статус: " + actStatus);
-                    MessageBox.Show("Have no pending update for download.", "Warning");
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "No pending update"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Warning")); 
                 }
                 else
                 {
                     if (appSettings.enableLogs) Log.Write("Ответ от сервера пустой или содержит ошибку, статус: " + actStatus);
-                    MessageBox.Show("Server response have error or empty, status: " + Environment.NewLine + actStatus, "Error");
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Response from server has error or empty"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                 }
             }
         }
@@ -362,7 +399,7 @@ namespace Enterprise
         {
             if (appSettings.enableLogs) Log.Write("Пробуем выполнить запрос обновления для программы через upclient.exe...");
             if (!System.Net.NetworkInformation.NetworkInterface.GetIsNetworkAvailable()) {
-                MessageBox.Show("Missing or limited physical connection to network." + Environment.NewLine + "Please check your connetctions settings.", "Error: Phisichal network unavaliable...");
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Missing or limited physical connection to network"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: Physical network unavailable"));
                 if (appSettings.enableLogs) Log.Write("Отсутствует или ограниченно физическое подключение к сети. Проверьте настройки вашего сетевого подключения.");
                 return;
             }
@@ -380,7 +417,7 @@ namespace Enterprise
 
             if (!isConnected) {
                 if (appSettings.enableLogs) Log.Write("Нет подключения к интернету. Проверьте ваш фаервол или настройки сетевого подключения.");
-                MessageBox.Show("Haven't access to the internet." + Environment.NewLine + "Please check your firewall or connection settings.", "Error: Internet access unavaliable...");
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Haven't access to the internet."), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: Internet access unavailable"));
             }
             else {
                 if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "upclient.exe")) {
@@ -389,15 +426,14 @@ namespace Enterprise
                     try {
                         System.Diagnostics.Process upClientProcess = System.Diagnostics.Process.Start(upClientConfig);
 
-                        if (appSettings.enableLogs) Log.Write("Закрываем приложение перед его обновлением...");
-                        Environment.Exit(0);
+                        ActiveForm.Close();
                     } catch (Exception ex) {
                         if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить upclient.exe, ошибка: " + ex.Message);
-                        MessageBox.Show("Error: " + ex.Message, "Error");
+                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: ").Replace("{0}", ex.Message), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                     }
                 } else {
                     if (appSettings.enableLogs) Log.Write("Error: нет SentinelUp клиента в директории с обновляемым ПО.");
-                    MessageBox.Show("Error: SentinelUp Client not found in dir: " + Environment.NewLine + FormMain.baseDir, "Error");
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: SentinelUp Client not found in dir:").Replace("{0}", FormMain.baseDir), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                 }
             }
         }
@@ -416,6 +452,7 @@ namespace Enterprise
 
             return base.ProcessDialogKey(keyData);
         }
+
         /// <summary>
         /// Проверяет вхождение заданных комбинаций (keys) в исходную (keyData).
         /// </summary>
@@ -431,6 +468,47 @@ namespace Enterprise
                     return false;
 
             return true;
+        }
+
+        private void buttonGetTrial_Click(object sender, EventArgs e)
+        {
+            string trialLicense = FormMain.baseDir + Path.DirectorySeparatorChar + "trial_license";
+            if (File.Exists(trialLicense))
+            {
+                DialogResult installTrial = DialogResult.None;
+                installTrial = MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Do you want to install trial license"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Request"), MessageBoxButtons.YesNo);
+                if (installTrial == DialogResult.Yes)
+                {
+                    // применяем триальную лицензию
+                    string acknowledgeXml = "";
+                    string trialV2c = File.ReadAllText(trialLicense);
+
+                    hStatus = Hasp.Update(trialV2c, ref acknowledgeXml);
+                    if (HaspStatus.StatusOk != hStatus)
+                    {
+                        if (appSettings.enableLogs) Log.Write("Ошибка применения V2C с триальной лицензией, статус: " + hStatus);
+
+                        // error
+                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Trial license can't be applied! Error: ") + hStatus, FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+                    }
+                    else
+                    {
+                        if (appSettings.enableLogs) Log.Write("Результат применения V2C с триальной лицензией, статус: " + hStatus);
+
+                        // successfully
+                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Trial license successfully installed!"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Successfully"));
+                    }
+                }
+                else if (installTrial == DialogResult.No)
+                {
+                    // если нет, то ничего не делаем
+                    return;
+                }
+            }
+            else
+            {
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Not found trial license: \"trial_license\", -  in base dir"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+            }
         }
     }
 }

@@ -21,7 +21,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-OutputDir=\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\InnoSetupInstaller\Enterprise v.2.0
+;OutputDir=\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\InnoSetupInstaller\Enterprise v.2.0
 OutputBaseFilename=EnterpriseSetupLite
 Compression=lzma
 SolidCompression=yes
@@ -31,8 +31,8 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "russian"; MessagesFile: "compiler:Languages\Russian.isl"
 
 [Files]
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Enterprise.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "\\Mac\Home\Documents\Coding\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Enterprise.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Enterprise.exe"; DestDir: "{app}"; Flags: ignoreversion
+;Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Enterprise.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

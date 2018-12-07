@@ -28,6 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.buttonAccounting = new System.Windows.Forms.Button();
             this.buttonStock = new System.Windows.Forms.Button();
             this.buttonStaff = new System.Windows.Forms.Button();
@@ -36,8 +38,10 @@
             this.labelStaffFID = new System.Windows.Forms.Label();
             this.buttonAbout = new System.Windows.Forms.Button();
             this.labelComponents = new System.Windows.Forms.Label();
-            this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             this.buttonConfigInfo = new System.Windows.Forms.Button();
+            this.backgroundWorkerCheckKey = new System.ComponentModel.BackgroundWorker();
+            this.timerCheckKey = new System.Windows.Forms.Timer(this.components);
+            this.pictureBoxLogo = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).BeginInit();
             this.SuspendLayout();
             // 
@@ -131,18 +135,6 @@
             this.labelComponents.TabIndex = 7;
             this.labelComponents.Text = "Components:";
             // 
-            // pictureBoxLogo
-            // 
-            this.pictureBoxLogo.BackgroundImage = global::Enterprise.Properties.Resources.Enterprise_logo;
-            this.pictureBoxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBoxLogo.InitialImage = null;
-            this.pictureBoxLogo.Location = new System.Drawing.Point(0, 0);
-            this.pictureBoxLogo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.pictureBoxLogo.Name = "pictureBoxLogo";
-            this.pictureBoxLogo.Size = new System.Drawing.Size(873, 78);
-            this.pictureBoxLogo.TabIndex = 8;
-            this.pictureBoxLogo.TabStop = false;
-            // 
             // buttonConfigInfo
             // 
             this.buttonConfigInfo.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -155,6 +147,28 @@
             this.buttonConfigInfo.UseVisualStyleBackColor = true;
             this.buttonConfigInfo.Visible = false;
             this.buttonConfigInfo.Click += new System.EventHandler(this.buttonConfigInfo_Click);
+            // 
+            // backgroundWorkerCheckKey
+            // 
+            this.backgroundWorkerCheckKey.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerCheckKey_DoWork);
+            // 
+            // timerCheckKey
+            // 
+            this.timerCheckKey.Enabled = true;
+            this.timerCheckKey.Interval = 1000;
+            this.timerCheckKey.Tick += new System.EventHandler(this.timerCheckKey_Tick);
+            // 
+            // pictureBoxLogo
+            // 
+            this.pictureBoxLogo.BackgroundImage = global::Enterprise.Properties.Resources.Enterprise_logo;
+            this.pictureBoxLogo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.pictureBoxLogo.InitialImage = null;
+            this.pictureBoxLogo.Location = new System.Drawing.Point(0, 0);
+            this.pictureBoxLogo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.pictureBoxLogo.Name = "pictureBoxLogo";
+            this.pictureBoxLogo.Size = new System.Drawing.Size(873, 78);
+            this.pictureBoxLogo.TabIndex = 8;
+            this.pictureBoxLogo.TabStop = false;
             // 
             // FormMain
             // 
@@ -171,6 +185,7 @@
             this.Controls.Add(this.buttonStaff);
             this.Controls.Add(this.buttonStock);
             this.Controls.Add(this.buttonAccounting);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MaximumSize = new System.Drawing.Size(887, 520);
             this.MinimumSize = new System.Drawing.Size(887, 520);
@@ -195,6 +210,8 @@
         private System.Windows.Forms.Label labelComponents;
         private System.Windows.Forms.PictureBox pictureBoxLogo;
         private System.Windows.Forms.Button buttonConfigInfo;
+        private System.ComponentModel.BackgroundWorker backgroundWorkerCheckKey;
+        private System.Windows.Forms.Timer timerCheckKey;
     }
 }
 

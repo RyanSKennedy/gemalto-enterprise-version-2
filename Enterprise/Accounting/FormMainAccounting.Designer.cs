@@ -37,9 +37,9 @@
             this.labelAccounting.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelAccounting.Location = new System.Drawing.Point(48, 89);
             this.labelAccounting.Name = "labelAccounting";
-            this.labelAccounting.Size = new System.Drawing.Size(364, 37);
+            this.labelAccounting.Size = new System.Drawing.Size(187, 37);
             this.labelAccounting.TabIndex = 0;
-            this.labelAccounting.Text = "Here is our Accounting";
+            this.labelAccounting.Text = "Accounting";
             // 
             // FormMainAccounting
             // 
