@@ -15,7 +15,7 @@ namespace Enterprise
 {
     public partial class FormMain : Form
     {
-        public static string currentVersion = " v.2.0";
+        public static string currentVersion = " v.1.0";
         public static string featureIdAccounting, featureIdStock, featureIdStaff;
         public static string baseDir, logFileName;
         public static Dictionary<string, string> vCode = new Dictionary<string, string>(1);
@@ -430,6 +430,7 @@ namespace Enterprise
 
             return base.ProcessDialogKey(keyData);
         }
+        
         /// <summary>
         /// Проверяет вхождение заданных комбинаций (keys) в исходную (keyData).
         /// </summary>

@@ -32,6 +32,7 @@ namespace Enterprise
         public static AvaliableKeys[] avalibleKeys;
         FormLicense LicenseWindow;
         FormKeys KeysForSelect;
+        FormRegistration RegistrationWindow;
 
         public struct AvaliableKeys {
             public string keyId;
@@ -59,6 +60,7 @@ namespace Enterprise
             labelCurrentVersion.Text += FormMain.currentVersion;
             
             KeysForSelect = new FormKeys();
+            RegistrationWindow = new FormRegistration();
         }
 
         private void FormAbout_Load(object sender, EventArgs e)
@@ -141,7 +143,11 @@ namespace Enterprise
 
         private void buttonActivatePK_Click(object sender, EventArgs e)
         {
-            string actStatus = "";
+            if (appSettings.enableLogs) Log.Write("Открываем окно \"Визард регистрации\"");
+            RegistrationWindow.ShowDialog();
+
+            #region old act code
+            /*string actStatus = "";
 
             string actXml = "";
 
@@ -318,7 +324,8 @@ namespace Enterprise
                     if (appSettings.enableLogs) Log.Write("Ответ от сервера пустой или содержит ошибку, статус: " + actStatus);
                     MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, actStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                 }
-            }
+            }*/
+            #endregion
         }
 
         private void buttonGetUpdateByKeyID_Click(object sender, EventArgs e)
