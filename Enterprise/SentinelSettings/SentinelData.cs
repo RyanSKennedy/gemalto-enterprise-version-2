@@ -646,6 +646,8 @@ namespace SentinelSettings
 
         public static bool apiIsEnabled = true;
 
+        public static bool newActMechanism = true;
+
         public static bool advancedDataIsEnabled = true;
 
         public static string portForTestConnection = "8080";

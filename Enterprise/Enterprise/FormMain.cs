@@ -21,7 +21,7 @@ namespace Enterprise
         public static Dictionary<string, string> vCode = new Dictionary<string, string>(1);
         public static string batchCode, kScope, kFormat, hInfo, eUrl, aSentinelUpCall;
         public static int tPort;
-        public static bool lIsEnabled, aIsEnabled, adIsEnabled, keyIsConnected = false;
+        public static bool lIsEnabled, aIsEnabled, adIsEnabled, nActMechanism, keyIsConnected = false;
         public static bool buttonAccountingEnabled = false, buttonStockEnabled = false, buttonStaffEnabled = false;
         public static string curentKeyId = "";
         public static string langState, language, locale;
@@ -155,6 +155,11 @@ namespace Enterprise
             // решаем откуда брать Port для проверки интернет соединения
             //============================================= 
             tPort = (String.IsNullOrEmpty(appSettings.portForTestConnection)) ? Convert.ToInt32(SentinelSettings.SentinelData.portForTestConnection) : Convert.ToInt32(appSettings.portForTestConnection);
+            //=============================================
+
+            // решаем какой механизм активации использовать
+            //============================================= 
+            nActMechanism = (Convert.ToString(appSettings.newActMechanism) == "") ? SentinelSettings.SentinelData.newActMechanism : appSettings.newActMechanism;
             //=============================================
 
             // решаем какой Scope использовать для поиска ключа с лицензиями и откуда его брать

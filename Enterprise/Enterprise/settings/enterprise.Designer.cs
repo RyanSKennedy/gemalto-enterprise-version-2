@@ -190,5 +190,14 @@ namespace Enterprise.settings {
                 return ((bool)(this["enableDisplayAdvancedData"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool newActMechanism {
+            get {
+                return ((bool)(this["newActMechanism"]));
+            }
+        }
     }
 }
