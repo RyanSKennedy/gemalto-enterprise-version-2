@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRegistration));
             this.tabControlRegForm = new System.Windows.Forms.TabControl();
             this.tabPageInfoAboutPK = new System.Windows.Forms.TabPage();
             this.checkBoxSkipRegInfoTab = new System.Windows.Forms.CheckBox();
@@ -57,6 +58,7 @@
             this.buttonNextLoginTab = new System.Windows.Forms.Button();
             this.buttonBackLoginTab = new System.Windows.Forms.Button();
             this.tabPageConfirmActivation = new System.Windows.Forms.TabPage();
+            this.buttonRefreshKeyListConfirmTab = new System.Windows.Forms.Button();
             this.listBoxKeysConfirmTab = new System.Windows.Forms.ListBox();
             this.labelAvaliableKeysConfirmTab = new System.Windows.Forms.Label();
             this.radioButtonInstallInExistKeyConfirmTab = new System.Windows.Forms.RadioButton();
@@ -74,7 +76,6 @@
             this.buttonFinishSuccessTab = new System.Windows.Forms.Button();
             this.textBoxSuccessDescSuccessTab = new System.Windows.Forms.TextBox();
             this.labelSuccessDescSuccessTab = new System.Windows.Forms.Label();
-            this.buttonRefreshKeyListConfirmTab = new System.Windows.Forms.Button();
             this.tabControlRegForm.SuspendLayout();
             this.tabPageInfoAboutPK.SuspendLayout();
             this.tabPageLoginOrRegNew.SuspendLayout();
@@ -91,7 +92,7 @@
             this.tabControlRegForm.Controls.Add(this.tabPageConfirmActivation);
             this.tabControlRegForm.Controls.Add(this.tabPageError);
             this.tabControlRegForm.Controls.Add(this.tabPageSuccess);
-            this.tabControlRegForm.ItemSize = new System.Drawing.Size(100, 10);
+            this.tabControlRegForm.ItemSize = new System.Drawing.Size(0, 1);
             this.tabControlRegForm.Location = new System.Drawing.Point(12, 12);
             this.tabControlRegForm.Name = "tabControlRegForm";
             this.tabControlRegForm.SelectedIndex = 0;
@@ -108,10 +109,10 @@
             this.tabPageInfoAboutPK.Controls.Add(this.labelInformationAboutLicenseInfoTab);
             this.tabPageInfoAboutPK.Controls.Add(this.textBoxPKInfoTab);
             this.tabPageInfoAboutPK.Controls.Add(this.labelPKInfoTab);
-            this.tabPageInfoAboutPK.Location = new System.Drawing.Point(4, 14);
+            this.tabPageInfoAboutPK.Location = new System.Drawing.Point(4, 5);
             this.tabPageInfoAboutPK.Name = "tabPageInfoAboutPK";
             this.tabPageInfoAboutPK.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageInfoAboutPK.Size = new System.Drawing.Size(843, 430);
+            this.tabPageInfoAboutPK.Size = new System.Drawing.Size(843, 439);
             this.tabPageInfoAboutPK.TabIndex = 0;
             this.tabPageInfoAboutPK.Text = "Info about PK";
             this.tabPageInfoAboutPK.UseVisualStyleBackColor = true;
@@ -139,7 +140,6 @@
             // 
             // textBoxInformationAboutLicenseInfoTab
             // 
-            this.textBoxInformationAboutLicenseInfoTab.Enabled = false;
             this.textBoxInformationAboutLicenseInfoTab.Location = new System.Drawing.Point(11, 90);
             this.textBoxInformationAboutLicenseInfoTab.Multiline = true;
             this.textBoxInformationAboutLicenseInfoTab.Name = "textBoxInformationAboutLicenseInfoTab";
@@ -160,7 +160,6 @@
             // 
             // textBoxPKInfoTab
             // 
-            this.textBoxPKInfoTab.Enabled = false;
             this.textBoxPKInfoTab.Location = new System.Drawing.Point(166, 3);
             this.textBoxPKInfoTab.Name = "textBoxPKInfoTab";
             this.textBoxPKInfoTab.ReadOnly = true;
@@ -198,10 +197,10 @@
             this.tabPageLoginOrRegNew.Controls.Add(this.radioButtonLoginLoginTab);
             this.tabPageLoginOrRegNew.Controls.Add(this.buttonNextLoginTab);
             this.tabPageLoginOrRegNew.Controls.Add(this.buttonBackLoginTab);
-            this.tabPageLoginOrRegNew.Location = new System.Drawing.Point(4, 14);
+            this.tabPageLoginOrRegNew.Location = new System.Drawing.Point(4, 5);
             this.tabPageLoginOrRegNew.Name = "tabPageLoginOrRegNew";
             this.tabPageLoginOrRegNew.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageLoginOrRegNew.Size = new System.Drawing.Size(843, 430);
+            this.tabPageLoginOrRegNew.Size = new System.Drawing.Size(843, 439);
             this.tabPageLoginOrRegNew.TabIndex = 1;
             this.tabPageLoginOrRegNew.Text = "Login or Reg new ";
             this.tabPageLoginOrRegNew.UseVisualStyleBackColor = true;
@@ -209,7 +208,7 @@
             // labelReqDescValueLoginTab
             // 
             this.labelReqDescValueLoginTab.AutoSize = true;
-            this.labelReqDescValueLoginTab.Location = new System.Drawing.Point(51, 277);
+            this.labelReqDescValueLoginTab.Location = new System.Drawing.Point(51, 192);
             this.labelReqDescValueLoginTab.Name = "labelReqDescValueLoginTab";
             this.labelReqDescValueLoginTab.Size = new System.Drawing.Size(164, 25);
             this.labelReqDescValueLoginTab.TabIndex = 21;
@@ -220,7 +219,7 @@
             this.labelReqDescLoginTab.AutoSize = true;
             this.labelReqDescLoginTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelReqDescLoginTab.ForeColor = System.Drawing.Color.OrangeRed;
-            this.labelReqDescLoginTab.Location = new System.Drawing.Point(35, 277);
+            this.labelReqDescLoginTab.Location = new System.Drawing.Point(35, 192);
             this.labelReqDescLoginTab.Name = "labelReqDescLoginTab";
             this.labelReqDescLoginTab.Size = new System.Drawing.Size(21, 25);
             this.labelReqDescLoginTab.TabIndex = 20;
@@ -231,7 +230,7 @@
             this.labelReqMailLoginTab.AutoSize = true;
             this.labelReqMailLoginTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelReqMailLoginTab.ForeColor = System.Drawing.Color.OrangeRed;
-            this.labelReqMailLoginTab.Location = new System.Drawing.Point(35, 234);
+            this.labelReqMailLoginTab.Location = new System.Drawing.Point(35, 149);
             this.labelReqMailLoginTab.Name = "labelReqMailLoginTab";
             this.labelReqMailLoginTab.Size = new System.Drawing.Size(21, 25);
             this.labelReqMailLoginTab.TabIndex = 19;
@@ -242,7 +241,7 @@
             this.labelReqLNLoginTab.AutoSize = true;
             this.labelReqLNLoginTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelReqLNLoginTab.ForeColor = System.Drawing.Color.OrangeRed;
-            this.labelReqLNLoginTab.Location = new System.Drawing.Point(35, 187);
+            this.labelReqLNLoginTab.Location = new System.Drawing.Point(35, 102);
             this.labelReqLNLoginTab.Name = "labelReqLNLoginTab";
             this.labelReqLNLoginTab.Size = new System.Drawing.Size(21, 25);
             this.labelReqLNLoginTab.TabIndex = 18;
@@ -253,7 +252,7 @@
             this.labelReqFNLoginTab.AutoSize = true;
             this.labelReqFNLoginTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelReqFNLoginTab.ForeColor = System.Drawing.Color.OrangeRed;
-            this.labelReqFNLoginTab.Location = new System.Drawing.Point(35, 141);
+            this.labelReqFNLoginTab.Location = new System.Drawing.Point(35, 56);
             this.labelReqFNLoginTab.Name = "labelReqFNLoginTab";
             this.labelReqFNLoginTab.Size = new System.Drawing.Size(21, 25);
             this.labelReqFNLoginTab.TabIndex = 17;
@@ -261,7 +260,7 @@
             // 
             // textBoxDescLoginTab
             // 
-            this.textBoxDescLoginTab.Location = new System.Drawing.Point(473, 169);
+            this.textBoxDescLoginTab.Location = new System.Drawing.Point(473, 84);
             this.textBoxDescLoginTab.Multiline = true;
             this.textBoxDescLoginTab.Name = "textBoxDescLoginTab";
             this.textBoxDescLoginTab.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -271,7 +270,7 @@
             // labelDescLoginTab
             // 
             this.labelDescLoginTab.AutoSize = true;
-            this.labelDescLoginTab.Location = new System.Drawing.Point(468, 141);
+            this.labelDescLoginTab.Location = new System.Drawing.Point(468, 56);
             this.labelDescLoginTab.Name = "labelDescLoginTab";
             this.labelDescLoginTab.Size = new System.Drawing.Size(126, 25);
             this.labelDescLoginTab.TabIndex = 15;
@@ -280,7 +279,7 @@
             // labelMailLoginTab
             // 
             this.labelMailLoginTab.AutoSize = true;
-            this.labelMailLoginTab.Location = new System.Drawing.Point(51, 234);
+            this.labelMailLoginTab.Location = new System.Drawing.Point(51, 149);
             this.labelMailLoginTab.Name = "labelMailLoginTab";
             this.labelMailLoginTab.Size = new System.Drawing.Size(78, 25);
             this.labelMailLoginTab.TabIndex = 14;
@@ -289,7 +288,7 @@
             // labelLNLoginTab
             // 
             this.labelLNLoginTab.AutoSize = true;
-            this.labelLNLoginTab.Location = new System.Drawing.Point(51, 187);
+            this.labelLNLoginTab.Location = new System.Drawing.Point(51, 102);
             this.labelLNLoginTab.Name = "labelLNLoginTab";
             this.labelLNLoginTab.Size = new System.Drawing.Size(121, 25);
             this.labelLNLoginTab.TabIndex = 13;
@@ -298,7 +297,7 @@
             // labelFNLoginTab
             // 
             this.labelFNLoginTab.AutoSize = true;
-            this.labelFNLoginTab.Location = new System.Drawing.Point(51, 141);
+            this.labelFNLoginTab.Location = new System.Drawing.Point(51, 56);
             this.labelFNLoginTab.Name = "labelFNLoginTab";
             this.labelFNLoginTab.Size = new System.Drawing.Size(122, 25);
             this.labelFNLoginTab.TabIndex = 12;
@@ -306,29 +305,32 @@
             // 
             // textBoxMailLoginTab
             // 
-            this.textBoxMailLoginTab.Location = new System.Drawing.Point(135, 231);
+            this.textBoxMailLoginTab.Location = new System.Drawing.Point(135, 146);
             this.textBoxMailLoginTab.Name = "textBoxMailLoginTab";
             this.textBoxMailLoginTab.Size = new System.Drawing.Size(296, 31);
             this.textBoxMailLoginTab.TabIndex = 11;
+            this.textBoxMailLoginTab.TextChanged += new System.EventHandler(this.textBoxMailLoginTab_TextChanged);
             // 
             // textBoxLNLoginTab
             // 
-            this.textBoxLNLoginTab.Location = new System.Drawing.Point(179, 184);
+            this.textBoxLNLoginTab.Location = new System.Drawing.Point(179, 99);
             this.textBoxLNLoginTab.Name = "textBoxLNLoginTab";
             this.textBoxLNLoginTab.Size = new System.Drawing.Size(252, 31);
             this.textBoxLNLoginTab.TabIndex = 10;
+            this.textBoxLNLoginTab.TextChanged += new System.EventHandler(this.textBoxLNLoginTab_TextChanged);
             // 
             // textBoxFNLoginTab
             // 
-            this.textBoxFNLoginTab.Location = new System.Drawing.Point(179, 138);
+            this.textBoxFNLoginTab.Location = new System.Drawing.Point(179, 53);
             this.textBoxFNLoginTab.Name = "textBoxFNLoginTab";
             this.textBoxFNLoginTab.Size = new System.Drawing.Size(252, 31);
             this.textBoxFNLoginTab.TabIndex = 9;
+            this.textBoxFNLoginTab.TextChanged += new System.EventHandler(this.textBoxFNLoginTab_TextChanged);
             // 
             // radioButtonRegNewLoginTab
             // 
             this.radioButtonRegNewLoginTab.AutoSize = true;
-            this.radioButtonRegNewLoginTab.Location = new System.Drawing.Point(6, 92);
+            this.radioButtonRegNewLoginTab.Location = new System.Drawing.Point(6, 7);
             this.radioButtonRegNewLoginTab.Name = "radioButtonRegNewLoginTab";
             this.radioButtonRegNewLoginTab.Size = new System.Drawing.Size(251, 29);
             this.radioButtonRegNewLoginTab.TabIndex = 8;
@@ -339,15 +341,16 @@
             // 
             // textBoxEmailLoginTab
             // 
-            this.textBoxEmailLoginTab.Location = new System.Drawing.Point(135, 43);
+            this.textBoxEmailLoginTab.Location = new System.Drawing.Point(135, 277);
             this.textBoxEmailLoginTab.Name = "textBoxEmailLoginTab";
             this.textBoxEmailLoginTab.Size = new System.Drawing.Size(296, 31);
             this.textBoxEmailLoginTab.TabIndex = 5;
+            this.textBoxEmailLoginTab.TextChanged += new System.EventHandler(this.textBoxEmailLoginTab_TextChanged);
             // 
             // labelEmailLoginTab
             // 
             this.labelEmailLoginTab.AutoSize = true;
-            this.labelEmailLoginTab.Location = new System.Drawing.Point(51, 46);
+            this.labelEmailLoginTab.Location = new System.Drawing.Point(51, 280);
             this.labelEmailLoginTab.Name = "labelEmailLoginTab";
             this.labelEmailLoginTab.Size = new System.Drawing.Size(78, 25);
             this.labelEmailLoginTab.TabIndex = 4;
@@ -356,7 +359,7 @@
             // radioButtonLoginLoginTab
             // 
             this.radioButtonLoginLoginTab.AutoSize = true;
-            this.radioButtonLoginLoginTab.Location = new System.Drawing.Point(6, 6);
+            this.radioButtonLoginLoginTab.Location = new System.Drawing.Point(6, 240);
             this.radioButtonLoginLoginTab.Name = "radioButtonLoginLoginTab";
             this.radioButtonLoginLoginTab.Size = new System.Drawing.Size(347, 29);
             this.radioButtonLoginLoginTab.TabIndex = 3;
@@ -396,13 +399,24 @@
             this.tabPageConfirmActivation.Controls.Add(this.radioButtonInstallLikeNewKeyConfirmTab);
             this.tabPageConfirmActivation.Controls.Add(this.buttonNextConfirmTab);
             this.tabPageConfirmActivation.Controls.Add(this.buttonBackConfirmTab);
-            this.tabPageConfirmActivation.Location = new System.Drawing.Point(4, 14);
+            this.tabPageConfirmActivation.Location = new System.Drawing.Point(4, 5);
             this.tabPageConfirmActivation.Name = "tabPageConfirmActivation";
             this.tabPageConfirmActivation.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPageConfirmActivation.Size = new System.Drawing.Size(843, 430);
+            this.tabPageConfirmActivation.Size = new System.Drawing.Size(843, 439);
             this.tabPageConfirmActivation.TabIndex = 2;
             this.tabPageConfirmActivation.Text = "Confirm Activation";
             this.tabPageConfirmActivation.UseVisualStyleBackColor = true;
+            // 
+            // buttonRefreshKeyListConfirmTab
+            // 
+            this.buttonRefreshKeyListConfirmTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.buttonRefreshKeyListConfirmTab.Location = new System.Drawing.Point(654, 258);
+            this.buttonRefreshKeyListConfirmTab.Name = "buttonRefreshKeyListConfirmTab";
+            this.buttonRefreshKeyListConfirmTab.Size = new System.Drawing.Size(161, 39);
+            this.buttonRefreshKeyListConfirmTab.TabIndex = 9;
+            this.buttonRefreshKeyListConfirmTab.Text = "Refresh";
+            this.buttonRefreshKeyListConfirmTab.UseVisualStyleBackColor = true;
+            this.buttonRefreshKeyListConfirmTab.Click += new System.EventHandler(this.buttonRefreshKeyListConfirmTab_Click);
             // 
             // listBoxKeysConfirmTab
             // 
@@ -475,9 +489,9 @@
             this.tabPageError.Controls.Add(this.buttonCloseErrorTab);
             this.tabPageError.Controls.Add(this.textBoxErrorDescErrorTab);
             this.tabPageError.Controls.Add(this.labelErrorDescErrorTab);
-            this.tabPageError.Location = new System.Drawing.Point(4, 14);
+            this.tabPageError.Location = new System.Drawing.Point(4, 5);
             this.tabPageError.Name = "tabPageError";
-            this.tabPageError.Size = new System.Drawing.Size(843, 430);
+            this.tabPageError.Size = new System.Drawing.Size(843, 439);
             this.tabPageError.TabIndex = 3;
             this.tabPageError.Text = "Error";
             this.tabPageError.UseVisualStyleBackColor = true;
@@ -543,9 +557,9 @@
             this.tabPageSuccess.Controls.Add(this.buttonFinishSuccessTab);
             this.tabPageSuccess.Controls.Add(this.textBoxSuccessDescSuccessTab);
             this.tabPageSuccess.Controls.Add(this.labelSuccessDescSuccessTab);
-            this.tabPageSuccess.Location = new System.Drawing.Point(4, 14);
+            this.tabPageSuccess.Location = new System.Drawing.Point(4, 5);
             this.tabPageSuccess.Name = "tabPageSuccess";
-            this.tabPageSuccess.Size = new System.Drawing.Size(843, 430);
+            this.tabPageSuccess.Size = new System.Drawing.Size(843, 439);
             this.tabPageSuccess.TabIndex = 4;
             this.tabPageSuccess.Text = "Success";
             this.tabPageSuccess.UseVisualStyleBackColor = true;
@@ -595,26 +609,17 @@
             this.labelSuccessDescSuccessTab.TabIndex = 8;
             this.labelSuccessDescSuccessTab.Text = "License installed successfully! Description:";
             // 
-            // buttonRefreshKeyListConfirmTab
-            // 
-            this.buttonRefreshKeyListConfirmTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonRefreshKeyListConfirmTab.Location = new System.Drawing.Point(654, 258);
-            this.buttonRefreshKeyListConfirmTab.Name = "buttonRefreshKeyListConfirmTab";
-            this.buttonRefreshKeyListConfirmTab.Size = new System.Drawing.Size(161, 39);
-            this.buttonRefreshKeyListConfirmTab.TabIndex = 9;
-            this.buttonRefreshKeyListConfirmTab.Text = "Refresh";
-            this.buttonRefreshKeyListConfirmTab.UseVisualStyleBackColor = true;
-            this.buttonRefreshKeyListConfirmTab.Click += new System.EventHandler(this.buttonRefreshKeyListConfirmTab_Click);
-            // 
             // FormRegistration
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(861, 449);
             this.Controls.Add(this.tabControlRegForm);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(887, 520);
             this.MinimumSize = new System.Drawing.Size(887, 520);
             this.Name = "FormRegistration";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Registration Wizard";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormRegistration_FormClosing);
             this.Load += new System.EventHandler(this.FormRegistration_Load);

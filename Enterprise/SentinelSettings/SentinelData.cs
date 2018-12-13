@@ -13,6 +13,7 @@ namespace SentinelSettings
 
         public static XDocument errors = new XDocument();
 
+        #region Code for init defaultErrors (with bag some where)
         /*public static XDocument defaultErrors = XDocument.Parse(
   "<ErrorCodes>" + 
     "<!-- Sentinel EMS Errors -->" +
@@ -540,6 +541,7 @@ namespace SentinelSettings
       "<language type=\"translate\" name=\"En\">Error: SentinelUp Client not found in dir: {0}</language>" +
     "</error>" +
   "</ErrorCodes>");*/
+        #endregion
 
         public static string appSentinelUpCallData = "<upclient>" +
                                                          "<param>" +
@@ -652,6 +654,8 @@ namespace SentinelSettings
 
         public static string portForTestConnection = "8080";
 
+        public static string regExForValidatingPK = @"\w{8}-\w{4}-\w{4}-\w{4}-\w{12}";
+
         public SentinelData(string pathToAlp = null)
         {
             if (!String.IsNullOrEmpty(pathToAlp) && File.Exists(pathToAlp))
@@ -687,6 +691,11 @@ namespace SentinelSettings
             if (String.IsNullOrEmpty(newErrorMessage)) newErrorMessage = originalError;
 
             return newErrorMessage;
+        }
+
+        public bool CheckEmail(string s)
+        {
+            return ((s.Contains('@') && (s.Split('@')[1].Contains('.'))) ? true : false); 
         }
     }
 }

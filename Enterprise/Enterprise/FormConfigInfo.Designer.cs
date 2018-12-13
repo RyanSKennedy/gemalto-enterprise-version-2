@@ -311,6 +311,7 @@
             this.MaximumSize = new System.Drawing.Size(587, 820);
             this.MinimumSize = new System.Drawing.Size(587, 820);
             this.Name = "FormConfigInfo";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
             this.UseWaitCursor = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormConfigInfo_FormClosing);

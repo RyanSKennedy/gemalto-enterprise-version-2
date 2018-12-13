@@ -168,8 +168,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="icons\AboutIcon.ico" />
+    <Content Include="icons\KeysIcon.ico" />
     <Content Include="icons\LicenseIcon.ico" />
     <Content Include="icons\MainIcon.ico" />
+    <Content Include="icons\RegistrationWizardIcon.ico" />
     <Content Include="icons\SettingsIcon.ico" />
     <Content Include="MainIcon.ico" />
     <Content Include="MainLogo.ico" />

@@ -16,17 +16,10 @@ namespace Enterprise
 {
     public partial class FormRegistration : Form
     {
-        Enterprise.settings.enterprise appSettings = new settings.enterprise();
+        static Enterprise.settings.enterprise appSettings = new settings.enterprise();
         public HaspStatus hStatus = new HaspStatus();
         public static string hInfo;
         public static XDocument xmlKeysInfo;
-        public static AvaliableKeys[] avalibleKeys;
-
-        public struct AvaliableKeys
-        {
-            public string keyId;
-            public string keyType;
-        }
 
         public FormRegistration()
         {
@@ -38,7 +31,32 @@ namespace Enterprise
             FormRegistration rForm = (FormRegistration)Application.OpenForms["FormRegistration"];
             bool isSetAlpFormAbout = FormMain.alp.SetLenguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, rForm);
 
-            checkBoxSkipRegInfoTab.Checked = false;
+            textBoxPKInfoTab.Text = FormAbout.productKey;
+            XDocument licenseInfo = XDocument.Parse(FormAbout.getPKInfoStatus);
+            textBoxInformationAboutLicenseInfoTab.Text = licenseInfo.Root.Element("productInfo").Attribute("productName").Value + Environment.NewLine;
+            textBoxInformationAboutLicenseInfoTab.Text += "Avaliable activation for Product Key: " + licenseInfo.Root.Element("available").Value + Environment.NewLine;
+            textBoxInformationAboutLicenseInfoTab.Text += "Registration required: " + licenseInfo.Root.Element("registrationRequired").Value + Environment.NewLine;
+            textBoxInformationAboutLicenseInfoTab.Text += "Entitlement ID: " + licenseInfo.Root.Element("entitlementId").Value + Environment.NewLine;
+
+            switch (licenseInfo.Root.Element("registrationRequired").Value) {
+                case ("DESIRED"):
+                    checkBoxSkipRegInfoTab.Visible = true;
+                    checkBoxSkipRegInfoTab.Enabled = true;
+                    checkBoxSkipRegInfoTab.Checked = false;
+                    break;
+
+                case ("MANDATORY"):
+                    checkBoxSkipRegInfoTab.Visible = true;
+                    checkBoxSkipRegInfoTab.Enabled = false;
+                    checkBoxSkipRegInfoTab.Checked = false;
+                    break;
+
+                case ("NOT_REQUIRED"):
+                    checkBoxSkipRegInfoTab.Visible = true;
+                    checkBoxSkipRegInfoTab.Enabled = false;
+                    checkBoxSkipRegInfoTab.Checked = true;
+                    break;
+            }
         }
 
         private void FormRegistration_FormClosing(object sender, FormClosingEventArgs e)
@@ -48,7 +66,7 @@ namespace Enterprise
 
         private void buttonNextInfoTab_Click(object sender, EventArgs e)
         {
-            if (checkBoxSkipRegInfoTab.Checked == true)
+            if (checkBoxSkipRegInfoTab.Checked)
             {
                 // если пропускаем регистрацию
                 tabControlRegForm.SelectTab(2);
@@ -58,7 +76,7 @@ namespace Enterprise
             {
                 // если регистрируемся
                 tabControlRegForm.SelectTab(1);
-                radioButtonLoginLoginTab.Select();
+                radioButtonRegNewLoginTab.Select();
             }
         }
 
@@ -70,6 +88,31 @@ namespace Enterprise
 
         private void buttonNextLoginTab_Click(object sender, EventArgs e)
         {
+            bool validEmail = false;
+
+            if (radioButtonLoginLoginTab.Checked == true) {
+                validEmail = FormMain.standartData.CheckEmail(textBoxEmailLoginTab.Text);
+            } else if (radioButtonRegNewLoginTab.Checked == true) {
+                validEmail = FormMain.standartData.CheckEmail(textBoxMailLoginTab.Text);
+            }
+
+            if (!validEmail) {
+                ToolTip ttWrongEmail = new ToolTip();
+                int VisibleTime = 3000;
+                string ttWrongEmailText = "Incorrect e-mail, please check and correct!";
+
+                if (radioButtonLoginLoginTab.Checked == true)
+                {
+                    ttWrongEmail.Show(ttWrongEmailText, textBoxEmailLoginTab, 0, 20, VisibleTime);
+                }
+                else if (radioButtonRegNewLoginTab.Checked == true)
+                {
+                    ttWrongEmail.Show(ttWrongEmailText, textBoxMailLoginTab, 0, 20, VisibleTime);
+                }
+
+                return;
+            }
+
             tabControlRegForm.SelectTab(2);
             radioButtonInstallLikeNewKeyConfirmTab.Select();
         }
@@ -99,6 +142,8 @@ namespace Enterprise
             textBoxMailLoginTab.Enabled = false;
             textBoxDescLoginTab.Enabled = false;
 
+            buttonNextLoginTab.Enabled = false;
+
             textBoxFNLoginTab.Text = "";
             textBoxLNLoginTab.Text = "";
             textBoxMailLoginTab.Text = "";
@@ -110,6 +155,8 @@ namespace Enterprise
             // выключаем и обнуляем
             labelEmailLoginTab.Enabled = false;
             textBoxEmailLoginTab.Enabled = false;
+
+            buttonNextLoginTab.Enabled = false;
 
             textBoxEmailLoginTab.Text = "";
 
@@ -156,7 +203,6 @@ namespace Enterprise
             {
                 // если регистрируемся
                 tabControlRegForm.SelectTab(1);
-                radioButtonLoginLoginTab.Select();
             }
         }
 
@@ -233,54 +279,15 @@ namespace Enterprise
         {
             listBoxKeysConfirmTab.Items.Clear();
 
-            string tScope, tFormat;
+            List<string> avalibleKeys = GetLockedKeyList();
 
-            tScope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                        "<haspscope>" +
-                            "<license_manager hostname=\"localhost\"/>" +
-                        "</haspscope>";
-
-            tFormat = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                        "<haspformat root=\"hasp_info\">" +
-                            "<hasp>" +
-                                "<element name=\"id\"/>" +
-                                "<element name=\"type\"/>" +
-                            "</hasp>" +
-                        "</haspformat>";
-
-            hStatus = Hasp.GetInfo(tScope, tFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
-            if (HaspStatus.StatusOk != hStatus)
-            {
-                if (appSettings.enableLogs) Log.Write("Ошибка запроса информации о доступных ключах, статус: " + hStatus);
-            }
-            else
-            {
-                if (appSettings.enableLogs) Log.Write("Результат выполнения запроса информации о ключах, статус: " + hStatus);
-                if (appSettings.enableLogs) Log.Write("Вывод:" + Environment.NewLine + hInfo);
-
-                xmlKeysInfo = XDocument.Parse(hInfo);
-            }
-
-            if (xmlKeysInfo != null)
-            {
-                avalibleKeys = new AvaliableKeys[xmlKeysInfo.Root.Elements("hasp").Count()];
-                int i = 0;
-
-                foreach (XElement el in xmlKeysInfo.Root.Elements())
-                {
-                    avalibleKeys[i].keyId = el.Element("id").Value;
-                    avalibleKeys[i].keyType = el.Element("type").Value;
-                    i++;
-                }
-            }
-
-            if (avalibleKeys.Count() > 0)
+            if (avalibleKeys != null && avalibleKeys.Count() > 0)
             {
                 if (appSettings.enableLogs) Log.Write("Загружаем доступные ключи в контрол listBox");
 
-                for (int i = 0; i < avalibleKeys.Count(); i++)
+                foreach (var el in avalibleKeys)
                 {
-                    listBoxKeysConfirmTab.Items.Add(avalibleKeys[i].keyType + " | Key ID = " + avalibleKeys[i].keyId);
+                    listBoxKeysConfirmTab.Items.Add(el);
                 }
             }
 
@@ -294,11 +301,108 @@ namespace Enterprise
 
         private void listBoxKeysConfirmTab_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (listBoxKeysConfirmTab.Items.Count > 0 && listBoxKeysConfirmTab.SelectedIndex != null) {
+            if (listBoxKeysConfirmTab.Items.Count > 0) {
                 buttonNextConfirmTab.Enabled = true;
             } else {
                 buttonNextConfirmTab.Enabled = false;
             }
+        }
+
+        private void textBoxFNLoginTab_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBoxFNLoginTab.Text) && !string.IsNullOrEmpty(textBoxLNLoginTab.Text) && !string.IsNullOrEmpty(textBoxMailLoginTab.Text)) {
+                buttonNextLoginTab.Enabled = true;
+            } else {
+                buttonNextLoginTab.Enabled = false;
+            }
+        }
+
+        private void textBoxLNLoginTab_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBoxFNLoginTab.Text) && !string.IsNullOrEmpty(textBoxLNLoginTab.Text) && !string.IsNullOrEmpty(textBoxMailLoginTab.Text))
+            {
+                buttonNextLoginTab.Enabled = true;
+            }
+            else
+            {
+                buttonNextLoginTab.Enabled = false;
+            }
+        }
+
+        private void textBoxMailLoginTab_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBoxFNLoginTab.Text) && !string.IsNullOrEmpty(textBoxLNLoginTab.Text) && !string.IsNullOrEmpty(textBoxMailLoginTab.Text))
+            {
+                buttonNextLoginTab.Enabled = true;
+            }
+            else
+            {
+                buttonNextLoginTab.Enabled = false;
+            }
+        }
+
+        private void textBoxEmailLoginTab_TextChanged(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(textBoxEmailLoginTab.Text))
+            {
+                buttonNextLoginTab.Enabled = true;
+            }
+            else
+            {
+                buttonNextLoginTab.Enabled = false;
+            }
+        }
+
+        public static List<string> GetLockedKeyList()
+        {
+            XDocument xmlKeyInfo = new XDocument();
+            List<string> keysList = new List<string>();
+
+            string scope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                           "<haspscope>" +
+                           "  <license_manager hostname=\"localhost\"/>" +
+                           "</haspscope>";
+
+            string format =
+            "<haspformat root=\"hasp_info\">" +
+            "  <hasp>" +
+            "    <attribute name=\"id\" />" +
+            "    <attribute name=\"type\" />" +
+            "    <feature>" +
+            "             <attribute name=\"id\" />" +
+            "             <attribute name=\"locked\" />" +
+            "        </feature>" +
+            "  </hasp>" +
+            "</haspformat>";
+
+            string info = null;
+            HaspStatus status = Hasp.GetInfo(scope, format, FormMain.vCode[FormMain.batchCode], ref info);
+
+            if (HaspStatus.StatusOk != status)
+            {
+                //handle error
+                if (appSettings.enableLogs) Log.Write("Ошибка запроса информации с ключа во время приоритезации ключей, статус: " + status);
+
+                return null;
+            }
+
+            xmlKeyInfo = XDocument.Parse(info);
+            if (xmlKeyInfo != null)
+            {
+                foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
+                {
+                    bool isTrialKey = false;
+
+                    foreach (XElement elFeature in elHasp.Elements("feature"))
+                    {
+                        if (elFeature.Attribute("locked").Value.Contains("false")) isTrialKey = true;
+                    }
+
+                    if (!isTrialKey) keysList.Add(elHasp.Attribute("type").Value + " | Key ID = " + elHasp.Attribute("id").Value);
+                }
+            }
+
+            return keysList;
         }
     }
 }

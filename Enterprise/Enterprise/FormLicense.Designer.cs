@@ -149,6 +149,7 @@
             this.MaximumSize = new System.Drawing.Size(650, 257);
             this.MinimumSize = new System.Drawing.Size(650, 257);
             this.Name = "FormLicense";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "License";
             this.Load += new System.EventHandler(this.FormLicense_Load);
             this.panelContainer.ResumeLayout(false);

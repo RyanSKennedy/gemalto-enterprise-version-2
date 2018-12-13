@@ -28,6 +28,8 @@ namespace Enterprise
         public static string aid = "";
         public static string v2c = "";
         public static string protectionKeyId = "";
+        public static string getPKInfoStatus = "";
+        public static string productKey = "";
         public static XDocument xmlKeysInfo;
         public static AvaliableKeys[] avalibleKeys;
         FormLicense LicenseWindow;
@@ -139,13 +141,27 @@ namespace Enterprise
             buttonGetUpdateByKeyID.Enabled = true;
             buttonActivatePK.Enabled = false;
             textBoxPK.Enabled = false;
+
+            textBoxPK.Text = "";
         }
 
         private void buttonActivatePK_Click(object sender, EventArgs e)
         {
+            productKey = textBoxPK.Text;
+
             if (FormMain.nActMechanism) {
-                if (appSettings.enableLogs) Log.Write("Открываем окно \"Визард регистрации\"");
-                RegistrationWindow.ShowDialog();
+                if (Regex.IsMatch(productKey, SentinelSettings.SentinelData.regExForValidatingPK)) {
+                    // если регулярку проходит, пробуем выполнить логин в EMS по ключу активации
+                    getPKInfoStatus = sentinelObject.GetRequest("productKey/" + productKey + ".ws", new KeyValuePair<string, string>("productKey", productKey));
+
+                    if (!string.IsNullOrEmpty(getPKInfoStatus)) {
+                        if (appSettings.enableLogs) Log.Write("Открываем окно \"Визард регистрации\"");
+                        RegistrationWindow.ShowDialog();
+                    }
+                } else {
+                    if (appSettings.enableLogs) Log.Write("Введён не валидный ProductKey..." + Environment.NewLine);
+                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Invalid ProductKey!"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+                }
             } else {
                 #region old act code
                 string actStatus = "";
@@ -260,7 +276,7 @@ namespace Enterprise
                     actXml = hInfo;
                 }
 
-                if (!string.IsNullOrEmpty(actXml) && Regex.IsMatch(textBoxPK.Text, @"\w{8}-\w{4}-\w{4}-\w{4}-\w{12}")) {
+                if (!string.IsNullOrEmpty(actXml) && Regex.IsMatch(productKey, SentinelSettings.SentinelData.regExForValidatingPK)) {
                     actXml = "<activation>" +
                                    "<activationInput>" +
                                       "<activationAttribute>" +
@@ -273,7 +289,7 @@ namespace Enterprise
                                    "</activationInput>" +
                                 "</activation>";
 
-                    actStatus = sentinelObject.GetRequest("productKey/" + textBoxPK.Text + "/activation.ws", new KeyValuePair<string, string>("activationXml", actXml));
+                    actStatus = sentinelObject.GetRequest("productKey/" + productKey + "/activation.ws", new KeyValuePair<string, string>("activationXml", actXml));
                 } else {
                     if (appSettings.enableLogs) Log.Write("Введён не валидный ProductKey или C2V..." + Environment.NewLine);
                     MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Invalid ProductKey or C2V"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));

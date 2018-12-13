@@ -718,5 +718,10 @@
       <language type="translate" name="En">Error: SentinelUp Client not found in dir: {0}</language>
       <language type="translate" name="Ru">Ошибка: клиент SentinelUp не найден в каталоге: {0}</language>
     </error>
+    <error>
+      <language type="origin" name="En">Invalid ProductKey!</language>
+      <language type="translate" name="En">Invalid ProductKey!</language>
+      <language type="translate" name="Ru">Не валидный ключ активации!</language>
+    </error>
   </ErrorCodes>
 </configuration>

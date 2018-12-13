@@ -190,6 +190,7 @@
             this.MaximumSize = new System.Drawing.Size(887, 520);
             this.MinimumSize = new System.Drawing.Size(887, 520);
             this.Name = "FormMain";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Entrprise";
             this.Load += new System.EventHandler(this.FormMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxLogo)).EndInit();

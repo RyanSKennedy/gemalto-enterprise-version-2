@@ -94,11 +94,12 @@
             // 
             // textBoxPK
             // 
-            this.textBoxPK.Location = new System.Drawing.Point(195, 49);
+            this.textBoxPK.Location = new System.Drawing.Point(134, 49);
             this.textBoxPK.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxPK.Name = "textBoxPK";
-            this.textBoxPK.Size = new System.Drawing.Size(277, 31);
+            this.textBoxPK.Size = new System.Drawing.Size(338, 31);
             this.textBoxPK.TabIndex = 4;
+            this.textBoxPK.Text = "b19a9257-e69d-4009-a37e-92a012899213";
             // 
             // buttonActivatePK
             // 
@@ -190,6 +191,7 @@
             this.MaximumSize = new System.Drawing.Size(680, 470);
             this.MinimumSize = new System.Drawing.Size(680, 470);
             this.Name = "FormAbout";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAbout_FormClosing);
             this.Load += new System.EventHandler(this.FormAbout_Load);

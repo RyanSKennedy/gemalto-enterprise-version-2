@@ -566,5 +566,9 @@
       <language type="origin" name="En">Error: SentinelUp Client not found in dir:</language>
       <language type="translate" name="En">Error: SentinelUp Client not found in dir: {0}</language>
     </error>
+    <error>
+      <language type="origin" name="En">Invalid ProductKey!</language>
+      <language type="translate" name="En">Invalid ProductKey!</language>
+    </error>
   </ErrorCodes>
 </configuration>

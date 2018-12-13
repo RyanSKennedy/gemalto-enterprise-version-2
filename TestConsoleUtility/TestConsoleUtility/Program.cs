@@ -18,8 +18,11 @@ namespace TestConsoleUtility
             //SentinelEMSClass emsClass = new SentinelEMSClass("http://10.211.55.3:8080/emsA/v78/ws"); // wrong link for test
 
             // Defaulft PK from DEMOMA Batch code in EMS default data
-            string pKey = "c03e2c49-225e-4984-b75f-d8ffe5c84a2b"; // right PK for test
+            string pKey = "c03e2c49-225e-4984-b75f-d8ffe5c84a2b"; // right PK for test REG IS NOT REQUIRED
+            //string pKey = "325c2607-e722-42c8-9d9f-5ab55c04213a"; // right PK for test REG IS MANDATORY
+            //string pKey = "ea6b8253-78d4-44e8-9047-d6ac7ae41f7c"; // right PK for test REG IS DESIRED
             //string pKey = "c03e2c49-225e-4984-b75f-d8ffe5c84a2b_e"; // wrong PK for test
+            //
 
             // Pattern PK for Regex
             // 0071eb86 - 911c - 40aa - a07b - 552d23ce37a1
