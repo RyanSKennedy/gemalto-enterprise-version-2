@@ -19,6 +19,7 @@ namespace Enterprise
         static Enterprise.settings.enterprise appSettings = new settings.enterprise();
         public HaspStatus hStatus = new HaspStatus();
         public static string hInfo;
+        public static string cId = "";
         public static XDocument xmlKeysInfo;
 
         public FormRegistration()
@@ -37,7 +38,11 @@ namespace Enterprise
             textBoxInformationAboutLicenseInfoTab.Text += "Avaliable activation for Product Key: " + licenseInfo.Root.Element("available").Value + Environment.NewLine;
             textBoxInformationAboutLicenseInfoTab.Text += "Registration required: " + licenseInfo.Root.Element("registrationRequired").Value + Environment.NewLine;
             textBoxInformationAboutLicenseInfoTab.Text += "Entitlement ID: " + licenseInfo.Root.Element("entitlementId").Value + Environment.NewLine;
-
+            if (!string.IsNullOrEmpty(licenseInfo.Root.Element("customerId").Value)) {
+                textBoxInformationAboutLicenseInfoTab.Text += "Customer: " + licenseInfo.Root.Element("customerId").Value + Environment.NewLine;
+                cId = licenseInfo.Root.Element("customerId").Value;
+            }
+            
             switch (licenseInfo.Root.Element("registrationRequired").Value) {
                 case ("DESIRED"):
                     checkBoxSkipRegInfoTab.Visible = true;
@@ -76,7 +81,17 @@ namespace Enterprise
             {
                 // если регистрируемся
                 tabControlRegForm.SelectTab(1);
-                radioButtonRegNewLoginTab.Select();
+                
+                if (!string.IsNullOrEmpty(cId))
+                {
+                    radioButtonLoginLoginTab.Select();
+                    textBoxEmailLoginTab.Text = cId;
+                    buttonNextLoginTab.PerformClick();
+                }
+                else
+                {
+                    radioButtonRegNewLoginTab.Select();
+                }
             }
         }
 

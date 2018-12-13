@@ -151,6 +151,35 @@ namespace SentinelConnector
                         {
                             response = request.GetAsync(fullRequestUrl).Result;
                             responseStr = response.Content.ReadAsStringAsync().Result;
+
+                            if (response.StatusCode.ToString() == "OK")
+                            {
+                                XDocument tmpPKInfo = XDocument.Parse(responseStr);
+                                string tmpResponseStr = "";
+
+                                if (!string.IsNullOrEmpty(tmpPKInfo.Root.Element("customerId").Value))
+                                {
+                                    try
+                                    {
+                                        response = request.GetAsync(UrlBuilder("customer/" + tmpPKInfo.Root.Element("customerId").Value + ".ws")).Result;
+                                        tmpResponseStr = response.Content.ReadAsStringAsync().Result;
+                                    }
+                                    catch (System.AggregateException e)
+                                    {
+                                        tmpResponseStr += e.InnerException.InnerException.Message + " | in get info request about customer ID after login by PK.";
+                                    }
+                                    catch (HttpRequestException hE)
+                                    {
+                                        tmpResponseStr += hE.Message + " | in get info request about customer ID after login by PK.";
+                                    }
+
+                                    if (response.StatusCode.ToString() == "OK") {
+                                        XDocument tmpCustomerInfo = XDocument.Parse(tmpResponseStr);
+
+                                        responseStr = responseStr.Replace("<customerId>" + tmpPKInfo.Root.Element("customerId").Value + "</customerId>", "<customerId>" + tmpCustomerInfo.Root.Element("defaultContact").Element("emailId").Value + "</customerId>");
+                                    }
+                                }
+                            }
                         }
                         catch (System.AggregateException e)
                         {

@@ -22,7 +22,7 @@ namespace Enterprise
         Size textBoxPKWithRadioButtonSize = new Size(134, 22);
         Size textBoxPKDefaultSize = new Size(220, 22);
         Enterprise.settings.enterprise appSettings = new settings.enterprise();
-        SentinelEMSClass sentinelObject = new SentinelEMSClass(FormMain.eUrl);
+        public static SentinelEMSClass sentinelObject = new SentinelEMSClass(FormMain.eUrl);
         public HaspStatus hStatus = new HaspStatus();
         public static string hInfo;
         public static string aid = "";
