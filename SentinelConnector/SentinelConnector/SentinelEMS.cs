@@ -56,13 +56,15 @@ namespace SentinelConnector
             return fullUrl;
         }
 
-        public string GetRequest(string rString, KeyValuePair<string, string> rData = new KeyValuePair<string, string>())
-        {
+        public KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>> GetRequest(string rString, KeyValuePair<string, string> rData = new KeyValuePair<string, string>(), KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>> client = new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>())
+        { 
             string fullRequestUrl = UrlBuilder(rString);
             var patterns = new[] { 
                 @"login.ws",
                 @"loginByProductKey.ws",
+                @"customer.ws",
                 @"activation/target.ws",
+                @"customer/[0-9]+.ws",
                 @"productKey/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}.ws",
                 @"productKey/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/activation.ws"
             };
@@ -86,10 +88,16 @@ namespace SentinelConnector
                     break;
                 }
             }
-
-            HttpClient request = new HttpClient();
-            HttpResponseMessage response;
-            string responseStr = "Error: Incorrect request... | ";
+            KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>> tmpRes = new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>();
+            HttpClient request;
+            if (client.Key.Key != null) {
+                request = client.Key.Key;
+            } else {
+                request = new HttpClient();
+            }
+            HttpResponseMessage response = null;
+            string responseStr = "";
+            string responseStatus = "Error: Incorrect request... | ";
 
             switch (cRequest.key)
             {
@@ -99,14 +107,15 @@ namespace SentinelConnector
                         var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
                         response = request.PostAsync(fullRequestUrl, content).Result;
                         responseStr = response.Content.ReadAsStringAsync().Result;
+                        responseStatus = response.StatusCode.ToString();
                     }
                     catch (System.AggregateException e)
                     {
-                        responseStr += e.InnerException.InnerException.Message;
+                        responseStatus += e.InnerException.InnerException.Message;
                     }
                     catch (HttpRequestException hE)
                     {
-                        responseStr += hE.Message;
+                        responseStatus += hE.Message;
                     }
                     break;
 
@@ -115,123 +124,116 @@ namespace SentinelConnector
                     {
                         var content = new FormUrlEncodedContent(new[] { rData });
                         response = request.PostAsync(fullRequestUrl, content).Result;
-                        responseStr = response.StatusCode.ToString();
+                        responseStr = response.Content.ReadAsStringAsync().Result;
+                        responseStatus = response.StatusCode.ToString();
                     }
                     catch (System.AggregateException e)
                     {
 
-                        responseStr += e.InnerException.InnerException.Message;
+                        responseStatus += e.InnerException.InnerException.Message;
 
                     }
                     catch (HttpRequestException hE)
                     {
-                        responseStr += hE.Message;
+                        responseStatus += hE.Message;
+                    }
+                    break;
+
+                case "customer.ws":
+                    if (client.Key.Key != null)
+                    {
+                        tmpRes = new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(client.Key.Key, client.Key.Value), new KeyValuePair<string, string>(client.Value.Key, client.Value.Value));
+                        request = tmpRes.Key.Key;
+
+                        if (tmpRes.Value.Value == "OK")
+                        {
+                            try
+                            {
+                                var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
+                                response = request.PutAsync(fullRequestUrl, content).Result;
+                                responseStr = response.Content.ReadAsStringAsync().Result;
+                                responseStatus = response.StatusCode.ToString();
+                            }
+                            catch (System.AggregateException e)
+                            {
+                                responseStatus += e.InnerException.InnerException.Message + " | in customer create request by PK after login by PK.";
+                            }
+                            catch (HttpRequestException hE)
+                            {
+                                responseStatus += hE.Message + " | in customer create request by PK after login by PK.";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        responseStatus = " | Not set HttpClient instance.";
                     }
                     break;
 
                 case "productKey":
-                    try
-                    {
-                        var content = new FormUrlEncodedContent(new[] { rData });
-                        response = request.PostAsync(UrlBuilder("loginByProductKey.ws"), content).Result;
-                        responseStr = response.StatusCode.ToString();
-                    }
-                    catch (System.AggregateException e)
-                    {
-                        responseStr += e.InnerException.InnerException.Message;
-                    }
-                    catch (HttpRequestException hE)
-                    {
-                        responseStr += hE.Message;
-                    }
+                    tmpRes = ((client.Key.Key == null) ? GetRequest("loginByProductKey.ws", rData) : new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(client.Key.Key, client.Key.Value), new KeyValuePair<string, string>(client.Value.Key, client.Value.Value)));
+                    request = tmpRes.Key.Key;
 
-                    if (responseStr == "OK")
-                    {
+                    if (tmpRes.Value.Value == "OK") {
                         try
                         {
                             response = request.GetAsync(fullRequestUrl).Result;
                             responseStr = response.Content.ReadAsStringAsync().Result;
+                            responseStatus = response.StatusCode.ToString();
 
-                            if (response.StatusCode.ToString() == "OK")
+                            if (responseStatus == "OK")
                             {
                                 XDocument tmpPKInfo = XDocument.Parse(responseStr);
                                 string tmpResponseStr = "";
 
                                 if (!string.IsNullOrEmpty(tmpPKInfo.Root.Element("customerId").Value))
                                 {
-                                    try
-                                    {
-                                        response = request.GetAsync(UrlBuilder("customer/" + tmpPKInfo.Root.Element("customerId").Value + ".ws")).Result;
-                                        tmpResponseStr = response.Content.ReadAsStringAsync().Result;
-                                    }
-                                    catch (System.AggregateException e)
-                                    {
-                                        tmpResponseStr += e.InnerException.InnerException.Message + " | in get info request about customer ID after login by PK.";
-                                    }
-                                    catch (HttpRequestException hE)
-                                    {
-                                        tmpResponseStr += hE.Message + " | in get info request about customer ID after login by PK.";
-                                    }
+                                    tmpResponseStr = GetRequest("customer/" + tmpPKInfo.Root.Element("customerId").Value + ".ws", new KeyValuePair<string, string>(null, null), new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(request, response), new KeyValuePair<string, string>(responseStr, responseStatus))).Value.Key;
 
-                                    if (response.StatusCode.ToString() == "OK") {
-                                        XDocument tmpCustomerInfo = XDocument.Parse(tmpResponseStr);
-
-                                        responseStr = responseStr.Replace("<customerId>" + tmpPKInfo.Root.Element("customerId").Value + "</customerId>", "<customerId>" + tmpCustomerInfo.Root.Element("defaultContact").Element("emailId").Value + "</customerId>");
+                                    if (!string.IsNullOrEmpty(tmpResponseStr)) {
+                                        responseStr = responseStr.Replace("<customerId>" + tmpPKInfo.Root.Element("customerId").Value + "</customerId>", "<customerId>" + tmpPKInfo.Root.Element("customerId").Value + "</customerId>" + "<customerEmail>" + tmpResponseStr + "</customerEmail>");
                                     }
                                 }
                             }
                         }
                         catch (System.AggregateException e)
                         {
-                            responseStr += e.InnerException.InnerException.Message + " | in get info request after login by PK.";
+                            responseStatus += e.InnerException.InnerException.Message + " | in get info request after login by PK.";
                         }
                         catch (HttpRequestException hE)
                         {
-                            responseStr += hE.Message + " | in get info request after login by PK.";
+                            responseStatus += hE.Message + " | in get info request after login by PK.";
                         }
-                    }
-                    else
-                    {
-                        responseStr += " | in request login by PK.";
+                    } else {
+                        responseStatus += tmpRes.Value.Key;
                     }
                     break;
 
                 case "activation.ws":
-                    try
-                    {
-                        var content = new FormUrlEncodedContent(new[] { new KeyValuePair<string, string>("productKey", cRequest.value) });
-                        response = request.PostAsync(UrlBuilder("loginByProductKey.ws"), content).Result;
-                        responseStr = response.StatusCode.ToString();
-                    }
-                    catch (System.AggregateException e)
-                    {
-                        responseStr += e.InnerException.InnerException.Message;
-                    }
-                    catch (HttpRequestException hE)
-                    {
-                        responseStr += hE.Message;
-                    }
+                    tmpRes = ((client.Key.Key == null) ? GetRequest("loginByProductKey.ws", rData) : new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(client.Key.Key, client.Key.Value), new KeyValuePair<string, string>(client.Value.Key, client.Value.Value)));
+                    request = tmpRes.Key.Key;
 
-                    if (responseStr == "OK")
+                    if (tmpRes.Value.Value == "OK")
                     {
                         try
                         {
                             var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
                             response = request.PostAsync(fullRequestUrl, content).Result;
                             responseStr = response.Content.ReadAsStringAsync().Result;
+                            responseStatus = response.StatusCode.ToString();
                         }
                         catch (System.AggregateException e)
                         {
-                            responseStr += e.InnerException.InnerException.Message + " | in activate request after login by PK.";
+                            responseStatus += e.InnerException.InnerException.Message + " | in activate request after login by PK.";
                         }
                         catch (HttpRequestException hE)
                         {
-                            responseStr += hE.Message + " | in activate request after login by PK.";
+                            responseStatus += hE.Message + " | in activate request after login by PK.";
                         }
                     }
                     else
                     {
-                        responseStr += " | in request login by PK.";
+                        responseStatus += " | in request login by PK.";
                     }
                     break;
 
@@ -240,24 +242,60 @@ namespace SentinelConnector
                         var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
                         response = request.PostAsync(fullRequestUrl, content).Result;
                         responseStr = response.Content.ReadAsStringAsync().Result;
+                        responseStatus = response.StatusCode.ToString();
                     }
                     catch (System.AggregateException e)
                     {
-                        responseStr += e.InnerException.InnerException.Message + " | in get update by C2V request.";
+                        responseStatus += e.InnerException.InnerException.Message + " | in get update by C2V request.";
                     }
                     catch (HttpRequestException hE)
                     {
-                        responseStr += hE.Message + " | in get update by C2V request.";
+                        responseStatus += hE.Message + " | in get update by C2V request.";
+                    }
+                    break;
+
+                case "customer":
+                    if (client.Key.Key != null) {
+                        tmpRes = new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(client.Key.Key, client.Key.Value), new KeyValuePair<string, string>(client.Value.Key, client.Value.Value));
+                        request = tmpRes.Key.Key;
+
+                        if (tmpRes.Value.Value == "OK")
+                        {
+                            try
+                            {
+                                response = request.GetAsync(fullRequestUrl).Result;
+                                responseStr = response.Content.ReadAsStringAsync().Result;
+                                responseStatus = response.StatusCode.ToString();
+
+                                if (responseStatus == "OK")
+                                {
+                                    XDocument tmpCustomerInfo = XDocument.Parse(responseStr);
+
+                                    responseStr = tmpCustomerInfo.Root.Element("defaultContact").Element("emailId").Value;
+                                }
+                            }
+                            catch (System.AggregateException e)
+                            {
+                                responseStatus += e.InnerException.InnerException.Message + " | in get info request about customer ID after login by PK.";
+                            }
+                            catch (HttpRequestException hE)
+                            {
+                                responseStatus += hE.Message + " | in get info request about customer ID after login by PK.";
+                            }
+                        }
+                    } else {
+                        responseStatus = " | Not set HttpClient instance.";
                     }
                     break;
 
                 default:
                     // Передали в качестве запроса что-то невразумительное
-                    responseStr += " | Something whrong...";
+                    responseStatus += " | Something whrong...";
                     break;
             }
 
-            return responseStr;
+            //return new KeyValuePair<HttpClient, string>(request, responseStr); 
+            return new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(request, response), new KeyValuePair<string, string>(responseStr, responseStatus));
         }
     }
 }

@@ -38,10 +38,16 @@ namespace Enterprise
             textBoxInformationAboutLicenseInfoTab.Text += "Avaliable activation for Product Key: " + licenseInfo.Root.Element("available").Value + Environment.NewLine;
             textBoxInformationAboutLicenseInfoTab.Text += "Registration required: " + licenseInfo.Root.Element("registrationRequired").Value + Environment.NewLine;
             textBoxInformationAboutLicenseInfoTab.Text += "Entitlement ID: " + licenseInfo.Root.Element("entitlementId").Value + Environment.NewLine;
-            if (!string.IsNullOrEmpty(licenseInfo.Root.Element("customerId").Value)) {
+            if (!string.IsNullOrEmpty(licenseInfo.Root.Element("customerId").Value))
+            {
                 textBoxInformationAboutLicenseInfoTab.Text += "Customer: " + licenseInfo.Root.Element("customerId").Value + Environment.NewLine;
                 cId = licenseInfo.Root.Element("customerId").Value;
             }
+            else
+            {
+                cId = "";
+            }
+
             
             switch (licenseInfo.Root.Element("registrationRequired").Value) {
                 case ("DESIRED"):
