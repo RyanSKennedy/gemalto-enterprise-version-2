@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
-using System.Net;
 using System.Net.Http;
 using System.Xml.Linq;
 using System.Collections.Generic;
@@ -9,6 +7,22 @@ using System.Text;
 
 namespace SentinelConnector
 {
+    public class RequestData 
+    {
+        public HttpClient httpClient;
+        public HttpResponseMessage httpClientResponse;
+        public string httpClientResponseStr;
+        public string httpClientResponseStatus;
+
+        public RequestData(HttpClient newClient = null, HttpResponseMessage newResponse = null, string newResponseStr = null, string newResponseStatus = null) 
+        {
+            httpClient = newClient;
+            httpClientResponse = newResponse;
+            httpClientResponseStr = newResponseStr;
+            httpClientResponseStatus = newResponseStatus;
+        }
+    }
+
     public class SentinelEMSClass
     {
         private struct currentRequest
@@ -56,8 +70,8 @@ namespace SentinelConnector
             return fullUrl;
         }
 
-        public KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>> GetRequest(string rString, KeyValuePair<string, string> rData = new KeyValuePair<string, string>(), KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>> client = new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>())
-        { 
+        public RequestData GetRequest(string rString, KeyValuePair<string, string> rData = new KeyValuePair<string, string>(), RequestData client = null)
+        {
             string fullRequestUrl = UrlBuilder(rString);
             var patterns = new[] { 
                 @"login.ws",
@@ -88,13 +102,16 @@ namespace SentinelConnector
                     break;
                 }
             }
-            KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>> tmpRes = new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>();
+
+            RequestData tmpRes = new RequestData();
+
             HttpClient request;
-            if (client.Key.Key != null) {
-                request = client.Key.Key;
+            if (client != null) {
+                request = client.httpClient;
             } else {
                 request = new HttpClient();
             }
+
             HttpResponseMessage response = null;
             string responseStr = "";
             string responseStatus = "Error: Incorrect request... | ";
@@ -140,12 +157,12 @@ namespace SentinelConnector
                     break;
 
                 case "customer.ws":
-                    if (client.Key.Key != null)
+                    if (client != null)
                     {
-                        tmpRes = new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(client.Key.Key, client.Key.Value), new KeyValuePair<string, string>(client.Value.Key, client.Value.Value));
-                        request = tmpRes.Key.Key;
+                        tmpRes = new RequestData(client.httpClient, client.httpClientResponse, client.httpClientResponseStr, client.httpClientResponseStatus);
+                        request = tmpRes.httpClient;
 
-                        if (tmpRes.Value.Value == "OK")
+                        if (tmpRes.httpClientResponseStatus == "OK")
                         {
                             try
                             {
@@ -163,77 +180,105 @@ namespace SentinelConnector
                                 responseStatus += hE.Message + " | in customer create request by PK after login by PK.";
                             }
                         }
+                        else
+                        {
+                            response = tmpRes.httpClientResponse;
+                            responseStr = tmpRes.httpClientResponseStr;
+                            responseStatus = tmpRes.httpClientResponseStatus;
+                        }
                     }
                     else
                     {
-                        responseStatus = " | Not set HttpClient instance.";
+                        responseStatus = "Not set HttpClient instance.";
                     }
                     break;
 
                 case "productKey":
-                    tmpRes = ((client.Key.Key == null) ? GetRequest("loginByProductKey.ws", rData) : new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(client.Key.Key, client.Key.Value), new KeyValuePair<string, string>(client.Value.Key, client.Value.Value)));
-                    request = tmpRes.Key.Key;
+                    if (client != null)
+                    {
+                        tmpRes = new RequestData(client.httpClient, client.httpClientResponse, client.httpClientResponseStr, client.httpClientResponseStatus);
+                        request = tmpRes.httpClient;
 
-                    if (tmpRes.Value.Value == "OK") {
-                        try
+                        if (tmpRes.httpClientResponseStatus == "OK")
                         {
-                            response = request.GetAsync(fullRequestUrl).Result;
-                            responseStr = response.Content.ReadAsStringAsync().Result;
-                            responseStatus = response.StatusCode.ToString();
-
-                            if (responseStatus == "OK")
+                            try
                             {
-                                XDocument tmpPKInfo = XDocument.Parse(responseStr);
-                                string tmpResponseStr = "";
+                                response = request.GetAsync(fullRequestUrl).Result;
+                                responseStr = response.Content.ReadAsStringAsync().Result;
+                                responseStatus = response.StatusCode.ToString();
 
-                                if (!string.IsNullOrEmpty(tmpPKInfo.Root.Element("customerId").Value))
+                                if (responseStatus == "OK")
                                 {
-                                    tmpResponseStr = GetRequest("customer/" + tmpPKInfo.Root.Element("customerId").Value + ".ws", new KeyValuePair<string, string>(null, null), new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(request, response), new KeyValuePair<string, string>(responseStr, responseStatus))).Value.Key;
+                                    XDocument tmpPKInfo = XDocument.Parse(responseStr);
+                                    string tmpResponseStr = "";
 
-                                    if (!string.IsNullOrEmpty(tmpResponseStr)) {
-                                        responseStr = responseStr.Replace("<customerId>" + tmpPKInfo.Root.Element("customerId").Value + "</customerId>", "<customerId>" + tmpPKInfo.Root.Element("customerId").Value + "</customerId>" + "<customerEmail>" + tmpResponseStr + "</customerEmail>");
+                                    if (!string.IsNullOrEmpty(tmpPKInfo.Root.Element("customerId").Value))
+                                    {
+                                        tmpResponseStr = GetRequest("customer/" + tmpPKInfo.Root.Element("customerId").Value + ".ws", new KeyValuePair<string, string>(null, null), new RequestData(request, response, responseStr, responseStatus)).httpClientResponseStr;
+
+                                        if (!string.IsNullOrEmpty(tmpResponseStr))
+                                        {
+                                            responseStr = responseStr.Replace("<customerId>" + tmpPKInfo.Root.Element("customerId").Value + "</customerId>", "<customerId>" + tmpPKInfo.Root.Element("customerId").Value + "</customerId>" + "<customerEmail>" + tmpResponseStr + "</customerEmail>");
+                                        }
                                     }
                                 }
                             }
+                            catch (System.AggregateException e)
+                            {
+                                responseStatus += e.InnerException.InnerException.Message + " | in get info request after login by PK.";
+                            }
+                            catch (HttpRequestException hE)
+                            {
+                                responseStatus += hE.Message + " | in get info request after login by PK.";
+                            }
                         }
-                        catch (System.AggregateException e)
+                        else
                         {
-                            responseStatus += e.InnerException.InnerException.Message + " | in get info request after login by PK.";
-                        }
-                        catch (HttpRequestException hE)
-                        {
-                            responseStatus += hE.Message + " | in get info request after login by PK.";
-                        }
-                    } else {
-                        responseStatus += tmpRes.Value.Key;
-                    }
-                    break;
-
-                case "activation.ws":
-                    tmpRes = ((client.Key.Key == null) ? GetRequest("loginByProductKey.ws", rData) : new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(client.Key.Key, client.Key.Value), new KeyValuePair<string, string>(client.Value.Key, client.Value.Value)));
-                    request = tmpRes.Key.Key;
-
-                    if (tmpRes.Value.Value == "OK")
-                    {
-                        try
-                        {
-                            var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
-                            response = request.PostAsync(fullRequestUrl, content).Result;
-                            responseStr = response.Content.ReadAsStringAsync().Result;
-                            responseStatus = response.StatusCode.ToString();
-                        }
-                        catch (System.AggregateException e)
-                        {
-                            responseStatus += e.InnerException.InnerException.Message + " | in activate request after login by PK.";
-                        }
-                        catch (HttpRequestException hE)
-                        {
-                            responseStatus += hE.Message + " | in activate request after login by PK.";
+                            response = tmpRes.httpClientResponse;
+                            responseStr = tmpRes.httpClientResponseStr;
+                            responseStatus = tmpRes.httpClientResponseStatus;
                         }
                     }
                     else
                     {
-                        responseStatus += " | in request login by PK.";
+                        responseStatus = "Not set HttpClient instance.";
+                    }
+                    break;
+
+                case "activation.ws":
+                    if (client != null)
+                    {
+                        tmpRes = new RequestData(client.httpClient, client.httpClientResponse, client.httpClientResponseStr, client.httpClientResponseStatus);
+                        request = tmpRes.httpClient;
+
+                        if (tmpRes.httpClientResponseStatus == "OK")
+                        {
+                            try
+                            {
+                                var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
+                                response = request.PostAsync(fullRequestUrl, content).Result;
+                                responseStr = response.Content.ReadAsStringAsync().Result;
+                                responseStatus = response.StatusCode.ToString();
+                            }
+                            catch (System.AggregateException e)
+                            {
+                                responseStatus += e.InnerException.InnerException.Message + " | in activate request after login by PK.";
+                            }
+                            catch (HttpRequestException hE)
+                            {
+                                responseStatus += hE.Message + " | in activate request after login by PK.";
+                            }
+                        }
+                        else
+                        {
+                            response = tmpRes.httpClientResponse;
+                            responseStr = tmpRes.httpClientResponseStr;
+                            responseStatus = tmpRes.httpClientResponseStatus;
+                        }
+                    }
+                    else
+                    {
+                        responseStatus = "Not set HttpClient instance.";
                     }
                     break;
 
@@ -255,11 +300,11 @@ namespace SentinelConnector
                     break;
 
                 case "customer":
-                    if (client.Key.Key != null) {
-                        tmpRes = new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(client.Key.Key, client.Key.Value), new KeyValuePair<string, string>(client.Value.Key, client.Value.Value));
-                        request = tmpRes.Key.Key;
+                    if (client != null) {
+                        tmpRes = new RequestData(client.httpClient, client.httpClientResponse, client.httpClientResponseStr, client.httpClientResponseStatus);
+                        request = tmpRes.httpClient;
 
-                        if (tmpRes.Value.Value == "OK")
+                        if (tmpRes.httpClientResponseStatus == "OK")
                         {
                             try
                             {
@@ -283,18 +328,24 @@ namespace SentinelConnector
                                 responseStatus += hE.Message + " | in get info request about customer ID after login by PK.";
                             }
                         }
+                        else
+                        {
+                            response = tmpRes.httpClientResponse;
+                            responseStr = tmpRes.httpClientResponseStr;
+                            responseStatus = tmpRes.httpClientResponseStatus;
+                        }
                     } else {
-                        responseStatus = " | Not set HttpClient instance.";
+                        responseStatus = "Not set HttpClient instance.";
                     }
                     break;
 
                 default:
                     // Передали в качестве запроса что-то невразумительное
-                    responseStatus += " | Something whrong...";
+                    responseStatus = "Something whrong...";
                     break;
             }
 
-            return new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(request, response), new KeyValuePair<string, string>(responseStr, responseStatus));
+            return new RequestData(request, response, responseStr, responseStatus);
         }
     }
 }

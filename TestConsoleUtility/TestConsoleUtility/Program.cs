@@ -3,7 +3,6 @@ using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Collections.Generic;
 using SentinelConnector;
-using System.Net.Http;
 
 namespace TestConsoleUtility
 {
@@ -279,8 +278,6 @@ namespace TestConsoleUtility
 
             if (action.Length > 1 && (action.StartsWith('a') || action.StartsWith('l') || action.StartsWith('u')) && action.Contains("sc:") && !action.Contains("pk:"))
             {
-                //int s = action.LastIndexOf("sc:");
-                //int ss = action.Length - action.LastIndexOf("sc:") - 5;                         
                 string pathToFile = action.Substring(action.LastIndexOf("sc:") + 5, action.Length - action.LastIndexOf("sc:") - 6);
 
                 try
@@ -340,60 +337,61 @@ namespace TestConsoleUtility
             }
 
             Console.WriteLine(Environment.NewLine + "/-------------------------/" + Environment.NewLine);
-            KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>> res = new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>();
+            RequestData res = new RequestData();
 
             switch (action.Substring(0, 1))
             {
                 case "k":
                     res = emsClass.GetRequest("loginByProductKey.ws", new KeyValuePair<string, string>("productKey", pKey));
                     Console.WriteLine("Let's try doing login by PK..." + Environment.NewLine);
-                    Console.WriteLine(res.Value.Key + Environment.NewLine);
-                    Console.WriteLine(res.Value.Value + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStr + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStatus + Environment.NewLine);
                     break;
 
                 case "a":
                     res = emsClass.GetRequest("productKey/" + pKey + "/activation.ws", new KeyValuePair<string, string>("activationXml", actXml));
                     Console.WriteLine("Let's try doing activation..." + Environment.NewLine);
-                    Console.WriteLine(res.Value.Key + Environment.NewLine);
-                    Console.WriteLine(res.Value.Value + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStr + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStatus + Environment.NewLine);
                     break;
 
                 case "i":
-                    res = emsClass.GetRequest("productKey/" + pKey + ".ws", new KeyValuePair<string, string>("productKey", pKey));
+                    res = emsClass.GetRequest("loginByProductKey.ws", new KeyValuePair<string, string>("productKey", pKey));
+                    res = emsClass.GetRequest("productKey/" + pKey + ".ws", new KeyValuePair<string, string>("productKey", pKey), res);
                     Console.WriteLine("Let's try get info about PK..." + Environment.NewLine);
-                    Console.WriteLine(res.Value.Key + Environment.NewLine);
-                    Console.WriteLine(res.Value.Value + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStr + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStatus + Environment.NewLine);
                     break;
 
                 case "l":
                     res = emsClass.GetRequest("login.ws", new KeyValuePair<string, string>("authenticationDetail", authXml));
                     Console.WriteLine("Let's try doing ISV login..." + Environment.NewLine);
-                    Console.WriteLine(res.Value.Key + Environment.NewLine);
-                    Console.WriteLine(res.Value.Value + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStr + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStatus + Environment.NewLine);
                     break;
 
                 case "u":
                     res = emsClass.GetRequest("activation/target.ws", new KeyValuePair<string, string>("targetXml", targetXml));
                     Console.WriteLine("Let's try get update via C2V..." + Environment.NewLine);
-                    Console.WriteLine(res.Value.Key + Environment.NewLine);
-                    Console.WriteLine(res.Value.Value + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStr + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStatus + Environment.NewLine);
                     break;
 
                 case "n":
                     res = emsClass.GetRequest("loginByProductKey.ws", new KeyValuePair<string, string>("productKey", pKey));
-                    res = emsClass.GetRequest("customer.ws", new KeyValuePair<string, string>("customerXml", newCustomerXml), new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(res.Key.Key, res.Key.Value), new KeyValuePair<string, string>(res.Value.Key, res.Value.Value)));
+                    res = emsClass.GetRequest("customer.ws", new KeyValuePair<string, string>("customerXml", newCustomerXml), res);
                     Console.WriteLine("Let's try to create customer and assoc him with PK..." + Environment.NewLine);
-                    Console.WriteLine(res.Value.Key + Environment.NewLine);
-                    Console.WriteLine(res.Value.Value + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStr + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStatus + Environment.NewLine);
                     break;
 
                 case "c":
                     res = emsClass.GetRequest("loginByProductKey.ws", new KeyValuePair<string, string>("productKey", pKey));
-                    //res = emsClass.GetRequest("customer.ws", new KeyValuePair<string, string>("customerXml", newCustomerXml), new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(res.Key.Key, res.Key.Value), new KeyValuePair<string, string>(res.Value.Key, res.Value.Value)));
+                    //res = emsClass.GetRequest("customer.ws", new KeyValuePair<string, string>("customerXml", newCustomerXml), res);
                     // тут нужна логика...
                     Console.WriteLine("Let's try to create customer and assoc him with PK..." + Environment.NewLine);
-                    Console.WriteLine(res.Value.Key + Environment.NewLine);
-                    Console.WriteLine(res.Value.Value + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStr + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStatus + Environment.NewLine);
                     break;
 
                 case "e":
