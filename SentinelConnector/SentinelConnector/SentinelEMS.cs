@@ -294,7 +294,6 @@ namespace SentinelConnector
                     break;
             }
 
-            //return new KeyValuePair<HttpClient, string>(request, responseStr); 
             return new KeyValuePair<KeyValuePair<HttpClient, HttpResponseMessage>, KeyValuePair<string, string>>(new KeyValuePair<HttpClient, HttpResponseMessage>(request, response), new KeyValuePair<string, string>(responseStr, responseStatus));
         }
     }
