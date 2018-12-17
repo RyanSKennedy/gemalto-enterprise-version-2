@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Linq;
+using System.Net.Http;
 using System.IO;
 using System.Net.Sockets;
 using System.Windows.Forms;
@@ -23,6 +24,7 @@ namespace Enterprise
         Size textBoxPKDefaultSize = new Size(220, 22);
         Enterprise.settings.enterprise appSettings = new settings.enterprise();
         public static SentinelEMSClass sentinelObject = new SentinelEMSClass(FormMain.eUrl);
+        public static RequestData instance = new RequestData();
         public HaspStatus hStatus = new HaspStatus();
         public static string hInfo;
         public static string aid = "";
@@ -152,9 +154,11 @@ namespace Enterprise
             if (FormMain.nActMechanism) {
                 if (Regex.IsMatch(productKey, SentinelSettings.SentinelData.regExForValidatingPK)) {
                     // если регулярку проходит, пробуем выполнить логин в EMS по ключу активации
-                    getPKInfoStatus = sentinelObject.GetRequest("productKey/" + productKey + ".ws", new KeyValuePair<string, string>("productKey", productKey));
+                    //getPKInfoStatus = sentinelObject.GetRequest("loginByProductKey.ws", HttpMethod.Post, new KeyValuePair<string, string>("productKey", productKey));
+                    instance = sentinelObject.GetRequest("loginByProductKey.ws", HttpMethod.Post, new KeyValuePair<string, string>("productKey", productKey));
+                    instance = sentinelObject.GetRequest("productKey/" + productKey + ".ws", HttpMethod.Get, new KeyValuePair<string, string>("productKey", productKey), instance);
 
-                    if (!string.IsNullOrEmpty(getPKInfoStatus)) {
+                    if (!string.IsNullOrEmpty(instance.httpClientResponseStr)) {
                         if (appSettings.enableLogs) Log.Write("Открываем окно \"Визард регистрации\"");
                         RegistrationWindow.ShowDialog();
                     }
@@ -289,7 +293,7 @@ namespace Enterprise
                                    "</activationInput>" +
                                 "</activation>";
 
-                    actStatus = sentinelObject.GetRequest("productKey/" + productKey + "/activation.ws", new KeyValuePair<string, string>("activationXml", actXml));
+                    actStatus = sentinelObject.GetRequest("productKey/" + productKey + "/activation.ws", HttpMethod.Post, new KeyValuePair<string, string>("activationXml", actXml)).httpClientResponseStr;
                 } else {
                     if (appSettings.enableLogs) Log.Write("Введён не валидный ProductKey или C2V..." + Environment.NewLine);
                     MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Invalid ProductKey or C2V"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
@@ -377,7 +381,7 @@ namespace Enterprise
             }
             else
             {
-                actStatus = sentinelObject.GetRequest("activation/target.ws", new KeyValuePair<string, string>("targetXml", targetXml));
+                actStatus = sentinelObject.GetRequest("activation/target.ws", HttpMethod.Post, new KeyValuePair<string, string>("targetXml", targetXml)).httpClientResponseStr;
 
                 if (!string.IsNullOrEmpty(actStatus) && !actStatus.Contains("Error") && !actStatus.Contains("error") && !actStatus.Contains("No pending update"))
                 {

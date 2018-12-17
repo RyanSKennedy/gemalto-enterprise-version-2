@@ -19,7 +19,7 @@ namespace Enterprise
         static Enterprise.settings.enterprise appSettings = new settings.enterprise();
         public HaspStatus hStatus = new HaspStatus();
         public static string hInfo;
-        public static string cId = "";
+        public static string cEmail = "";
         public static XDocument xmlKeysInfo;
 
         public FormRegistration()
@@ -33,19 +33,19 @@ namespace Enterprise
             bool isSetAlpFormAbout = FormMain.alp.SetLenguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, rForm);
 
             textBoxPKInfoTab.Text = FormAbout.productKey;
-            XDocument licenseInfo = XDocument.Parse(FormAbout.getPKInfoStatus);
-            textBoxInformationAboutLicenseInfoTab.Text = licenseInfo.Root.Element("productInfo").Attribute("productName").Value + Environment.NewLine;
+            XDocument licenseInfo = XDocument.Parse(FormAbout.instance.httpClientResponseStr);
+            textBoxInformationAboutLicenseInfoTab.Text = "Product: " + licenseInfo.Root.Element("productInfo").Attribute("productName").Value + Environment.NewLine;
             textBoxInformationAboutLicenseInfoTab.Text += "Avaliable activation for Product Key: " + licenseInfo.Root.Element("available").Value + Environment.NewLine;
             textBoxInformationAboutLicenseInfoTab.Text += "Registration required: " + licenseInfo.Root.Element("registrationRequired").Value + Environment.NewLine;
             textBoxInformationAboutLicenseInfoTab.Text += "Entitlement ID: " + licenseInfo.Root.Element("entitlementId").Value + Environment.NewLine;
-            if (!string.IsNullOrEmpty(licenseInfo.Root.Element("customerId").Value))
+            if (!string.IsNullOrEmpty(licenseInfo.Root.Element("customerEmail").Value))
             {
-                textBoxInformationAboutLicenseInfoTab.Text += "Customer: " + licenseInfo.Root.Element("customerId").Value + Environment.NewLine;
-                cId = licenseInfo.Root.Element("customerId").Value;
+                textBoxInformationAboutLicenseInfoTab.Text += "Customer: " + licenseInfo.Root.Element("customerEmail").Value + Environment.NewLine;
+                cEmail = licenseInfo.Root.Element("customerEmail").Value;
             }
             else
             {
-                cId = "";
+                cEmail = "";
             }
 
             
@@ -88,10 +88,10 @@ namespace Enterprise
                 // если регистрируемся
                 tabControlRegForm.SelectTab(1);
                 
-                if (!string.IsNullOrEmpty(cId))
+                if (!string.IsNullOrEmpty(cEmail))
                 {
                     radioButtonLoginLoginTab.Select();
-                    textBoxEmailLoginTab.Text = cId;
+                    textBoxEmailLoginTab.Text = cEmail;
                     buttonNextLoginTab.PerformClick();
                 }
                 else
