@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Xml.Linq;
 using System.Collections.Generic;
@@ -70,7 +71,7 @@ namespace SentinelConnector
             return fullUrl;
         }
 
-        public RequestData GetRequest(string rString, KeyValuePair<string, string> rData = new KeyValuePair<string, string>(), RequestData client = null)
+        public RequestData GetRequest(string rString, HttpMethod method, KeyValuePair<string, string> rData = new KeyValuePair<string, string>(), RequestData client = null)
         {
             string fullRequestUrl = UrlBuilder(rString);
             var patterns = new[] { 
@@ -103,8 +104,6 @@ namespace SentinelConnector
                 }
             }
 
-            RequestData tmpRes = new RequestData();
-
             HttpClient request;
             if (client != null) {
                 request = client.httpClient;
@@ -114,7 +113,7 @@ namespace SentinelConnector
 
             HttpResponseMessage response = null;
             string responseStr = "";
-            string responseStatus = "Error: Incorrect request... | ";
+            string responseStatus = "Error: Incorrect request.";
 
             switch (cRequest.key)
             {
@@ -159,10 +158,9 @@ namespace SentinelConnector
                 case "customer.ws":
                     if (client != null)
                     {
-                        tmpRes = new RequestData(client.httpClient, client.httpClientResponse, client.httpClientResponseStr, client.httpClientResponseStatus);
-                        request = tmpRes.httpClient;
+                        request = client.httpClient;
 
-                        if (tmpRes.httpClientResponseStatus == "OK")
+                        if (client.httpClientResponseStatus == "OK")
                         {
                             try
                             {
@@ -182,9 +180,9 @@ namespace SentinelConnector
                         }
                         else
                         {
-                            response = tmpRes.httpClientResponse;
-                            responseStr = tmpRes.httpClientResponseStr;
-                            responseStatus = tmpRes.httpClientResponseStatus;
+                            response = client.httpClientResponse;
+                            responseStr = client.httpClientResponseStr;
+                            responseStatus = client.httpClientResponseStatus;
                         }
                     }
                     else
@@ -196,25 +194,30 @@ namespace SentinelConnector
                 case "productKey":
                     if (client != null)
                     {
-                        tmpRes = new RequestData(client.httpClient, client.httpClientResponse, client.httpClientResponseStr, client.httpClientResponseStatus);
-                        request = tmpRes.httpClient;
+                        request = client.httpClient;
 
-                        if (tmpRes.httpClientResponseStatus == "OK")
+                        if (client.httpClientResponseStatus == "OK")
                         {
                             try
                             {
-                                response = request.GetAsync(fullRequestUrl).Result;
+                                if (method == HttpMethod.Get) {
+                                    response = request.GetAsync(fullRequestUrl).Result;
+                                } else if (method == HttpMethod.Post) {
+                                    var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
+                                    response = request.PostAsync(fullRequestUrl, content).Result;
+                                }
+
                                 responseStr = response.Content.ReadAsStringAsync().Result;
                                 responseStatus = response.StatusCode.ToString();
 
-                                if (responseStatus == "OK")
+                                if (responseStatus == "OK" && method == HttpMethod.Get)
                                 {
                                     XDocument tmpPKInfo = XDocument.Parse(responseStr);
                                     string tmpResponseStr = "";
 
                                     if (!string.IsNullOrEmpty(tmpPKInfo.Root.Element("customerId").Value))
                                     {
-                                        tmpResponseStr = GetRequest("customer/" + tmpPKInfo.Root.Element("customerId").Value + ".ws", new KeyValuePair<string, string>(null, null), new RequestData(request, response, responseStr, responseStatus)).httpClientResponseStr;
+                                        tmpResponseStr = GetRequest("customer/" + tmpPKInfo.Root.Element("customerId").Value + ".ws", HttpMethod.Get, new KeyValuePair<string, string>(null, null), new RequestData(request, response, responseStr, responseStatus)).httpClientResponseStr;
 
                                         if (!string.IsNullOrEmpty(tmpResponseStr))
                                         {
@@ -234,9 +237,9 @@ namespace SentinelConnector
                         }
                         else
                         {
-                            response = tmpRes.httpClientResponse;
-                            responseStr = tmpRes.httpClientResponseStr;
-                            responseStatus = tmpRes.httpClientResponseStatus;
+                            response = client.httpClientResponse;
+                            responseStr = client.httpClientResponseStr;
+                            responseStatus = client.httpClientResponseStatus;
                         }
                     }
                     else
@@ -248,10 +251,9 @@ namespace SentinelConnector
                 case "activation.ws":
                     if (client != null)
                     {
-                        tmpRes = new RequestData(client.httpClient, client.httpClientResponse, client.httpClientResponseStr, client.httpClientResponseStatus);
-                        request = tmpRes.httpClient;
+                        request = client.httpClient;
 
-                        if (tmpRes.httpClientResponseStatus == "OK")
+                        if (client.httpClientResponseStatus == "OK")
                         {
                             try
                             {
@@ -271,9 +273,9 @@ namespace SentinelConnector
                         }
                         else
                         {
-                            response = tmpRes.httpClientResponse;
-                            responseStr = tmpRes.httpClientResponseStr;
-                            responseStatus = tmpRes.httpClientResponseStatus;
+                            response = client.httpClientResponse;
+                            responseStr = client.httpClientResponseStr;
+                            responseStatus = client.httpClientResponseStatus;
                         }
                     }
                     else
@@ -301,10 +303,9 @@ namespace SentinelConnector
 
                 case "customer":
                     if (client != null) {
-                        tmpRes = new RequestData(client.httpClient, client.httpClientResponse, client.httpClientResponseStr, client.httpClientResponseStatus);
-                        request = tmpRes.httpClient;
+                        request = client.httpClient;
 
-                        if (tmpRes.httpClientResponseStatus == "OK")
+                        if (client.httpClientResponseStatus == "OK")
                         {
                             try
                             {
@@ -330,9 +331,9 @@ namespace SentinelConnector
                         }
                         else
                         {
-                            response = tmpRes.httpClientResponse;
-                            responseStr = tmpRes.httpClientResponseStr;
-                            responseStatus = tmpRes.httpClientResponseStatus;
+                            response = client.httpClientResponse;
+                            responseStr = client.httpClientResponseStr;
+                            responseStatus = client.httpClientResponseStatus;
                         }
                     } else {
                         responseStatus = "Not set HttpClient instance.";
