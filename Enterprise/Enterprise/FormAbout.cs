@@ -154,7 +154,6 @@ namespace Enterprise
             if (FormMain.nActMechanism) {
                 if (Regex.IsMatch(productKey, SentinelSettings.SentinelData.regExForValidatingPK)) {
                     // если регулярку проходит, пробуем выполнить логин в EMS по ключу активации
-                    //getPKInfoStatus = sentinelObject.GetRequest("loginByProductKey.ws", HttpMethod.Post, new KeyValuePair<string, string>("productKey", productKey));
                     instance = sentinelObject.GetRequest("loginByProductKey.ws", HttpMethod.Post, new KeyValuePair<string, string>("productKey", productKey));
                     instance = sentinelObject.GetRequest("productKey/" + productKey + ".ws", HttpMethod.Get, new KeyValuePair<string, string>("productKey", productKey), instance);
 

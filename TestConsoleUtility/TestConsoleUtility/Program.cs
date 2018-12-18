@@ -23,7 +23,7 @@ namespace TestConsoleUtility
             //string pKey = "c03e2c49-225e-4984-b75f-d8ffe5c84a2b"; // right PK for test REG IS NOT REQUIRED
             //string pKey = "325c2607-e722-42c8-9d9f-5ab55c04213a"; // right PK for test REG IS MANDATORY
             //string pKey = "ea6b8253-78d4-44e8-9047-d6ac7ae41f7c"; // right PK for test REG IS DESIRED
-            string pKey = "b19a9257-e69d-4009-a37e-92a012899213"; // right PK for test REG IS DESIRED
+            string pKey = "f6f1ad75-7db3-4874-b5ec-cbb160bd7b5c"; // right PK for test REG IS DESIRED
             //string pKey = "c03e2c49-225e-4984-b75f-d8ffe5c84a2b_e"; // wrong PK for test
 
             // Pattern PK for Regex
@@ -65,7 +65,7 @@ namespace TestConsoleUtility
                                         "<type>ind</type>" +
                                         "<enabled>true</enabled>" +
                                         "<description>" + desc + "</description>" +
-                                        "<vendorId>1</vendorId>" +
+                                        //"<vendorId>1</vendorId>" +
                                         "<defaultContact>" +
                                             "<emailId>" + email + "</emailId>" +
                                             "<firstName>" + fName + "</firstName>" +

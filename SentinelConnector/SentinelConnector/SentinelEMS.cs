@@ -83,6 +83,7 @@ namespace SentinelConnector
                 @"productKey/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}.ws",
                 @"productKey/\w{8}-\w{4}-\w{4}-\w{4}-\w{12}/activation.ws"
             };
+
             Regex regex;
             cRequest = new currentRequest();
 
@@ -104,249 +105,218 @@ namespace SentinelConnector
                 }
             }
 
-            HttpClient request;
-            if (client != null) {
-                request = client.httpClient;
-            } else {
-                request = new HttpClient();
+            if (client == null)
+            {
+                client = new RequestData(null, new HttpResponseMessage(), "", "");
             }
-
-            HttpResponseMessage response = null;
-            string responseStr = "";
-            string responseStatus = "Error: Incorrect request.";
 
             switch (cRequest.key)
             {
                 case "login.ws":
                     try
                     {
+                        client.httpClient = new HttpClient();
+
                         var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
-                        response = request.PostAsync(fullRequestUrl, content).Result;
-                        responseStr = response.Content.ReadAsStringAsync().Result;
-                        responseStatus = response.StatusCode.ToString();
+                        client.httpClientResponse = client.httpClient.PostAsync(fullRequestUrl, content).Result;
+                        client.httpClientResponseStr = client.httpClientResponse.Content.ReadAsStringAsync().Result;
+                        client.httpClientResponseStatus = client.httpClientResponse.StatusCode.ToString();
                     }
                     catch (System.AggregateException e)
                     {
-                        responseStatus += e.InnerException.InnerException.Message;
+                        client.httpClientResponseStatus += e.InnerException.InnerException.Message;
                     }
                     catch (HttpRequestException hE)
                     {
-                        responseStatus += hE.Message;
+                        client.httpClientResponseStatus += hE.Message;
                     }
                     break;
 
                 case "loginByProductKey.ws":
                     try
                     {
+                        client.httpClient = new HttpClient();
+
                         var content = new FormUrlEncodedContent(new[] { rData });
-                        response = request.PostAsync(fullRequestUrl, content).Result;
-                        responseStr = response.Content.ReadAsStringAsync().Result;
-                        responseStatus = response.StatusCode.ToString();
+                        client.httpClientResponse = client.httpClient.PostAsync(fullRequestUrl, content).Result;
+                        client.httpClientResponseStr = client.httpClientResponse.Content.ReadAsStringAsync().Result;
+                        client.httpClientResponseStatus = client.httpClientResponse.StatusCode.ToString();
                     }
                     catch (System.AggregateException e)
                     {
 
-                        responseStatus += e.InnerException.InnerException.Message;
+                        client.httpClientResponseStatus += e.InnerException.InnerException.Message;
 
                     }
                     catch (HttpRequestException hE)
                     {
-                        responseStatus += hE.Message;
+                        client.httpClientResponseStatus += hE.Message;
                     }
                     break;
 
                 case "customer.ws":
-                    if (client != null)
+                    if (client != null && client.httpClient != null)
                     {
-                        request = client.httpClient;
-
                         if (client.httpClientResponseStatus == "OK")
                         {
                             try
                             {
                                 var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
-                                response = request.PutAsync(fullRequestUrl, content).Result;
-                                responseStr = response.Content.ReadAsStringAsync().Result;
-                                responseStatus = response.StatusCode.ToString();
+                                client.httpClientResponse = client.httpClient.PutAsync(fullRequestUrl, content).Result;
+                                client.httpClientResponseStr = client.httpClientResponse.Content.ReadAsStringAsync().Result;
+                                client.httpClientResponseStatus = client.httpClientResponse.StatusCode.ToString();
                             }
                             catch (System.AggregateException e)
                             {
-                                responseStatus += e.InnerException.InnerException.Message + " | in customer create request by PK after login by PK.";
+                                client.httpClientResponseStatus += e.InnerException.InnerException.Message + " | in customer create request by PK after login by PK.";
                             }
                             catch (HttpRequestException hE)
                             {
-                                responseStatus += hE.Message + " | in customer create request by PK after login by PK.";
+                                client.httpClientResponseStatus += hE.Message + " | in customer create request by PK after login by PK.";
                             }
-                        }
-                        else
-                        {
-                            response = client.httpClientResponse;
-                            responseStr = client.httpClientResponseStr;
-                            responseStatus = client.httpClientResponseStatus;
                         }
                     }
                     else
                     {
-                        responseStatus = "Not set HttpClient instance.";
+                        client.httpClientResponseStatus = "Not set HttpClient instance.";
                     }
                     break;
 
                 case "productKey":
-                    if (client != null)
+                    if (client != null && client.httpClient != null)
                     {
-                        request = client.httpClient;
-
                         if (client.httpClientResponseStatus == "OK")
                         {
                             try
                             {
                                 if (method == HttpMethod.Get) {
-                                    response = request.GetAsync(fullRequestUrl).Result;
+                                    client.httpClientResponse = client.httpClient.GetAsync(fullRequestUrl).Result;
                                 } else if (method == HttpMethod.Post) {
                                     var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
-                                    response = request.PostAsync(fullRequestUrl, content).Result;
+                                    client.httpClientResponse = client.httpClient.PostAsync(fullRequestUrl, content).Result;
                                 }
 
-                                responseStr = response.Content.ReadAsStringAsync().Result;
-                                responseStatus = response.StatusCode.ToString();
+                                client.httpClientResponseStr = client.httpClientResponse.Content.ReadAsStringAsync().Result;
+                                client.httpClientResponseStatus = client.httpClientResponse.StatusCode.ToString();
 
-                                if (responseStatus == "OK" && method == HttpMethod.Get)
+                                if (client.httpClientResponseStatus == "OK" && method == HttpMethod.Get)
                                 {
-                                    XDocument tmpPKInfo = XDocument.Parse(responseStr);
+                                    XDocument tmpPKInfo = XDocument.Parse(client.httpClientResponseStr);
                                     string tmpResponseStr = "";
 
                                     if (!string.IsNullOrEmpty(tmpPKInfo.Root.Element("customerId").Value))
                                     {
-                                        tmpResponseStr = GetRequest("customer/" + tmpPKInfo.Root.Element("customerId").Value + ".ws", HttpMethod.Get, new KeyValuePair<string, string>(null, null), new RequestData(request, response, responseStr, responseStatus)).httpClientResponseStr;
+                                        tmpResponseStr = GetRequest("customer/" + tmpPKInfo.Root.Element("customerId").Value + ".ws", HttpMethod.Get, new KeyValuePair<string, string>(null, null), new RequestData(client.httpClient, client.httpClientResponse, client.httpClientResponseStr, client.httpClientResponseStatus)).httpClientResponseStr;
 
                                         if (!string.IsNullOrEmpty(tmpResponseStr))
                                         {
-                                            responseStr = responseStr.Replace("<customerId>" + tmpPKInfo.Root.Element("customerId").Value + "</customerId>", "<customerId>" + tmpPKInfo.Root.Element("customerId").Value + "</customerId>" + "<customerEmail>" + tmpResponseStr + "</customerEmail>");
+                                            client.httpClientResponseStr = client.httpClientResponseStr.Replace("<customerId>" + tmpPKInfo.Root.Element("customerId").Value + "</customerId>", "<customerId>" + tmpPKInfo.Root.Element("customerId").Value + "</customerId>" + "<customerEmail>" + tmpResponseStr + "</customerEmail>");
                                         }
                                     }
                                 }
                             }
                             catch (System.AggregateException e)
                             {
-                                responseStatus += e.InnerException.InnerException.Message + " | in get info request after login by PK.";
+                                client.httpClientResponseStatus += e.InnerException.InnerException.Message + " | in get info request after login by PK.";
                             }
                             catch (HttpRequestException hE)
                             {
-                                responseStatus += hE.Message + " | in get info request after login by PK.";
+                                client.httpClientResponseStatus += hE.Message + " | in get info request after login by PK.";
                             }
-                        }
-                        else
-                        {
-                            response = client.httpClientResponse;
-                            responseStr = client.httpClientResponseStr;
-                            responseStatus = client.httpClientResponseStatus;
                         }
                     }
                     else
                     {
-                        responseStatus = "Not set HttpClient instance.";
+                        client.httpClientResponseStatus = "Not set HttpClient instance.";
                     }
                     break;
 
                 case "activation.ws":
-                    if (client != null)
+                    if (client != null && client.httpClient != null)
                     {
-                        request = client.httpClient;
-
                         if (client.httpClientResponseStatus == "OK")
                         {
                             try
                             {
                                 var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
-                                response = request.PostAsync(fullRequestUrl, content).Result;
-                                responseStr = response.Content.ReadAsStringAsync().Result;
-                                responseStatus = response.StatusCode.ToString();
+                                client.httpClientResponse = client.httpClient.PostAsync(fullRequestUrl, content).Result;
+                                client.httpClientResponseStr = client.httpClientResponse.Content.ReadAsStringAsync().Result;
+                                client.httpClientResponseStatus = client.httpClientResponse.StatusCode.ToString();
                             }
                             catch (System.AggregateException e)
                             {
-                                responseStatus += e.InnerException.InnerException.Message + " | in activate request after login by PK.";
+                                client.httpClientResponseStatus += e.InnerException.InnerException.Message + " | in activate request after login by PK.";
                             }
                             catch (HttpRequestException hE)
                             {
-                                responseStatus += hE.Message + " | in activate request after login by PK.";
+                                client.httpClientResponseStatus += hE.Message + " | in activate request after login by PK.";
                             }
-                        }
-                        else
-                        {
-                            response = client.httpClientResponse;
-                            responseStr = client.httpClientResponseStr;
-                            responseStatus = client.httpClientResponseStatus;
                         }
                     }
                     else
                     {
-                        responseStatus = "Not set HttpClient instance.";
+                        client.httpClientResponseStatus = "Not set HttpClient instance.";
                     }
                     break;
 
                 case "target.ws":
                     try {
+                        client.httpClient = new HttpClient();
+
                         var content = new StringContent(rData.Value, Encoding.UTF8, "application/xml");
-                        response = request.PostAsync(fullRequestUrl, content).Result;
-                        responseStr = response.Content.ReadAsStringAsync().Result;
-                        responseStatus = response.StatusCode.ToString();
+                        client.httpClientResponse = client.httpClient.PostAsync(fullRequestUrl, content).Result;
+                        client.httpClientResponseStr = client.httpClientResponse.Content.ReadAsStringAsync().Result;
+                        client.httpClientResponseStatus = client.httpClientResponse.StatusCode.ToString();
                     }
                     catch (System.AggregateException e)
                     {
-                        responseStatus += e.InnerException.InnerException.Message + " | in get update by C2V request.";
+                        client.httpClientResponseStatus += e.InnerException.InnerException.Message + " | in get update by C2V request.";
                     }
                     catch (HttpRequestException hE)
                     {
-                        responseStatus += hE.Message + " | in get update by C2V request.";
+                        client.httpClientResponseStatus += hE.Message + " | in get update by C2V request.";
                     }
                     break;
 
                 case "customer":
-                    if (client != null) {
-                        request = client.httpClient;
-
+                    if (client != null && client.httpClient != null) 
+                    {
                         if (client.httpClientResponseStatus == "OK")
                         {
                             try
                             {
-                                response = request.GetAsync(fullRequestUrl).Result;
-                                responseStr = response.Content.ReadAsStringAsync().Result;
-                                responseStatus = response.StatusCode.ToString();
+                                client.httpClientResponse = client.httpClient.GetAsync(fullRequestUrl).Result;
+                                client.httpClientResponseStr = client.httpClientResponse.Content.ReadAsStringAsync().Result;
+                                client.httpClientResponseStatus = client.httpClientResponse.StatusCode.ToString();
 
-                                if (responseStatus == "OK")
+                                if (client.httpClientResponseStatus == "OK")
                                 {
-                                    XDocument tmpCustomerInfo = XDocument.Parse(responseStr);
+                                    XDocument tmpCustomerInfo = XDocument.Parse(client.httpClientResponseStr);
 
-                                    responseStr = tmpCustomerInfo.Root.Element("defaultContact").Element("emailId").Value;
+                                    client.httpClientResponseStr = tmpCustomerInfo.Root.Element("defaultContact").Element("emailId").Value;
                                 }
                             }
                             catch (System.AggregateException e)
                             {
-                                responseStatus += e.InnerException.InnerException.Message + " | in get info request about customer ID after login by PK.";
+                                client.httpClientResponseStatus += e.InnerException.InnerException.Message + " | in get info request about customer ID after login by PK.";
                             }
                             catch (HttpRequestException hE)
                             {
-                                responseStatus += hE.Message + " | in get info request about customer ID after login by PK.";
+                                client.httpClientResponseStatus += hE.Message + " | in get info request about customer ID after login by PK.";
                             }
                         }
-                        else
-                        {
-                            response = client.httpClientResponse;
-                            responseStr = client.httpClientResponseStr;
-                            responseStatus = client.httpClientResponseStatus;
-                        }
                     } else {
-                        responseStatus = "Not set HttpClient instance.";
+                        client.httpClientResponseStatus = "Not set HttpClient instance.";
                     }
                     break;
 
                 default:
                     // Передали в качестве запроса что-то невразумительное
-                    responseStatus = "Something whrong...";
+                    client.httpClientResponseStatus = "Something whrong...";
                     break;
             }
 
-            return new RequestData(request, response, responseStr, responseStatus);
+            return client;
         }
     }
 }
