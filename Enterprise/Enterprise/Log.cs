@@ -5,7 +5,11 @@ namespace MyLogClass
 {
     public class Log
     {
+        #region Init Params
         private static object sync = new object();
+        #endregion
+
+        #region Methods: Write
         public static void Write(string eventString)
         {
             try {
@@ -21,5 +25,6 @@ namespace MyLogClass
                 //перехватываем всё и ничего не делаем
             }
         }
+        #endregion
     }
 }

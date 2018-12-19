@@ -489,9 +489,9 @@
             this.tabPageError.Controls.Add(this.buttonCloseErrorTab);
             this.tabPageError.Controls.Add(this.textBoxErrorDescErrorTab);
             this.tabPageError.Controls.Add(this.labelErrorDescErrorTab);
-            this.tabPageError.Location = new System.Drawing.Point(4, 5);
+            this.tabPageError.Location = new System.Drawing.Point(4, 14);
             this.tabPageError.Name = "tabPageError";
-            this.tabPageError.Size = new System.Drawing.Size(843, 439);
+            this.tabPageError.Size = new System.Drawing.Size(843, 430);
             this.tabPageError.TabIndex = 3;
             this.tabPageError.Text = "Error";
             this.tabPageError.UseVisualStyleBackColor = true;

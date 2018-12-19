@@ -1,15 +1,17 @@
 ﻿using System;
 using System.IO;
 using System.Windows.Forms;
-using System.Windows;
 using MyLogClass;
 
 namespace Enterprise
 {
     public partial class FormLicense : Form
     {
+        #region Init param's
         Enterprise.settings.enterprise appSettings = new settings.enterprise();
+        #endregion
 
+        #region Init(default constructor) / Init(constructor with param) Load 
         public FormLicense()
         {
             InitializeComponent();
@@ -28,6 +30,41 @@ namespace Enterprise
             }
         }
 
+        private void FormLicense_Load(object sender, EventArgs e)
+        {
+            FormLicense lForm = (FormLicense)Application.OpenForms["FormLicense"];
+            bool isSetAlpFormLicense = FormMain.alp.SetLanguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, lForm);
+
+            labelUpdateStatus.Dock = DockStyle.Top;
+            labelUpdateStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            labelUpdateStatus.AutoSize = false;
+
+            linkLabelSaveV2C.Dock = DockStyle.Right;
+
+            textBoxAID.Text = FormAbout.aid;
+            textBoxKeyID.Text = FormAbout.protectionKeyId;
+
+            if (FormMain.adIsEnabled == false)
+            {
+                textBoxAID.Visible = false;
+                labelAID.Visible = false;
+
+                textBoxKeyID.Location = new System.Drawing.Point(55, 40);
+                labelKeyID.Location = new System.Drawing.Point(6, 46);
+            }
+            else
+            {
+                textBoxAID.Visible = true;
+                labelAID.Visible = true;
+
+                textBoxKeyID.Location = new System.Drawing.Point(55, 52);
+                labelKeyID.Location = new System.Drawing.Point(6, 58);
+            }
+
+        }
+        #endregion
+
+        #region Link Label
         private void linkLabelSaveV2C_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Stream myStream;
@@ -51,35 +88,6 @@ namespace Enterprise
                 //----------------------------------------------------------------------------
             }
         }
-
-        private void FormLicense_Load(object sender, EventArgs e)
-        {
-            FormLicense lForm = (FormLicense)Application.OpenForms["FormLicense"];
-            bool isSetAlpFormLicense = FormMain.alp.SetLenguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, lForm);
-
-            labelUpdateStatus.Dock = DockStyle.Top;
-            labelUpdateStatus.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            labelUpdateStatus.AutoSize = false;
-
-            linkLabelSaveV2C.Dock = DockStyle.Right;
-
-            textBoxAID.Text = FormAbout.aid;
-            textBoxKeyID.Text = FormAbout.protectionKeyId;
-
-            if (FormMain.adIsEnabled == false) {
-                textBoxAID.Visible = false;
-                labelAID.Visible = false;
-
-                textBoxKeyID.Location = new System.Drawing.Point(55,40);
-                labelKeyID.Location = new System.Drawing.Point(6, 46);
-            } else {
-                textBoxAID.Visible = true;
-                labelAID.Visible = true;
-
-                textBoxKeyID.Location = new System.Drawing.Point(55, 52);
-                labelKeyID.Location = new System.Drawing.Point(6, 58);
-            }
-            
-        }
+        #endregion
     }
 }

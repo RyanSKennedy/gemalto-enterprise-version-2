@@ -16,6 +16,13 @@ namespace Enterprise
 {
     public partial class FormAbout : Form
     {
+        #region Init param's
+        public static string hInfo;
+        public static string aid = "";
+        public static string v2c = "";
+        public static string protectionKeyId = "";
+        public static string getPKInfoStatus = "";
+        public static string productKey = "";
         Point textBoxPKWithRadioButtonPoint = new Point(100, 24);
         Point textBoxPKDefaultPoint = new Point(12, 24);
         Point buttonGetTrialVisiblePoint = new Point(8, 47);
@@ -23,26 +30,24 @@ namespace Enterprise
         Size textBoxPKWithRadioButtonSize = new Size(134, 22);
         Size textBoxPKDefaultSize = new Size(220, 22);
         Enterprise.settings.enterprise appSettings = new settings.enterprise();
-        public static SentinelEMSClass sentinelObject = new SentinelEMSClass(FormMain.eUrl);
-        public static RequestData instance = new RequestData();
         public HaspStatus hStatus = new HaspStatus();
-        public static string hInfo;
-        public static string aid = "";
-        public static string v2c = "";
-        public static string protectionKeyId = "";
-        public static string getPKInfoStatus = "";
-        public static string productKey = "";
+        public static SentinelEMSClass sentinelObject = new SentinelEMSClass(FormMain.eUrl);
+        public static RequestData instance;
         public static XDocument xmlKeysInfo;
         public static AvaliableKeys[] avalibleKeys;
         FormLicense LicenseWindow;
         FormKeys KeysForSelect;
         FormRegistration RegistrationWindow;
+        #endregion
 
+        #region Create Struct
         public struct AvaliableKeys {
             public string keyId;
             public string keyType;
         }
+        #endregion
 
+        #region Init / Load / Closing
         public FormAbout()
         {
             InitializeComponent();
@@ -70,7 +75,7 @@ namespace Enterprise
         private void FormAbout_Load(object sender, EventArgs e)
         {
             FormAbout aForm = (FormAbout)Application.OpenForms["FormAbout"];
-            bool isSetAlpFormAbout = FormMain.alp.SetLenguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, aForm);
+            bool isSetAlpFormAbout = FormMain.alp.SetLanguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, aForm);
 
             if (!string.IsNullOrEmpty(FormMain.curentKeyId) && (FormMain.buttonAccountingEnabled == true || FormMain.buttonStockEnabled == true || FormMain.buttonStaffEnabled == true))
             {
@@ -130,7 +135,9 @@ namespace Enterprise
         {
             if (appSettings.enableLogs) Log.Write("Закрываем окно \"О программе\"");
         }
+        #endregion
 
+        #region Radio Buttons
         private void radioButtonByPK_CheckedChanged(object sender, EventArgs e)
         {
             buttonGetUpdateByKeyID.Enabled = false;
@@ -146,206 +153,254 @@ namespace Enterprise
 
             textBoxPK.Text = "";
         }
+        #endregion
 
+        #region Buttons
         private void buttonActivatePK_Click(object sender, EventArgs e)
         {
             productKey = textBoxPK.Text;
-
-            if (FormMain.nActMechanism) {
-                if (Regex.IsMatch(productKey, SentinelSettings.SentinelData.regExForValidatingPK)) {
-                    // если регулярку проходит, пробуем выполнить логин в EMS по ключу активации
+            if (productKey.StartsWith("\t") != true && productKey.StartsWith(" ") != true && productKey.EndsWith(" ") != true && Regex.IsMatch(productKey, SentinelSettings.SentinelData.regExForValidatingPK))
+            {
+                // если регулярку проходит, пробуем выполнить логин в EMS по ключу активации
+                if (FormMain.nActMechanism)
+                {
+                    #region new act code
+                    instance = new RequestData();
                     instance = sentinelObject.GetRequest("loginByProductKey.ws", HttpMethod.Post, new KeyValuePair<string, string>("productKey", productKey));
                     instance = sentinelObject.GetRequest("productKey/" + productKey + ".ws", HttpMethod.Get, new KeyValuePair<string, string>("productKey", productKey), instance);
 
-                    if (!string.IsNullOrEmpty(instance.httpClientResponseStr)) {
+                    if (!string.IsNullOrEmpty(instance.httpClientResponseStr) && instance.httpClientResponseStatus == "OK")
+                    {
                         if (appSettings.enableLogs) Log.Write("Открываем окно \"Визард регистрации\"");
                         RegistrationWindow.ShowDialog();
                     }
-                } else {
-                    if (appSettings.enableLogs) Log.Write("Введён не валидный ProductKey..." + Environment.NewLine);
-                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Invalid ProductKey!"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+                    else
+                    {
+                        if (appSettings.enableLogs) Log.Write("Ответ от сервера содержит ошибку: " + instance.httpClientResponseStatus + Environment.NewLine);
+                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error in login/get_info operation by PK"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+                    }
+                    #endregion
                 }
-            } else {
-                #region old act code
-                string actStatus = "";
+                else
+                {
+                    #region old act code
+                    string actStatus = "";
 
-                string actXml = "";
+                    string actXml = "";
 
-                DialogResult dialogResultIfKeyIsExist = DialogResult.None, dialogResultForNewKey = DialogResult.None;
+                    DialogResult dialogResultIfKeyIsExist = DialogResult.None, dialogResultForNewKey = DialogResult.None;
 
-                // Проверка есть ли вообще какой-либо ключ нашей серии на ПК
-                if (string.IsNullOrEmpty(FormMain.curentKeyId)) {
-                    string tScope, tFormat;
+                    // Проверка есть ли вообще какой-либо ключ нашей серии на ПК
+                    if (string.IsNullOrEmpty(FormMain.curentKeyId))
+                    {
+                        string tScope, tFormat;
 
-                    tScope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
-                                "<haspscope>" + 
-                                    "<license_manager hostname=\"localhost\"/>" + 
-                                "</haspscope>";
+                        tScope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                                    "<haspscope>" +
+                                        "<license_manager hostname=\"localhost\"/>" +
+                                    "</haspscope>";
 
-                    tFormat = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
-                                "<haspformat root=\"hasp_info\">" +
-                                    "<hasp>" +
-                                        "<element name=\"id\"/>" + 
-                                        "<element name=\"type\"/>" + 
-                                    "</hasp>" +
-                                "</haspformat>";
+                        tFormat = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                                    "<haspformat root=\"hasp_info\">" +
+                                        "<hasp>" +
+                                            "<element name=\"id\"/>" +
+                                            "<element name=\"type\"/>" +
+                                        "</hasp>" +
+                                    "</haspformat>";
 
-                    hStatus = Hasp.GetInfo(tScope, tFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
+                        hStatus = Hasp.GetInfo(tScope, tFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
+                        if (HaspStatus.StatusOk != hStatus)
+                        {
+                            if (appSettings.enableLogs) Log.Write("Ошибка запроса информации о доступных ключах, статус: " + hStatus);
+                        }
+                        else
+                        {
+                            if (appSettings.enableLogs) Log.Write("Результат выполнения запроса информации о ключах, статус: " + hStatus);
+                            if (appSettings.enableLogs) Log.Write("Вывод:" + Environment.NewLine + hInfo);
+
+                            xmlKeysInfo = XDocument.Parse(hInfo);
+                        }
+
+                        if (xmlKeysInfo != null)
+                        {
+                            avalibleKeys = new AvaliableKeys[xmlKeysInfo.Root.Elements("hasp").Count()];
+                            int i = 0;
+
+                            foreach (XElement el in xmlKeysInfo.Root.Elements())
+                            {
+                                avalibleKeys[i].keyId = el.Element("id").Value;
+                                avalibleKeys[i].keyType = el.Element("type").Value;
+                                i++;
+                            }
+                        }
+
+                        if (avalibleKeys.Count() > 1)
+                        {
+                            if (appSettings.enableLogs) Log.Write("Открываем окно выбора ключа для записи лицензии \"Ключи\"");
+                            dialogResultIfKeyIsExist = KeysForSelect.ShowDialog();
+                            if (dialogResultIfKeyIsExist == DialogResult.Cancel)
+                            {
+                                return;
+                            }
+                        }
+                        else if (avalibleKeys.Count() == 1)
+                        {
+                            dialogResultIfKeyIsExist = MessageBox.Show((FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Do you want to install license in exist Key").Replace("{0}", avalibleKeys[0].keyType).Replace("{1}", avalibleKeys[0].keyId)),
+                                FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Warning"), MessageBoxButtons.YesNoCancel);
+
+                            if (dialogResultIfKeyIsExist == DialogResult.Yes)
+                            {
+                                FormMain.curentKeyId = avalibleKeys[0].keyId;
+                            }
+                            else if (dialogResultIfKeyIsExist == DialogResult.No)
+                            {
+                                FormMain.curentKeyId = "";
+                            }
+                            else if (dialogResultIfKeyIsExist == DialogResult.Cancel)
+                            {
+                                return;
+                            }
+                        }
+                    }
+
+                    if (FormMain.curentKeyId == "" && dialogResultIfKeyIsExist != DialogResult.No && dialogResultIfKeyIsExist != DialogResult.Cancel)
+                    {
+                        dialogResultForNewKey = MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Do you want to install license in New SL Key?"),
+                                FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Warning"), MessageBoxButtons.YesNo);
+
+                        if (dialogResultForNewKey == DialogResult.Yes)
+                        {
+                            FormMain.curentKeyId = "";
+                        }
+                        else if (dialogResultForNewKey == DialogResult.No)
+                        {
+                            return;
+                        }
+                    }
+                    // =========================================================
+
+                    string aScope = (!string.IsNullOrEmpty(FormMain.curentKeyId)) ?
+                                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                                    "<haspscope>" +
+                                        "<hasp id=\"" + FormMain.curentKeyId + "\"/>" +
+                                    "</haspscope>"
+                                    :
+                                    "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                                    "<haspscope>" +
+                                        "<license_manager hostname=\"localhost\"/>" +
+                                    "</haspscope>";
+
+                    string aFormat = (!string.IsNullOrEmpty(FormMain.curentKeyId)) ?
+                                     "<haspformat format =\"updateinfo\"/>"
+                                     :
+                                     "<haspformat format=\"host_fingerprint\"/>";
+
+                    hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
                     if (HaspStatus.StatusOk != hStatus)
                     {
-                        if (appSettings.enableLogs) Log.Write("Ошибка запроса информации о доступных ключах, статус: " + hStatus);
+                        if (appSettings.enableLogs) Log.Write("Ошибка запроса C2V, статус: " + hStatus);
+                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error in request C2V"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                     }
                     else
                     {
-                        if (appSettings.enableLogs) Log.Write("Результат выполнения запроса информации о ключах, статус: " + hStatus);
+                        if (appSettings.enableLogs) Log.Write("Результат выполнения запроса C2V, статус: " + hStatus);
                         if (appSettings.enableLogs) Log.Write("Вывод:" + Environment.NewLine + hInfo);
 
-                        xmlKeysInfo = XDocument.Parse(hInfo);
+                        actXml = hInfo;
                     }
 
-                    if(xmlKeysInfo != null) {
-                        avalibleKeys = new AvaliableKeys[xmlKeysInfo.Root.Elements("hasp").Count()];
-                        int i = 0;
+                    if (!string.IsNullOrEmpty(actXml))
+                    {
+                        actXml = "<activation>" +
+                                       "<activationInput>" +
+                                          "<activationAttribute>" +
+                                             "<attributeValue>" +
+                                                "<![CDATA[" + actXml + "]]>" +
+                                             "</attributeValue>" +
+                                             "<attributeName>C2V</attributeName>" +
+                                          "</activationAttribute>" +
+                                          "<comments>New Comments Added By Web Services</comments>" +
+                                       "</activationInput>" +
+                                    "</activation>";
 
-                        foreach (XElement el in xmlKeysInfo.Root.Elements())
+                        instance = new RequestData();
+                        instance = sentinelObject.GetRequest("loginByProductKey.ws", HttpMethod.Post, new KeyValuePair<string, string>("productKey", productKey));
+                        instance = sentinelObject.GetRequest("productKey/" + productKey + "/activation.ws", HttpMethod.Post, new KeyValuePair<string, string>("activationXml", actXml), instance);
+                        actStatus = instance.httpClientResponseStr;
+                    }
+                    else
+                    {
+                        if (appSettings.enableLogs) Log.Write("Введён не валидный ProductKey или C2V..." + Environment.NewLine);
+                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Invalid ProductKey or C2V"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+                    }
+
+                    if (actStatus != "")
+                    {
+                        if (!string.IsNullOrEmpty(actStatus) && !actStatus.Contains("Error") && !actStatus.Contains("error") && !actStatus.Contains("pending"))
                         {
-                            avalibleKeys[i].keyId = el.Element("id").Value;
-                            avalibleKeys[i].keyType = el.Element("type").Value;
-                            i++;
-                        }
-                    }
+                            XDocument licXml = XDocument.Parse(actStatus);
 
-                    if (avalibleKeys.Count() > 1)
-                    {
-                        if (appSettings.enableLogs) Log.Write("Открываем окно выбора ключа для записи лицензии \"Ключи\"");
-                        dialogResultIfKeyIsExist = KeysForSelect.ShowDialog();
-                        if (dialogResultIfKeyIsExist == DialogResult.Cancel)
+                            foreach (XElement el in licXml.Root.Elements())
+                            {
+                                foreach (XElement elAid in el.Elements("AID"))
+                                {
+                                    aid = (!string.IsNullOrEmpty(elAid.Value)) ? elAid.Value : aid;
+                                }
+
+                                foreach (XElement elProtectionKeyId in el.Elements("protectionKeyId"))
+                                {
+                                    protectionKeyId = (!string.IsNullOrEmpty(elProtectionKeyId.Value)) ? elProtectionKeyId.Value : protectionKeyId;
+                                }
+
+                                foreach (XElement elActivationString in el.Elements("activationString"))
+                                {
+                                    v2c = (!string.IsNullOrEmpty(elActivationString.Value)) ? elActivationString.Value : v2c;
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(v2c))
+                            {
+                                string acknowledgeXml = "";
+
+                                hStatus = Hasp.Update(v2c, ref acknowledgeXml);
+                                if (HaspStatus.StatusOk != hStatus)
+                                {
+                                    if (appSettings.enableLogs) Log.Write("Ошибка применения V2C массива с лицензией на PC, статус: " + hStatus);
+                                    if (appSettings.enableLogs) Log.Write("V2C: " + Environment.NewLine + v2c);
+                                    if (appSettings.enableLogs) Log.Write("Открываем окно \"Лицензия\"");
+
+                                    LicenseWindow = new FormLicense(false);
+                                    LicenseWindow.ShowDialog();
+                                }
+                                else
+                                {
+                                    if (appSettings.enableLogs) Log.Write("Результат применения V2C массива с лицензией на PC, статус: " + hStatus);
+                                    if (appSettings.enableLogs) Log.Write("V2C: " + Environment.NewLine + v2c);
+                                    if (appSettings.enableLogs) Log.Write("Открываем окно \"Лицензия\"");
+
+                                    LicenseWindow = new FormLicense(true);
+                                    LicenseWindow.ShowDialog();
+                                }
+                            }
+                        }
+                        else if (actStatus.Contains("pending"))
                         {
-                            return;
-                        } 
-                    } else if (avalibleKeys.Count() == 1) {
-                        dialogResultIfKeyIsExist = MessageBox.Show((FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Do you want to install license in exist Key").Replace("{0}", avalibleKeys[0].keyType).Replace("{1}", avalibleKeys[0].keyId)),
-                            FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Warning"), MessageBoxButtons.YesNoCancel);
-
-                        if (dialogResultIfKeyIsExist == DialogResult.Yes) {
-                            FormMain.curentKeyId = avalibleKeys[0].keyId;
-                        } else if (dialogResultIfKeyIsExist == DialogResult.No) {
-                            FormMain.curentKeyId = "";
-                        } else if (dialogResultIfKeyIsExist == DialogResult.Cancel) {
-                            return;
+                            if (appSettings.enableLogs) Log.Write("Для ключа имеются неприменённые обновления, в начале примените эти обновления. Статус: " + actStatus);
+                            MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, actStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+                        }
+                        else
+                        {
+                            if (appSettings.enableLogs) Log.Write("Ответ от сервера пустой или содержит ошибку, статус: " + actStatus);
+                            MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, actStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                         }
                     }
+                    #endregion
                 }
-
-                if (FormMain.curentKeyId == "" && dialogResultIfKeyIsExist != DialogResult.No && dialogResultIfKeyIsExist != DialogResult.Cancel) {
-                    dialogResultForNewKey = MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Do you want to install license in New SL Key?"),
-                            FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Warning"), MessageBoxButtons.YesNo);
-
-                    if (dialogResultForNewKey == DialogResult.Yes)
-                    {
-                        FormMain.curentKeyId = "";
-                    }
-                    else if (dialogResultForNewKey == DialogResult.No)
-                    {
-                        return;
-                    }
-                }
-                // =========================================================
-
-                string aScope = (!string.IsNullOrEmpty(FormMain.curentKeyId)) ?
-                                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                                "<haspscope>" +
-                                    "<hasp id=\"" + FormMain.curentKeyId + "\"/>" +
-                                "</haspscope>"
-                                :
-                                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                                "<haspscope>" +
-                                    "<license_manager hostname=\"localhost\"/>" +
-                                "</haspscope>";
-
-                string aFormat = (!string.IsNullOrEmpty(FormMain.curentKeyId)) ?
-                                 "<haspformat format =\"updateinfo\"/>"
-                                 :
-                                 "<haspformat format=\"host_fingerprint\"/>";
-
-                hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
-                if (HaspStatus.StatusOk != hStatus) {
-                    if (appSettings.enableLogs) Log.Write("Ошибка запроса C2V, статус: " + hStatus);
-                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error in request C2V"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
-                } else {
-                    if (appSettings.enableLogs) Log.Write("Результат выполнения запроса C2V, статус: " + hStatus);
-                    if (appSettings.enableLogs) Log.Write("Вывод:" + Environment.NewLine + hInfo);
-
-                    actXml = hInfo;
-                }
-
-                if (!string.IsNullOrEmpty(actXml) && Regex.IsMatch(productKey, SentinelSettings.SentinelData.regExForValidatingPK)) {
-                    actXml = "<activation>" +
-                                   "<activationInput>" +
-                                      "<activationAttribute>" +
-                                         "<attributeValue>" +
-                                            "<![CDATA[" + actXml + "]]>" +
-                                         "</attributeValue>" +
-                                         "<attributeName>C2V</attributeName>" +
-                                      "</activationAttribute>" +
-                                      "<comments>New Comments Added By Web Services</comments>" +
-                                   "</activationInput>" +
-                                "</activation>";
-
-                    actStatus = sentinelObject.GetRequest("productKey/" + productKey + "/activation.ws", HttpMethod.Post, new KeyValuePair<string, string>("activationXml", actXml)).httpClientResponseStr;
-                } else {
-                    if (appSettings.enableLogs) Log.Write("Введён не валидный ProductKey или C2V..." + Environment.NewLine);
-                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Invalid ProductKey or C2V"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
-                }
-
-                if (actStatus != "") {
-                    if (!string.IsNullOrEmpty(actStatus) && !actStatus.Contains("Error") && !actStatus.Contains("error") && !actStatus.Contains("pending")) {
-                        XDocument licXml = XDocument.Parse(actStatus);
-
-                        foreach (XElement el in licXml.Root.Elements()) {
-                            foreach (XElement elAid in el.Elements("AID")) {
-                                aid = (!string.IsNullOrEmpty(elAid.Value)) ? elAid.Value : aid;
-                            }
-
-                            foreach (XElement elProtectionKeyId in el.Elements("protectionKeyId")) {
-                                protectionKeyId = (!string.IsNullOrEmpty(elProtectionKeyId.Value)) ? elProtectionKeyId.Value : protectionKeyId;
-                            }
-
-                            foreach (XElement elActivationString in el.Elements("activationString")) {
-                                v2c = (!string.IsNullOrEmpty(elActivationString.Value)) ? elActivationString.Value : v2c;
-                            }
-                        }
-
-                        if (!string.IsNullOrEmpty(v2c)) {
-                            string acknowledgeXml = "";
-
-                            hStatus = Hasp.Update(v2c, ref acknowledgeXml);
-                            if (HaspStatus.StatusOk != hStatus) {
-                                if (appSettings.enableLogs) Log.Write("Ошибка применения V2C массива с лицензией на PC, статус: " + hStatus);
-                                if (appSettings.enableLogs) Log.Write("V2C: " + Environment.NewLine + v2c);
-                                if (appSettings.enableLogs) Log.Write("Открываем окно \"Лицензия\"");
-
-                                LicenseWindow = new FormLicense(false);
-                                LicenseWindow.ShowDialog();
-                            } else {
-                                if (appSettings.enableLogs) Log.Write("Результат применения V2C массива с лицензией на PC, статус: " + hStatus);
-                                if (appSettings.enableLogs) Log.Write("V2C: " + Environment.NewLine + v2c);
-                                if (appSettings.enableLogs) Log.Write("Открываем окно \"Лицензия\"");
-
-                                LicenseWindow = new FormLicense(true);
-                                LicenseWindow.ShowDialog();
-                            }
-                        }
-                    } else if (actStatus.Contains("pending")) {
-                        if (appSettings.enableLogs) Log.Write("Для ключа имеются неприменённые обновления, в начале примените эти обновления. Статус: " + actStatus);
-                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, actStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
-                    }
-                    else {
-                        if (appSettings.enableLogs) Log.Write("Ответ от сервера пустой или содержит ошибку, статус: " + actStatus);
-                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, actStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
-                    }
-                }
-                #endregion
+            }
+            else
+            {
+                if (appSettings.enableLogs) Log.Write("Введён не валидный ProductKey...");
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Invalid ProductKey!"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
             }
         }
 
@@ -466,38 +521,6 @@ namespace Enterprise
             }
         }
 
-        protected override bool ProcessDialogKey(Keys keyData)
-        {
-            if (ckey(keyData, Keys.Alt, Keys.L)) { // Комбинация Alt+L
-                if (labelLicenseInfo.Visible) {
-                    labelLicenseInfo.Visible = false;
-                    textBoxLicenseInfo.Visible = false;
-                } else {
-                    labelLicenseInfo.Visible = true;
-                    textBoxLicenseInfo.Visible = true;
-                }
-            }
-
-            return base.ProcessDialogKey(keyData);
-        }
-
-        /// <summary>
-        /// Проверяет вхождение заданных комбинаций (keys) в исходную (keyData).
-        /// </summary>
-        /// <param name="keyData">Исходная комбинация.</param>
-        /// <param name="keys">Заданные комбинации.</param>
-        /// <returns>Возвращает True если все заданные комбинации входят в исходную, иначе False.</returns>
-        bool ckey(Keys keyData, params Keys[] keys)
-        {
-            if (keys == null) return false;
-
-            for (int i = 0; i < keys.Length; i++)
-                if ((keyData & keys[i]) != keys[i])
-                    return false;
-
-            return true;
-        }
-
         private void buttonGetTrial_Click(object sender, EventArgs e)
         {
             string trialLicense = FormMain.baseDir + Path.DirectorySeparatorChar + "trial_license";
@@ -538,5 +561,40 @@ namespace Enterprise
                 MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Not found trial license: \"trial_license\", -  in base dir"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
             }
         }
+        #endregion
+
+        #region Methods for check key combinations
+        protected override bool ProcessDialogKey(Keys keyData)
+        {
+            if (ckey(keyData, Keys.Alt, Keys.L)) { // Комбинация Alt+L
+                if (labelLicenseInfo.Visible) {
+                    labelLicenseInfo.Visible = false;
+                    textBoxLicenseInfo.Visible = false;
+                } else {
+                    labelLicenseInfo.Visible = true;
+                    textBoxLicenseInfo.Visible = true;
+                }
+            }
+
+            return base.ProcessDialogKey(keyData);
+        }
+
+        /// <summary>
+        /// Проверяет вхождение заданных комбинаций (keys) в исходную (keyData).
+        /// </summary>
+        /// <param name="keyData">Исходная комбинация.</param>
+        /// <param name="keys">Заданные комбинации.</param>
+        /// <returns>Возвращает True если все заданные комбинации входят в исходную, иначе False.</returns>
+        bool ckey(Keys keyData, params Keys[] keys)
+        {
+            if (keys == null) return false;
+
+            for (int i = 0; i < keys.Length; i++)
+                if ((keyData & keys[i]) != keys[i])
+                    return false;
+
+            return true;
+        }
+        #endregion
     }
 }

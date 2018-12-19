@@ -2,26 +2,27 @@
 using System;
 using System.IO;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Xml.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Aladdin.HASP;
+using System.Net.Http;
 
 namespace Enterprise
 {
     public partial class FormRegistration : Form
     {
+        #region Init param's
         static Enterprise.settings.enterprise appSettings = new settings.enterprise();
         public HaspStatus hStatus = new HaspStatus();
-        public static string hInfo;
+        public static string hInfo = "";
+        public static string v2c = "";
         public static string cEmail = "";
+        private bool isAlreadyRegistered = false;
         public static XDocument xmlKeysInfo;
+        #endregion
 
+        #region Init / Load / Closing
         public FormRegistration()
         {
             InitializeComponent();
@@ -30,42 +31,61 @@ namespace Enterprise
         private void FormRegistration_Load(object sender, EventArgs e)
         {
             FormRegistration rForm = (FormRegistration)Application.OpenForms["FormRegistration"];
-            bool isSetAlpFormAbout = FormMain.alp.SetLenguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, rForm);
+            bool isSetAlpFormAbout = FormMain.alp.SetLanguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, rForm);
 
+            if (appSettings.enableLogs) Log.Write("Загружаем информацию об используемом ключе активации...");
             textBoxPKInfoTab.Text = FormAbout.productKey;
             XDocument licenseInfo = XDocument.Parse(FormAbout.instance.httpClientResponseStr);
             textBoxInformationAboutLicenseInfoTab.Text = "Product: " + licenseInfo.Root.Element("productInfo").Attribute("productName").Value + Environment.NewLine;
             textBoxInformationAboutLicenseInfoTab.Text += "Avaliable activation for Product Key: " + licenseInfo.Root.Element("available").Value + Environment.NewLine;
             textBoxInformationAboutLicenseInfoTab.Text += "Registration required: " + licenseInfo.Root.Element("registrationRequired").Value + Environment.NewLine;
             textBoxInformationAboutLicenseInfoTab.Text += "Entitlement ID: " + licenseInfo.Root.Element("entitlementId").Value + Environment.NewLine;
-            if (!string.IsNullOrEmpty(licenseInfo.Root.Element("customerEmail").Value))
+            if (!string.IsNullOrEmpty(licenseInfo.Root.Element("customerId").Value))
             {
                 textBoxInformationAboutLicenseInfoTab.Text += "Customer: " + licenseInfo.Root.Element("customerEmail").Value + Environment.NewLine;
                 cEmail = licenseInfo.Root.Element("customerEmail").Value;
+                isAlreadyRegistered = true;
             }
             else
             {
                 cEmail = "";
+                isAlreadyRegistered = false;
             }
-
             
             switch (licenseInfo.Root.Element("registrationRequired").Value) {
                 case ("DESIRED"):
                     checkBoxSkipRegInfoTab.Visible = true;
-                    checkBoxSkipRegInfoTab.Enabled = true;
-                    checkBoxSkipRegInfoTab.Checked = false;
+                    if (isAlreadyRegistered)
+                    {
+                        checkBoxSkipRegInfoTab.Enabled = false;
+                        checkBoxSkipRegInfoTab.Checked = true;
+                    }
+                    else
+                    {
+                        checkBoxSkipRegInfoTab.Enabled = true;
+                        checkBoxSkipRegInfoTab.Checked = false;
+                    }
                     break;
 
                 case ("MANDATORY"):
                     checkBoxSkipRegInfoTab.Visible = true;
-                    checkBoxSkipRegInfoTab.Enabled = false;
-                    checkBoxSkipRegInfoTab.Checked = false;
+                    if (isAlreadyRegistered)
+                    {
+                        checkBoxSkipRegInfoTab.Enabled = false;
+                        checkBoxSkipRegInfoTab.Checked = true;
+                    }
+                    else
+                    {
+                        checkBoxSkipRegInfoTab.Enabled = false;
+                        checkBoxSkipRegInfoTab.Checked = false;
+                    }
                     break;
 
                 case ("NOT_REQUIRED"):
                     checkBoxSkipRegInfoTab.Visible = true;
                     checkBoxSkipRegInfoTab.Enabled = false;
                     checkBoxSkipRegInfoTab.Checked = true;
+                    isAlreadyRegistered = true;
                     break;
             }
         }
@@ -73,19 +93,24 @@ namespace Enterprise
         private void FormRegistration_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (appSettings.enableLogs) Log.Write("Закрываем \"Визард регистрации\"");
+            tabControlRegForm.SelectTab(0);
         }
+        #endregion
 
+        #region Next Buttons
         private void buttonNextInfoTab_Click(object sender, EventArgs e)
         {
             if (checkBoxSkipRegInfoTab.Checked)
             {
                 // если пропускаем регистрацию
+                if (appSettings.enableLogs) Log.Write("Выполняем переход на страничку выбора ключа (пропуская регистрацию)...");
                 tabControlRegForm.SelectTab(2);
                 radioButtonInstallLikeNewKeyConfirmTab.Select();
             }
             else
             {
                 // если регистрируемся
+                if (appSettings.enableLogs) Log.Write("Выполняем переход на страничку регистрации...");
                 tabControlRegForm.SelectTab(1);
                 
                 if (!string.IsNullOrEmpty(cEmail))
@@ -101,43 +126,255 @@ namespace Enterprise
             }
         }
 
+        private void buttonNextLoginTab_Click(object sender, EventArgs e)
+        {
+            if (isAlreadyRegistered == false)
+            {
+                bool validEmail = false, isNewUser = true;
+                string uEmail = "", uFirstName = "", uLastName = "", uDesc = "";
+
+                if (radioButtonLoginLoginTab.Checked == true)
+                {
+                    validEmail = FormMain.standartData.CheckEmail(textBoxEmailLoginTab.Text);
+                    isNewUser = false;
+                    uEmail = textBoxEmailLoginTab.Text;
+                }
+                else if (radioButtonRegNewLoginTab.Checked == true)
+                {
+                    validEmail = FormMain.standartData.CheckEmail(textBoxMailLoginTab.Text);
+                    isNewUser = true;
+                    uEmail = textBoxMailLoginTab.Text;
+                    uFirstName = textBoxFNLoginTab.Text;
+                    uLastName = textBoxLNLoginTab.Text;
+                    uDesc = textBoxDescLoginTab.Text;
+                }
+
+                if (!validEmail)
+                {
+                    ToolTip ttWrongEmail = new ToolTip();
+                    int VisibleTime = 3000;
+                    string ttWrongEmailText = "Incorrect e-mail, please check and correct!";
+
+                    if (radioButtonLoginLoginTab.Checked == true)
+                    {
+                        ttWrongEmail.Show(ttWrongEmailText, textBoxEmailLoginTab, 0, 20, VisibleTime);
+                    }
+                    else if (radioButtonRegNewLoginTab.Checked == true)
+                    {
+                        ttWrongEmail.Show(ttWrongEmailText, textBoxMailLoginTab, 0, 20, VisibleTime);
+                    }
+
+                    return;
+                }
+
+                if (uEmail == cEmail)
+                {
+                    if (appSettings.enableLogs) Log.Write("Регистрация не требуется, так как пользователь по ключу активации уже зарегистрирован, переходим дальше...");
+
+                    tabControlRegForm.SelectTab(2);
+                    radioButtonInstallLikeNewKeyConfirmTab.Select();
+                }
+                else
+                {
+                    if (isAlreadyRegistered == false)
+                    {
+                        if (isNewUser)
+                        {
+                            if (appSettings.enableLogs) Log.Write("Выполняем регистрацию нового пользователя...");
+                            // Default XML for update PK (set new customer by e-mail) 
+                            string newCustomerXml = "<customer>" +
+                                                        "<type>ind</type>" +
+                                                        "<enabled>true</enabled>" +
+                                                        "<description>" + uDesc + "</description>" +
+                                                        "<defaultContact>" +
+                                                            "<emailId>" + uEmail + "</emailId>" +
+                                                            "<firstName>" + uFirstName + "</firstName>" +
+                                                            "<lastName>" + uLastName + "</lastName>" +
+                                                        "</defaultContact>" +
+                                                    "</customer>";
+                            FormAbout.instance = FormAbout.sentinelObject.GetRequest("customer.ws", HttpMethod.Put, new KeyValuePair<string, string>("customerXml", newCustomerXml), FormAbout.instance);
+                        }
+                        else
+                        {
+                            if (appSettings.enableLogs) Log.Write("Выполняем логшин от имени существующего пользователя...");
+                            // Default XML for update PK (set exist customer by e-mail) 
+                            string existCustomerXml = "<productKey>" +
+                                                        "<productKeyId>" + FormAbout.productKey + "</productKeyId>" +
+                                                        "<customerEmail>" + uEmail + "</customerEmail>" +
+                                                      "</productKey>";
+                            FormAbout.instance = FormAbout.sentinelObject.GetRequest("productKey/" + FormAbout.productKey + ".ws", HttpMethod.Post, new KeyValuePair<string, string>("productKeyXml", existCustomerXml), FormAbout.instance);
+                        }
+
+                        if (FormAbout.instance.httpClientResponseStatus == "OK" || FormAbout.instance.httpClientResponseStatus == "Created")
+                        {
+                            if (appSettings.enableLogs) Log.Write("Регистрация / вход выполнен успешно, переходим дальше...");
+                            cEmail = uEmail;
+                            tabControlRegForm.SelectTab(2);
+                            radioButtonInstallLikeNewKeyConfirmTab.Select();
+                            isAlreadyRegistered = true;
+                        }
+                        else
+                        {
+                            if (appSettings.enableLogs) Log.Write("Ошибка при регистрации...");
+                            if (appSettings.enableLogs) Log.Write("Код ошибки: " + FormAbout.instance.httpClientResponseStatus);
+                            if (appSettings.enableLogs) Log.Write("Описание ошибки: " + FormAbout.instance.httpClientResponseStr);
+                            if (appSettings.enableLogs) Log.Write("Переходим на страничку с ошибкой...");
+
+                            tabControlRegForm.SelectTab(3); // error tab
+                            textBoxErrorDescErrorTab.Text = "Error: " + FormAbout.instance.httpClientResponseStatus + Environment.NewLine +
+                                FormAbout.instance.httpClientResponseStr + Environment.NewLine;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (appSettings.enableLogs) Log.Write("Регистрация не требуется, так как пользователь по ключу активации уже зарегистрирован, переходим дальше...");
+                tabControlRegForm.SelectTab(2);
+                radioButtonInstallLikeNewKeyConfirmTab.Select();
+            }
+        }
+
+        private void buttonNextConfirmTab_Click(object sender, EventArgs e)
+        {
+            KeyValuePair<string, string> requestedData = new KeyValuePair<string, string>();
+
+            if (radioButtonInstallLikeNewKeyConfirmTab.Checked == true)
+            {
+                requestedData = GetC2V(true);
+            }
+            else
+            {
+                requestedData = GetC2V(false, listBoxKeysConfirmTab.SelectedItem.ToString().Split(' ')[listBoxKeysConfirmTab.SelectedItem.ToString().Split(' ').Count() - 1]);
+            }
+
+            if (requestedData.Key == HaspStatus.StatusOk.ToString())
+            {
+                string actXml = "<activation>" +
+                                   "<activationInput>" +
+                                      "<activationAttribute>" +
+                                         "<attributeValue>" +
+                                            "<![CDATA[" + requestedData.Value + "]]>" +
+                                         "</attributeValue>" +
+                                         "<attributeName>C2V</attributeName>" +
+                                      "</activationAttribute>" +
+                                      "<comments>New Comments Added By Web Services</comments>" +
+                                   "</activationInput>" +
+                                "</activation>";
+
+                if (appSettings.enableLogs) Log.Write("Выполняем попытку активации...");
+
+                FormAbout.instance = FormAbout.sentinelObject.GetRequest("productKey/" + FormAbout.productKey + "/activation.ws", HttpMethod.Post, new KeyValuePair<string, string>("activationXml", actXml), FormAbout.instance);
+
+                if (FormAbout.instance.httpClientResponseStatus == "OK" || FormAbout.instance.httpClientResponseStatus == "Created")
+                {
+                    if (appSettings.enableLogs) Log.Write("Активации выполнена успешно, лицензия получена!");
+
+                    tabControlRegForm.SelectTab(4); // success tab
+
+                    XDocument licXml = XDocument.Parse(FormAbout.instance.httpClientResponseStr);
+
+                    foreach (XElement el in licXml.Root.Elements())
+                    {
+                        foreach (XElement elAid in el.Elements("AID"))
+                        {
+                            textBoxSuccessDescSuccessTab.Text += "AID: " + elAid.Value;
+                        }
+
+                        foreach (XElement elProtectionKeyId in el.Elements("protectionKeyId"))
+                        {
+                            textBoxSuccessDescSuccessTab.Text += "Protection Key ID: " + elProtectionKeyId.Value;
+                        }
+
+                        foreach (XElement elActivationString in el.Elements("activationString"))
+                        {
+                            v2c = elActivationString.Value;
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(v2c))
+                    {
+                        if (appSettings.enableLogs) Log.Write("Выполняем попытку приминения полученной лицензии...");
+
+                        string acknowledgeXml = "";
+
+                        hStatus = Hasp.Update(v2c, ref acknowledgeXml);
+                        if (HaspStatus.StatusOk != hStatus)
+                        {
+                            if (appSettings.enableLogs) Log.Write("Ошибка применения V2C массива с лицензией на ПК, статус: " + hStatus);
+                            if (appSettings.enableLogs) Log.Write("V2C: " + Environment.NewLine + v2c);
+
+                            textBoxSuccessDescSuccessTab.Text += "License file applied with error: " + hStatus.ToString() + Environment.NewLine +
+                                "License string: " + Environment.NewLine + v2c;
+                        }
+                        else
+                        {
+                            if (appSettings.enableLogs) Log.Write("Результат применения V2C массива с лицензией на ПК, статус: " + hStatus);
+                            if (appSettings.enableLogs) Log.Write("V2C: " + Environment.NewLine + v2c);
+
+                            textBoxSuccessDescSuccessTab.Text += "License file applied successfully!" + Environment.NewLine +
+                                "License string: " + Environment.NewLine + v2c;
+                        }
+                    }
+                }
+                else
+                {
+                    if (appSettings.enableLogs) Log.Write("Ошибка при активации...");
+                    if (appSettings.enableLogs) Log.Write("Код ошибки: " + FormAbout.instance.httpClientResponseStatus);
+                    if (appSettings.enableLogs) Log.Write("Описание ошибки: " + FormAbout.instance.httpClientResponseStr);
+                    if (appSettings.enableLogs) Log.Write("Переходим на страничку с ошибкой...");
+
+                    tabControlRegForm.SelectTab(3); // error tab
+                    textBoxErrorDescErrorTab.Text = "Error: " + FormAbout.instance.httpClientResponseStatus + Environment.NewLine +
+                        FormAbout.instance.httpClientResponseStr + Environment.NewLine;
+                }
+            }
+            else
+            {
+                tabControlRegForm.SelectTab(3); // error tab
+                textBoxErrorDescErrorTab.Text = "Error in collect C2V opertion." + Environment.NewLine +
+                    "Error code:" + requestedData.Key + Environment.NewLine;
+            }
+        }
+        #endregion
+
+        #region Back Buttons
         private void buttonBackLoginTab_Click(object sender, EventArgs e)
         {
+            if (appSettings.enableLogs) Log.Write("Выполняем возврат к окну с информацией о ключе активации...");
+
             tabControlRegForm.SelectTab(0);
             textBoxEmailLoginTab.Text = "";
         }
 
-        private void buttonNextLoginTab_Click(object sender, EventArgs e)
+        private void buttonBackConfirmTab_Click(object sender, EventArgs e)
         {
-            bool validEmail = false;
+            if (checkBoxSkipRegInfoTab.Checked == true)
+            {
+                // если пропускаем регистрацию
+                if (appSettings.enableLogs) Log.Write("Выполняем возврат к окну с информацией о ключе активации (пропуская окно регистрации)...");
 
-            if (radioButtonLoginLoginTab.Checked == true) {
-                validEmail = FormMain.standartData.CheckEmail(textBoxEmailLoginTab.Text);
-            } else if (radioButtonRegNewLoginTab.Checked == true) {
-                validEmail = FormMain.standartData.CheckEmail(textBoxMailLoginTab.Text);
+                tabControlRegForm.SelectTab(0);
             }
+            else
+            {
+                // если регистрируемся
+                if (appSettings.enableLogs) Log.Write("Выполняем возврат к окну регистрации...");
 
-            if (!validEmail) {
-                ToolTip ttWrongEmail = new ToolTip();
-                int VisibleTime = 3000;
-                string ttWrongEmailText = "Incorrect e-mail, please check and correct!";
-
-                if (radioButtonLoginLoginTab.Checked == true)
+                tabControlRegForm.SelectTab(1);
+                if (isAlreadyRegistered)
                 {
-                    ttWrongEmail.Show(ttWrongEmailText, textBoxEmailLoginTab, 0, 20, VisibleTime);
+                    radioButtonLoginLoginTab.Select();
+                    textBoxEmailLoginTab.Text = cEmail;
+                    radioButtonRegNewLoginTab.Enabled = false;
+                    checkBoxSkipRegInfoTab.Enabled = false;
+                    textBoxEmailLoginTab.Enabled = false;
                 }
-                else if (radioButtonRegNewLoginTab.Checked == true)
-                {
-                    ttWrongEmail.Show(ttWrongEmailText, textBoxMailLoginTab, 0, 20, VisibleTime);
-                }
-
-                return;
             }
-
-            tabControlRegForm.SelectTab(2);
-            radioButtonInstallLikeNewKeyConfirmTab.Select();
         }
+        #endregion
 
+        #region Radio Buttons
         private void radioButtonLoginLoginTab_CheckedChanged(object sender, EventArgs e)
         {
             // включаем
@@ -199,39 +436,49 @@ namespace Enterprise
             textBoxDescLoginTab.Enabled = true;
         }
 
-        private void buttonNextConfirmTab_Click(object sender, EventArgs e)
+        private void radioButtonInstallLikeNewKeyConfirmTab_CheckedChanged(object sender, EventArgs e)
         {
-            if (true)
-            {
-                // если активация прошла успешно
-                tabControlRegForm.SelectTab(4);
-            }
-            else
-            {
-                // если активация завершилась с ошибкой
-                tabControlRegForm.SelectTab(3);
-            }
+            listBoxKeysConfirmTab.Items.Clear();
+
+            labelAvaliableKeysConfirmTab.Enabled = false;
+            listBoxKeysConfirmTab.Enabled = false;
+            buttonRefreshKeyListConfirmTab.Enabled = false;
+            buttonNextConfirmTab.Enabled = true;
         }
 
-        private void buttonBackConfirmTab_Click(object sender, EventArgs e)
+        private void radioButtonInstallInExistKeyConfirmTab_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBoxSkipRegInfoTab.Checked == true)
-            {
-                // если пропускаем регистрацию
-                tabControlRegForm.SelectTab(0);
-            }
-            else
-            {
-                // если регистрируемся
-                tabControlRegForm.SelectTab(1);
-            }
-        }
+            labelAvaliableKeysConfirmTab.Enabled = true;
+            listBoxKeysConfirmTab.Enabled = true;
+            buttonRefreshKeyListConfirmTab.Enabled = true;
+            buttonNextConfirmTab.Enabled = false;
 
+            RefreshListOfKeys();
+        }
+        #endregion
+
+        #region Close / Finish / Refresh
         private void buttonCloseErrorTab_Click(object sender, EventArgs e)
         {
+            if (appSettings.enableLogs) Log.Write("Закрываем Визард регистрации (при ошибке)...");
+            tabControlRegForm.SelectTab(0);
             ActiveForm.Close();
         }
 
+        private void buttonFinishSuccessTab_Click(object sender, EventArgs e)
+        {
+            if (appSettings.enableLogs) Log.Write("Закрываем Визард регистрации (при успехе)...");
+            tabControlRegForm.SelectTab(0);
+            ActiveForm.Close();
+        }
+
+        private void buttonRefreshKeyListConfirmTab_Click(object sender, EventArgs e)
+        {
+            RefreshListOfKeys();
+        }
+        #endregion
+
+        #region Link Labels
         private void linkLabelSaveV2CErrorTab_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             SaveFile(""); // тут нужно передать в качестве параметра строку с V2C массивом
@@ -239,9 +486,11 @@ namespace Enterprise
 
         private void linkLabelSaveV2CSuccessTab_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            SaveFile(""); // тут нужно передать в качестве параметра строку с V2C массивом
+            SaveFile(v2c); // тут нужно передать в качестве параметра строку с V2C массивом
         }
+        #endregion
 
+        #region Internal methods: SaveFile / Refresh Keys / Get Locked Key List / Get C2V
         public void SaveFile(string savingData)
         {
             Stream myStream;
@@ -270,32 +519,6 @@ namespace Enterprise
             }
         }
 
-        private void buttonFinishSuccessTab_Click(object sender, EventArgs e)
-        {
-            ActiveForm.Close();
-            tabControlRegForm.SelectTab(0);
-        }
-
-        private void radioButtonInstallLikeNewKeyConfirmTab_CheckedChanged(object sender, EventArgs e)
-        {
-            listBoxKeysConfirmTab.Items.Clear();
-
-            labelAvaliableKeysConfirmTab.Enabled = false;
-            listBoxKeysConfirmTab.Enabled = false;
-            buttonRefreshKeyListConfirmTab.Enabled = false;
-            buttonNextConfirmTab.Enabled = true;
-        }
-
-        private void radioButtonInstallInExistKeyConfirmTab_CheckedChanged(object sender, EventArgs e)
-        {
-            labelAvaliableKeysConfirmTab.Enabled = true;
-            listBoxKeysConfirmTab.Enabled = true;
-            buttonRefreshKeyListConfirmTab.Enabled = true;
-            buttonNextConfirmTab.Enabled = false;
-
-            RefreshListOfKeys();
-        }
-
         private void RefreshListOfKeys()
         {
             listBoxKeysConfirmTab.Items.Clear();
@@ -304,22 +527,115 @@ namespace Enterprise
 
             if (avalibleKeys != null && avalibleKeys.Count() > 0)
             {
-                if (appSettings.enableLogs) Log.Write("Загружаем доступные ключи в контрол listBox");
+                if (appSettings.enableLogs) Log.Write("Загружаем доступные ключи...");
 
                 foreach (var el in avalibleKeys)
                 {
                     listBoxKeysConfirmTab.Items.Add(el);
                 }
             }
+            else
+            {
+                if (appSettings.enableLogs) Log.Write("Нет доступных ключей...");
+            }
 
             buttonNextConfirmTab.Enabled = false;
         }
 
-        private void buttonRefreshKeyListConfirmTab_Click(object sender, EventArgs e)
+        public static List<string> GetLockedKeyList()
         {
-            RefreshListOfKeys();
+            if (appSettings.enableLogs) Log.Write("Выполняем запрос на получения списка доступных ключей...");
+
+            XDocument xmlKeyInfo = new XDocument();
+            List<string> keysList = new List<string>();
+
+            string scope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                           "<haspscope>" +
+                           "  <license_manager hostname=\"localhost\"/>" +
+                           "</haspscope>";
+
+            string format =
+            "<haspformat root=\"hasp_info\">" +
+            "  <hasp>" +
+            "    <attribute name=\"id\" />" +
+            "    <attribute name=\"type\" />" +
+            "    <feature>" +
+            "             <attribute name=\"id\" />" +
+            "             <attribute name=\"locked\" />" +
+            "        </feature>" +
+            "  </hasp>" +
+            "</haspformat>";
+
+            string info = null;
+            HaspStatus status = Hasp.GetInfo(scope, format, FormMain.vCode[FormMain.batchCode], ref info);
+
+            if (HaspStatus.StatusOk != status)
+            {
+                //handle error
+                if (appSettings.enableLogs) Log.Write("Ошибка запроса информации во время приоритезации ключей, статус: " + status);
+
+                return null;
+            }
+
+            xmlKeyInfo = XDocument.Parse(info);
+            if (xmlKeyInfo != null)
+            {
+                foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
+                {
+                    bool isTrialKey = false;
+
+                    foreach (XElement elFeature in elHasp.Elements("feature"))
+                    {
+                        if (elFeature.Attribute("locked").Value.Contains("false")) isTrialKey = true;
+                    }
+
+                    if (!isTrialKey) keysList.Add(elHasp.Attribute("type").Value + " | Key ID = " + elHasp.Attribute("id").Value);
+                }
+            }
+
+            return keysList;
         }
 
+        private KeyValuePair<string, string> GetC2V(bool installNew = true, string keyId = "")
+        {
+            string scope = "", format = "", info = null;
+
+            if (installNew == true)
+            {
+                if (appSettings.enableLogs) Log.Write("Запрашиваем C2V для активации нового ключа...");
+
+                scope = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
+                                "<haspscope>" +
+                                "    <license_manager hostname=\"localhost\" />" +
+                                "</haspscope>";
+
+                format = "<haspformat format=\"host_fingerprint\"/>";
+            }
+            else
+            {
+                if (appSettings.enableLogs) Log.Write("Запрашиваем C2V для активации в существующий ключ с ID: " + keyId + "...");
+
+                scope = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
+                        "<haspscope>" +
+                        "    <hasp id=\"" + keyId + "\" />" +
+                        "</haspscope>";
+
+                format = "<haspformat format=\"updateinfo\"/>";
+            }
+
+            hStatus = Hasp.GetInfo(scope, format, FormMain.vCode[FormMain.batchCode], ref info);
+
+            if (HaspStatus.StatusOk != hStatus)
+            {
+                //handle error
+                if (appSettings.enableLogs) Log.Write("Ошибка запроса создания C2V, статус: " + hStatus);
+            }
+
+            return new KeyValuePair<string, string>(hStatus.ToString(), info);
+        }
+        #endregion
+
+        #region ListBox
         private void listBoxKeysConfirmTab_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (listBoxKeysConfirmTab.Items.Count > 0) {
@@ -328,7 +644,9 @@ namespace Enterprise
                 buttonNextConfirmTab.Enabled = false;
             }
         }
+        #endregion
 
+        #region TextBox for reg data
         private void textBoxFNLoginTab_TextChanged(object sender, EventArgs e)
         {
             if (!string.IsNullOrEmpty(textBoxFNLoginTab.Text) && !string.IsNullOrEmpty(textBoxLNLoginTab.Text) && !string.IsNullOrEmpty(textBoxMailLoginTab.Text)) {
@@ -373,57 +691,6 @@ namespace Enterprise
                 buttonNextLoginTab.Enabled = false;
             }
         }
-
-        public static List<string> GetLockedKeyList()
-        {
-            XDocument xmlKeyInfo = new XDocument();
-            List<string> keysList = new List<string>();
-
-            string scope = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-                           "<haspscope>" +
-                           "  <license_manager hostname=\"localhost\"/>" +
-                           "</haspscope>";
-
-            string format =
-            "<haspformat root=\"hasp_info\">" +
-            "  <hasp>" +
-            "    <attribute name=\"id\" />" +
-            "    <attribute name=\"type\" />" +
-            "    <feature>" +
-            "             <attribute name=\"id\" />" +
-            "             <attribute name=\"locked\" />" +
-            "        </feature>" +
-            "  </hasp>" +
-            "</haspformat>";
-
-            string info = null;
-            HaspStatus status = Hasp.GetInfo(scope, format, FormMain.vCode[FormMain.batchCode], ref info);
-
-            if (HaspStatus.StatusOk != status)
-            {
-                //handle error
-                if (appSettings.enableLogs) Log.Write("Ошибка запроса информации с ключа во время приоритезации ключей, статус: " + status);
-
-                return null;
-            }
-
-            xmlKeyInfo = XDocument.Parse(info);
-            if (xmlKeyInfo != null)
-            {
-                foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
-                {
-                    bool isTrialKey = false;
-
-                    foreach (XElement elFeature in elHasp.Elements("feature"))
-                    {
-                        if (elFeature.Attribute("locked").Value.Contains("false")) isTrialKey = true;
-                    }
-
-                    if (!isTrialKey) keysList.Add(elHasp.Attribute("type").Value + " | Key ID = " + elHasp.Attribute("id").Value);
-                }
-            }
-
-            return keysList;
-        }
+        #endregion
     }
 }
