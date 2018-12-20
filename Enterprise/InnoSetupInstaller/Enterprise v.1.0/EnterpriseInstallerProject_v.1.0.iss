@@ -21,7 +21,7 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-OutputBaseFilename=EnterpriseSetup
+OutputBaseFilename=EnterpriseSetup_v.1.0
 Compression=lzma
 SolidCompression=yes
 
@@ -43,6 +43,7 @@ Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-ver
 Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.1.0\hasp_windows_x64_demo.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.1.0\haspvlib_110659.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.1.0\SentinelConnector.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.1.0\SentinelSettings.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.1.0\Staff.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.1.0\Stock.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "\\Mac\Home\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.1.0\upclient.exe"; DestDir: "{app}"; Flags: ignoreversion

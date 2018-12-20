@@ -99,7 +99,6 @@
             this.textBoxPK.Name = "textBoxPK";
             this.textBoxPK.Size = new System.Drawing.Size(338, 31);
             this.textBoxPK.TabIndex = 4;
-            this.textBoxPK.Text = "b19a9257-e69d-4009-a37e-92a012899213";
             // 
             // buttonActivatePK
             // 

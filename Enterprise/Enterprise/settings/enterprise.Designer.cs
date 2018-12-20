@@ -169,7 +169,7 @@ namespace Enterprise.settings {
   </param>
   <param>
     <key>-l</key>
-    <value>en</value>
+    <value>ru</value>
   </param>
   <param>
     <key>-log</key>
