@@ -334,7 +334,7 @@ namespace Enterprise
                         MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Invalid ProductKey or C2V"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                     }
 
-                    if (actStatus != "")
+                    if (actStatus != "" && instance.httpClientResponseStatus == "OK")
                     {
                         if (!string.IsNullOrEmpty(actStatus) && !actStatus.Contains("Error") && !actStatus.Contains("error") && !actStatus.Contains("pending"))
                         {
@@ -393,6 +393,15 @@ namespace Enterprise
                             if (appSettings.enableLogs) Log.Write("Ответ от сервера пустой или содержит ошибку, статус: " + actStatus);
                             MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, actStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                         }
+                    }
+                    else
+                    {
+                        if (appSettings.enableLogs) Log.Write("Ошибка при активации...");
+                        if (appSettings.enableLogs) Log.Write("Код ошибки: " + instance.httpClientResponseStatus);
+                        if (appSettings.enableLogs) Log.Write("Описание ошибки: " + instance.httpClientResponseStr);
+
+                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error in activation:") + instance.httpClientResponseStatus + Environment.NewLine +
+                            FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error description:") + instance.httpClientResponseStr, FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                     }
                     #endregion
                 }
