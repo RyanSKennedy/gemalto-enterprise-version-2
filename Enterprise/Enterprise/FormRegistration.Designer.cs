@@ -172,9 +172,9 @@
             this.labelPKInfoTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.labelPKInfoTab.Location = new System.Drawing.Point(6, 6);
             this.labelPKInfoTab.Name = "labelPKInfoTab";
-            this.labelPKInfoTab.Size = new System.Drawing.Size(154, 25);
+            this.labelPKInfoTab.Size = new System.Drawing.Size(147, 25);
             this.labelPKInfoTab.TabIndex = 0;
-            this.labelPKInfoTab.Text = "Product Key: ";
+            this.labelPKInfoTab.Text = "Product Key:";
             // 
             // tabPageLoginOrRegNew
             // 
@@ -202,7 +202,7 @@
             this.tabPageLoginOrRegNew.Padding = new System.Windows.Forms.Padding(3);
             this.tabPageLoginOrRegNew.Size = new System.Drawing.Size(843, 439);
             this.tabPageLoginOrRegNew.TabIndex = 1;
-            this.tabPageLoginOrRegNew.Text = "Login or Reg new ";
+            this.tabPageLoginOrRegNew.Text = "Login or Reg new";
             this.tabPageLoginOrRegNew.UseVisualStyleBackColor = true;
             // 
             // labelReqDescValueLoginTab
@@ -489,9 +489,9 @@
             this.tabPageError.Controls.Add(this.buttonCloseErrorTab);
             this.tabPageError.Controls.Add(this.textBoxErrorDescErrorTab);
             this.tabPageError.Controls.Add(this.labelErrorDescErrorTab);
-            this.tabPageError.Location = new System.Drawing.Point(4, 14);
+            this.tabPageError.Location = new System.Drawing.Point(4, 5);
             this.tabPageError.Name = "tabPageError";
-            this.tabPageError.Size = new System.Drawing.Size(843, 430);
+            this.tabPageError.Size = new System.Drawing.Size(843, 439);
             this.tabPageError.TabIndex = 3;
             this.tabPageError.Text = "Error";
             this.tabPageError.UseVisualStyleBackColor = true;

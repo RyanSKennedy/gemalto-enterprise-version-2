@@ -36,13 +36,13 @@ namespace Enterprise
             if (appSettings.enableLogs) Log.Write("Загружаем информацию об используемом ключе активации...");
             textBoxPKInfoTab.Text = FormAbout.productKey;
             XDocument licenseInfo = XDocument.Parse(FormAbout.instance.httpClientResponseStr);
-            textBoxInformationAboutLicenseInfoTab.Text = "Product: " + licenseInfo.Root.Element("productInfo").Attribute("productName").Value + Environment.NewLine;
-            textBoxInformationAboutLicenseInfoTab.Text += "Avaliable activation for Product Key: " + licenseInfo.Root.Element("available").Value + Environment.NewLine;
-            textBoxInformationAboutLicenseInfoTab.Text += "Registration required: " + licenseInfo.Root.Element("registrationRequired").Value + Environment.NewLine;
-            textBoxInformationAboutLicenseInfoTab.Text += "Entitlement ID: " + licenseInfo.Root.Element("entitlementId").Value + Environment.NewLine;
+            textBoxInformationAboutLicenseInfoTab.Text = FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Product:") + licenseInfo.Root.Element("productInfo").Attribute("productName").Value + Environment.NewLine;
+            textBoxInformationAboutLicenseInfoTab.Text += FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Avaliable activation for Product Key:") + licenseInfo.Root.Element("available").Value + Environment.NewLine;
+            textBoxInformationAboutLicenseInfoTab.Text += FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Registration required:") + FormMain.standartData.ErrorMessageReplacer(FormMain.locale, licenseInfo.Root.Element("registrationRequired").Value) + Environment.NewLine;
+            textBoxInformationAboutLicenseInfoTab.Text += FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Entitlement ID:") + licenseInfo.Root.Element("entitlementId").Value + Environment.NewLine;
             if (!string.IsNullOrEmpty(licenseInfo.Root.Element("customerId").Value))
             {
-                textBoxInformationAboutLicenseInfoTab.Text += "Customer: " + licenseInfo.Root.Element("customerEmail").Value + Environment.NewLine;
+                textBoxInformationAboutLicenseInfoTab.Text += FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Customer:") + licenseInfo.Root.Element("customerEmail").Value + Environment.NewLine;
                 cEmail = licenseInfo.Root.Element("customerEmail").Value;
                 isAlreadyRegistered = true;
             }
@@ -153,7 +153,7 @@ namespace Enterprise
                 {
                     ToolTip ttWrongEmail = new ToolTip();
                     int VisibleTime = 3000;
-                    string ttWrongEmailText = "Incorrect e-mail, please check and correct!";
+                    string ttWrongEmailText = FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Incorrect e-mail, please check and correct!");
 
                     if (radioButtonLoginLoginTab.Checked == true)
                     {
@@ -221,8 +221,8 @@ namespace Enterprise
                             if (appSettings.enableLogs) Log.Write("Переходим на страничку с ошибкой...");
 
                             tabControlRegForm.SelectTab(3); // error tab
-                            textBoxErrorDescErrorTab.Text = "Error: " + FormAbout.instance.httpClientResponseStatus + Environment.NewLine +
-                                FormAbout.instance.httpClientResponseStr + Environment.NewLine;
+                            textBoxErrorDescErrorTab.Text = FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error in registration:") + FormAbout.instance.httpClientResponseStatus + Environment.NewLine +
+                                FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error description:") + FormAbout.instance.httpClientResponseStr + Environment.NewLine;
                         }
                     }
                 }
@@ -304,16 +304,16 @@ namespace Enterprise
                             if (appSettings.enableLogs) Log.Write("Ошибка применения V2C массива с лицензией на ПК, статус: " + hStatus);
                             if (appSettings.enableLogs) Log.Write("V2C: " + Environment.NewLine + v2c);
 
-                            textBoxSuccessDescSuccessTab.Text += "License file applied with error: " + hStatus.ToString() + Environment.NewLine +
-                                "License string: " + Environment.NewLine + v2c;
+                            textBoxSuccessDescSuccessTab.Text += FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "License file applied with error: ") + hStatus.ToString() + Environment.NewLine +
+                                "V2C: " + Environment.NewLine + v2c;
                         }
                         else
                         {
                             if (appSettings.enableLogs) Log.Write("Результат применения V2C массива с лицензией на ПК, статус: " + hStatus);
                             if (appSettings.enableLogs) Log.Write("V2C: " + Environment.NewLine + v2c);
 
-                            textBoxSuccessDescSuccessTab.Text += "License file applied successfully!" + Environment.NewLine +
-                                "License string: " + Environment.NewLine + v2c;
+                            textBoxSuccessDescSuccessTab.Text += FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "License file applied successfully!") + Environment.NewLine +
+                                "V2C: " + Environment.NewLine + v2c;
                         }
                     }
                 }
@@ -325,15 +325,15 @@ namespace Enterprise
                     if (appSettings.enableLogs) Log.Write("Переходим на страничку с ошибкой...");
 
                     tabControlRegForm.SelectTab(3); // error tab
-                    textBoxErrorDescErrorTab.Text = "Error: " + FormAbout.instance.httpClientResponseStatus + Environment.NewLine +
-                        FormAbout.instance.httpClientResponseStr + Environment.NewLine;
+                    textBoxErrorDescErrorTab.Text = FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error in activation:") + FormAbout.instance.httpClientResponseStatus + Environment.NewLine +
+                        FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error description:") + FormAbout.instance.httpClientResponseStr + Environment.NewLine;
                 }
             }
             else
             {
                 tabControlRegForm.SelectTab(3); // error tab
-                textBoxErrorDescErrorTab.Text = "Error in collect C2V opertion." + Environment.NewLine +
-                    "Error code:" + requestedData.Key + Environment.NewLine;
+                textBoxErrorDescErrorTab.Text = FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error in collect C2V opertion.") + Environment.NewLine +
+                    FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error code:") + requestedData.Key + Environment.NewLine;
             }
         }
         #endregion

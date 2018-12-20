@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Xml.Linq;
 using System.Windows.Forms;
@@ -11,20 +9,28 @@ namespace Stock
 {
     public partial class FormMainStock : Form
     {
+        #region Init param's
         public static SentinelSettings.SentinelData standartData;
-        public static bool lIsEnabled, aIsEnabled;
-        public static bool logsIsExist = false, logsDirIsExist = false, logsFileIsExist = false;
+        public static bool lIsEnabled;
+        public static bool aIsEnabled;
+        public static bool logsIsExist = false;
+        public static bool logsDirIsExist = false;
+        public static bool logsFileIsExist = false;
         public static string language;
-        public static string baseDir, logFileName;
-        public static HaspFeature feature;
-        public static string scope = "", format = "", info = "";
+        public static string baseDir;
+        public static string logFileName;
+        public static string scope = "";
+        public static string format = "";
+        public static string info = "";
         public static string keyId = "";
         public static string vendorCode = "";
-
+        public static HaspFeature feature;
         public static Hasp hasp;
         public static HaspStatus status;
         public static MultiLanguage alp;
+        #endregion
 
+        #region Init / Load / Closing
         public FormMainStock(string[] args)
         {
             InitializeComponent();
@@ -169,7 +175,7 @@ namespace Stock
         {
             if (lIsEnabled) Log.Write("Загружаем/применяем Language Pack к приложению");
             FormMainStock mForm = (FormMainStock)Application.OpenForms["FormMainStock"];
-            bool isSetAlpFormMain = alp.SetLenguage(language, baseDir + "\\language\\" + language + ".alp", this.Controls, mForm);
+            bool isSetAlpFormMain = alp.SetLanguage(language, baseDir + "\\language\\" + language + ".alp", this.Controls, mForm);
 
             if (aIsEnabled)
             {
@@ -253,5 +259,6 @@ namespace Stock
                 }
             }
         }
+        #endregion
     }
 }

@@ -31,6 +31,44 @@
   <FormLicense>Лицензия</FormLicense>
   <labelLicense>Вы можете сохранить лицензию тут:</labelLicense>
   <linkLabelSaveV2C>Сохранить V2C</linkLabelSaveV2C>
+  <!-- FormRegistration -->
+  <FormRegistration>Мастер регистрации</FormRegistration>
+  <buttonNextInfoTab>Далее</buttonNextInfoTab>
+  <buttonNextLoginTab>Далее</buttonNextLoginTab>
+  <buttonNextConfirmTab>Далее</buttonNextConfirmTab>
+  <buttonBackLoginTab>Назад</buttonBackLoginTab>
+  <buttonBackConfirmTab>Назад</buttonBackConfirmTab>
+  <buttonCloseErrorTab>Закрыть</buttonCloseErrorTab>
+  <buttonFinishSuccessTab>Завершить</buttonFinishSuccessTab>
+  <buttonRefreshKeyListConfirmTab>Обновить</buttonRefreshKeyListConfirmTab>
+  <labelAvaliableKeysConfirmTab>Доступные ключи:</labelAvaliableKeysConfirmTab>
+  <labelDescLoginTab>Описание:</labelDescLoginTab>
+  <labelEmailLoginTab>E-mail:</labelEmailLoginTab>
+  <labelErrorDescErrorTab>Ошибка! Описание:</labelErrorDescErrorTab>
+  <labelFNLoginTab>Имя:</labelFNLoginTab>
+  <labelInformationAboutLicenseInfoTab>Информация о лицензии:</labelInformationAboutLicenseInfoTab>
+  <labelLNLoginTab>Фамилия:</labelLNLoginTab>
+  <labelMailLoginTab>E-mail:</labelMailLoginTab>
+  <labelPKInfoTab>Ключ:</labelPKInfoTab>
+  <labelRecommendationErrorTab>Пожалуйста, проверьте описание ошибки и повторите ещё раз!</labelRecommendationErrorTab>
+  <labelReqDescLoginTab>*</labelReqDescLoginTab>
+  <labelReqDescValueLoginTab>- Обязательные поля.</labelReqDescValueLoginTab>
+  <labelReqFNLoginTab>*</labelReqFNLoginTab>
+  <labelReqLNLoginTab>*</labelReqLNLoginTab>
+  <labelReqMailLoginTab>*</labelReqMailLoginTab>
+  <labelSuccessDescSuccessTab>Лицензия установлена успешно! Описание:</labelSuccessDescSuccessTab>
+  <checkBoxSkipRegInfoTab>Пропустить регистрацию</checkBoxSkipRegInfoTab>
+  <linkLabelSaveV2CErrorTab>Сохранить V2C</linkLabelSaveV2CErrorTab>
+  <linkLabelSaveV2CSuccessTab>Сохранить V2C</linkLabelSaveV2CSuccessTab>
+  <radioButtonInstallInExistKeyConfirmTab>Установить в существующий ключ</radioButtonInstallInExistKeyConfirmTab>
+  <radioButtonInstallLikeNewKeyConfirmTab>Установить в новый SL ключ (если поддерживается продуктом)</radioButtonInstallLikeNewKeyConfirmTab>
+  <radioButtonLoginLoginTab>Вход (если уже зарегистрированы)</radioButtonLoginLoginTab>
+  <radioButtonRegNewLoginTab>Регистрация нового пользователя</radioButtonRegNewLoginTab>
+  <tabPageConfirmActivation>Подтверждение активации</tabPageConfirmActivation>
+  <tabPageError>Ошибка</tabPageError>
+  <tabPageInfoAboutPK>Информация о ключе активации</tabPageInfoAboutPK>
+  <tabPageLoginOrRegNew>Вход или регистрация нового пользователя</tabPageLoginOrRegNew>
+  <tabPageSuccess>Успех</tabPageSuccess>
   <!-- FormMainAccounting -->
   <FormMainAccounting>Бухгалтерия</FormMainAccounting>
   <labelAccounting>Бухгалтерия</labelAccounting>
@@ -722,6 +760,87 @@
       <language type="origin" name="En">Invalid ProductKey!</language>
       <language type="translate" name="En">Invalid ProductKey!</language>
       <language type="translate" name="Ru">Не валидный ключ активации!</language>
+    </error>
+    <!--  Other Messages -->
+    <error>
+      <language type="origin" name="En">Product:</language>
+      <language type="translate" name="En">Product: </language>
+      <language type="translate" name="Ru">Продукт: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Avaliable activation for Product Key:</language>
+      <language type="translate" name="En">Avaliable activation for Product Key: </language>
+      <language type="translate" name="Ru">Доступно активаций по ключу: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Registration required:</language>
+      <language type="translate" name="En">Registration required: </language>
+      <language type="translate" name="Ru">Требование регистрации: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Entitlement ID:</language>
+      <language type="translate" name="En">Entitlement ID: </language>
+      <language type="translate" name="Ru">Идентификатор права: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Customer:</language>
+      <language type="translate" name="En">Customer: </language>
+      <language type="translate" name="Ru">Клиент: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Incorrect e-mail, please check and correct!</language>
+      <language type="translate" name="En">Incorrect e-mail, please check and correct!</language>
+      <language type="translate" name="Ru">Некорректный e-mail, пожалуйста проверьте и исправьте!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">License file applied with error:</language>
+      <language type="translate" name="En">License file applied with error: </language>
+      <language type="translate" name="Ru">Ошибка при применении лицензии: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">License file applied successfully!</language>
+      <language type="translate" name="En">License file applied successfully!</language>
+      <language type="translate" name="Ru">Лицензия применена успешно!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Error in collect C2V opertion.</language>
+      <language type="translate" name="En">Error in collect C2V opertion.</language>
+      <language type="translate" name="Ru">Ошибка при получении C2V файла.</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Error code:</language>
+      <language type="translate" name="En">Error code: </language>
+      <language type="translate" name="Ru">Код ошибки: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Error description:</language>
+      <language type="translate" name="En">Error description: </language>
+      <language type="translate" name="Ru">Описание ошибки: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Error in activation:</language>
+      <language type="translate" name="En">Error in activation: </language>
+      <language type="translate" name="Ru">Ошибка при активации: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Error in registration:</language>
+      <language type="translate" name="En">Error in registration: </language>
+      <language type="translate" name="Ru">Ошибка при регистрации: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">DESIRED</language>
+      <language type="translate" name="En">DESIRED</language>
+      <language type="translate" name="Ru">ЖЕЛАТЕЛЬНО</language>
+    </error>
+    <error>
+      <language type="origin" name="En">MANDATORY</language>
+      <language type="translate" name="En">MANDATORY</language>
+      <language type="translate" name="Ru">ОБЯЗАТЕЛЬНО</language>
+    </error>
+    <error>
+      <language type="origin" name="En">NOT_REQUIRED</language>
+      <language type="translate" name="En">NOT REQUIRED</language>
+      <language type="translate" name="Ru">НЕ ТРЕБУЕТСЯ</language>
     </error>
   </ErrorCodes>
 </configuration>

@@ -2,28 +2,35 @@
 using System.IO;
 using System.Xml.Linq;
 using System.Windows.Forms;
-using System.Collections.Generic;
 using Aladdin.HASP;
 using MyLogClass;
-using SentinelSettings;
 
 namespace Accounting
 {
     public partial class FormMainAccounting : Form
     {
+        #region Init param's
         public static SentinelSettings.SentinelData standartData;
-        public static bool lIsEnabled, aIsEnabled;
-        public static bool logsIsExist = false, logsDirIsExist = false, logsFileIsExist = false;
+        public static bool lIsEnabled;
+        public static bool aIsEnabled;
+        public static bool logsIsExist = false;
+        public static bool logsDirIsExist = false;
+        public static bool logsFileIsExist = false;
         public static string language;
-        public static string baseDir, logFileName;
-        public static HaspFeature feature;
-        public static string scope = "", format = "", info = "";
+        public static string baseDir;
+        public static string logFileName;
+        public static string scope = "";
+        public static string format = "";
+        public static string info = "";
         public static string keyId = "";
         public static string vendorCode = "";
         public static Hasp hasp;
+        public static HaspFeature feature;
         public static HaspStatus status;
         public static MultiLanguage alp;
+        #endregion
 
+        #region Init / Load / Closing
         public FormMainAccounting(string[] args)
         {
             InitializeComponent();
@@ -169,7 +176,7 @@ namespace Accounting
         {
             if (lIsEnabled) Log.Write("Загружаем/применяем Language Pack к приложению");
             FormMainAccounting mForm = (FormMainAccounting)Application.OpenForms["FormMainAccounting"];
-            bool isSetAlpFormMain = alp.SetLenguage(language, baseDir + "\\language\\" + language + ".alp", this.Controls, mForm);
+            bool isSetAlpFormMain = alp.SetLanguage(language, baseDir + "\\language\\" + language + ".alp", this.Controls, mForm);
 
             if (aIsEnabled) {
                 if (lIsEnabled) Log.Write("Использование API включено, пробуем получить Key ID с требуемой для работы лицензией");
@@ -247,5 +254,6 @@ namespace Accounting
                 }
             }
         }
+        #endregion
     }
 }

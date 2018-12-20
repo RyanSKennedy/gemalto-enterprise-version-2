@@ -31,6 +31,44 @@
   <FormLicense>License</FormLicense>
   <labelLicense>You can save the license:</labelLicense>
   <linkLabelSaveV2C>Save V2C</linkLabelSaveV2C>
+  <!-- FormRegistration -->
+  <FormRegistration>Registration Wizard</FormRegistration>
+  <buttonNextInfoTab>Next</buttonNextInfoTab>
+  <buttonNextLoginTab>Next</buttonNextLoginTab>
+  <buttonNextConfirmTab>Next</buttonNextConfirmTab>
+  <buttonBackLoginTab>Back</buttonBackLoginTab>
+  <buttonBackConfirmTab>Back</buttonBackConfirmTab>
+  <buttonCloseErrorTab>Close</buttonCloseErrorTab>
+  <buttonFinishSuccessTab>Finish</buttonFinishSuccessTab>
+  <buttonRefreshKeyListConfirmTab>Refresh</buttonRefreshKeyListConfirmTab>
+  <labelAvaliableKeysConfirmTab>Avaliable Keys:</labelAvaliableKeysConfirmTab>
+  <labelDescLoginTab>Description:</labelDescLoginTab>
+  <labelEmailLoginTab>E-mail:</labelEmailLoginTab>
+  <labelErrorDescErrorTab>Error! Description:</labelErrorDescErrorTab>
+  <labelFNLoginTab>First Name:</labelFNLoginTab>
+  <labelInformationAboutLicenseInfoTab>Information about license:</labelInformationAboutLicenseInfoTab>
+  <labelLNLoginTab>Last Name:</labelLNLoginTab>
+  <labelMailLoginTab>E-mail:</labelMailLoginTab>
+  <labelPKInfoTab>Product Key:</labelPKInfoTab>
+  <labelRecommendationErrorTab>Please check error description and try again later!</labelRecommendationErrorTab>
+  <labelReqDescLoginTab>*</labelReqDescLoginTab>
+  <labelReqDescValueLoginTab>- Required field.</labelReqDescValueLoginTab>
+  <labelReqFNLoginTab>*</labelReqFNLoginTab>
+  <labelReqLNLoginTab>*</labelReqLNLoginTab>
+  <labelReqMailLoginTab>*</labelReqMailLoginTab>
+  <labelSuccessDescSuccessTab>License installed successfully! Description:</labelSuccessDescSuccessTab>
+  <checkBoxSkipRegInfoTab>Skip registration</checkBoxSkipRegInfoTab>
+  <linkLabelSaveV2CErrorTab>Save V2C</linkLabelSaveV2CErrorTab>
+  <linkLabelSaveV2CSuccessTab>Save V2C</linkLabelSaveV2CSuccessTab>
+  <radioButtonInstallInExistKeyConfirmTab>Install in exist key</radioButtonInstallInExistKeyConfirmTab>
+  <radioButtonInstallLikeNewKeyConfirmTab>Install like new SL key (if supported buy Product's)</radioButtonInstallLikeNewKeyConfirmTab>
+  <radioButtonLoginLoginTab>Login (if you already registered)</radioButtonLoginLoginTab>
+  <radioButtonRegNewLoginTab>Registration new user</radioButtonRegNewLoginTab>
+  <tabPageConfirmActivation>Confirm Activation</tabPageConfirmActivation>
+  <tabPageError>Error</tabPageError>
+  <tabPageInfoAboutPK>Info about PK</tabPageInfoAboutPK>
+  <tabPageLoginOrRegNew>Login or Reg new</tabPageLoginOrRegNew>
+  <tabPageSuccess>Success</tabPageSuccess>
   <!-- FormMainAccounting -->
   <FormMainAccounting>Accounting</FormMainAccounting>
   <labelAccounting>Accounting</labelAccounting>
@@ -131,8 +169,8 @@
     <error>
       <language type="origin" name="En">InvalidUpdateData</language>
       <language type="translate" name="En">
-        Required XML tags were not found. 
-        OR 
+        Required XML tags were not found.
+        OR
         Contents in binary data are missing or invalid.
       </language>
     </error>
@@ -569,6 +607,71 @@
     <error>
       <language type="origin" name="En">Invalid ProductKey!</language>
       <language type="translate" name="En">Invalid ProductKey!</language>
+    </error>
+    <!--  Other Messages -->
+    <error>
+      <language type="origin" name="En">Product:</language>
+      <language type="translate" name="En">Product: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Avaliable activation for Product Key:</language>
+      <language type="translate" name="En">Avaliable activation for Product Key: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Registration required:</language>
+      <language type="translate" name="En">Registration required: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Entitlement ID:</language>
+      <language type="translate" name="En">Entitlement ID: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Customer:</language>
+      <language type="translate" name="En">Customer: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Incorrect e-mail, please check and correct!</language>
+      <language type="translate" name="En">Incorrect e-mail, please check and correct!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">License file applied with error:</language>
+      <language type="translate" name="En">License file applied with error: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">License file applied successfully!</language>
+      <language type="translate" name="En">License file applied successfully!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Error in collect C2V opertion.</language>
+      <language type="translate" name="En">Error in collect C2V opertion.</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Error code:</language>
+      <language type="translate" name="En">Error code: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Error description:</language>
+      <language type="translate" name="En">Error description: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Error in activation:</language>
+      <language type="translate" name="En">Error in activation: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Error in registration:</language>
+      <language type="translate" name="En">Error in registration: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">DESIRED</language>
+      <language type="translate" name="En">DESIRED</language>
+    </error>
+    <error>
+      <language type="origin" name="En">MANDATORY</language>
+      <language type="translate" name="En">MANDATORY</language>
+    </error>
+    <error>
+      <language type="origin" name="En">NOT_REQUIRED</language>
+      <language type="translate" name="En">NOT REQUIRED</language>
     </error>
   </ErrorCodes>
 </configuration>

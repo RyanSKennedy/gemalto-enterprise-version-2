@@ -50,6 +50,8 @@
             this.labelPort = new System.Windows.Forms.Label();
             this.textBoxAdvancedData = new System.Windows.Forms.TextBox();
             this.labelAdvancedData = new System.Windows.Forms.Label();
+            this.textBoxActivationMechanism = new System.Windows.Forms.TextBox();
+            this.labelActivationMechanism = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // labelCurrentSettings
@@ -219,7 +221,7 @@
             // 
             // textBoxApi
             // 
-            this.textBoxApi.Location = new System.Drawing.Point(170, 628);
+            this.textBoxApi.Location = new System.Drawing.Point(170, 627);
             this.textBoxApi.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxApi.Name = "textBoxApi";
             this.textBoxApi.ReadOnly = true;
@@ -230,7 +232,7 @@
             // labelApi
             // 
             this.labelApi.AutoSize = true;
-            this.labelApi.Location = new System.Drawing.Point(20, 633);
+            this.labelApi.Location = new System.Drawing.Point(20, 632);
             this.labelApi.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelApi.Name = "labelApi";
             this.labelApi.Size = new System.Drawing.Size(51, 25);
@@ -240,7 +242,7 @@
             // 
             // textBoxPort
             // 
-            this.textBoxPort.Location = new System.Drawing.Point(170, 676);
+            this.textBoxPort.Location = new System.Drawing.Point(170, 672);
             this.textBoxPort.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxPort.Name = "textBoxPort";
             this.textBoxPort.ReadOnly = true;
@@ -251,7 +253,7 @@
             // labelPort
             // 
             this.labelPort.AutoSize = true;
-            this.labelPort.Location = new System.Drawing.Point(20, 681);
+            this.labelPort.Location = new System.Drawing.Point(20, 677);
             this.labelPort.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelPort.Name = "labelPort";
             this.labelPort.Size = new System.Drawing.Size(57, 25);
@@ -261,7 +263,7 @@
             // 
             // textBoxAdvancedData
             // 
-            this.textBoxAdvancedData.Location = new System.Drawing.Point(170, 725);
+            this.textBoxAdvancedData.Location = new System.Drawing.Point(170, 717);
             this.textBoxAdvancedData.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.textBoxAdvancedData.Name = "textBoxAdvancedData";
             this.textBoxAdvancedData.ReadOnly = true;
@@ -272,19 +274,42 @@
             // labelAdvancedData
             // 
             this.labelAdvancedData.AutoSize = true;
-            this.labelAdvancedData.Location = new System.Drawing.Point(20, 730);
+            this.labelAdvancedData.Location = new System.Drawing.Point(20, 722);
             this.labelAdvancedData.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.labelAdvancedData.Name = "labelAdvancedData";
-            this.labelAdvancedData.Size = new System.Drawing.Size(100, 25);
+            this.labelAdvancedData.Size = new System.Drawing.Size(106, 25);
             this.labelAdvancedData.TabIndex = 19;
-            this.labelAdvancedData.Text = "AdvData:";
+            this.labelAdvancedData.Text = "Adv Data:";
             this.labelAdvancedData.UseWaitCursor = true;
+            // 
+            // textBoxActivationMechanism
+            // 
+            this.textBoxActivationMechanism.Location = new System.Drawing.Point(170, 762);
+            this.textBoxActivationMechanism.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxActivationMechanism.Name = "textBoxActivationMechanism";
+            this.textBoxActivationMechanism.ReadOnly = true;
+            this.textBoxActivationMechanism.Size = new System.Drawing.Size(384, 31);
+            this.textBoxActivationMechanism.TabIndex = 22;
+            this.textBoxActivationMechanism.UseWaitCursor = true;
+            // 
+            // labelActivationMechanism
+            // 
+            this.labelActivationMechanism.AutoSize = true;
+            this.labelActivationMechanism.Location = new System.Drawing.Point(20, 767);
+            this.labelActivationMechanism.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelActivationMechanism.Name = "labelActivationMechanism";
+            this.labelActivationMechanism.Size = new System.Drawing.Size(108, 25);
+            this.labelActivationMechanism.TabIndex = 21;
+            this.labelActivationMechanism.Text = "Act Mech:";
+            this.labelActivationMechanism.UseWaitCursor = true;
             // 
             // FormConfigInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(561, 749);
+            this.ClientSize = new System.Drawing.Size(564, 789);
+            this.Controls.Add(this.textBoxActivationMechanism);
+            this.Controls.Add(this.labelActivationMechanism);
             this.Controls.Add(this.textBoxAdvancedData);
             this.Controls.Add(this.labelAdvancedData);
             this.Controls.Add(this.textBoxPort);
@@ -308,8 +333,8 @@
             this.Controls.Add(this.labelCurrentSettings);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.MaximumSize = new System.Drawing.Size(587, 820);
-            this.MinimumSize = new System.Drawing.Size(587, 820);
+            this.MaximumSize = new System.Drawing.Size(590, 860);
+            this.MinimumSize = new System.Drawing.Size(590, 860);
             this.Name = "FormConfigInfo";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Settings";
@@ -344,5 +369,7 @@
         private System.Windows.Forms.Label labelPort;
         private System.Windows.Forms.TextBox textBoxAdvancedData;
         private System.Windows.Forms.Label labelAdvancedData;
+        private System.Windows.Forms.TextBox textBoxActivationMechanism;
+        private System.Windows.Forms.Label labelActivationMechanism;
     }
 }

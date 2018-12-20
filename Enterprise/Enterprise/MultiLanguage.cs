@@ -39,11 +39,36 @@ namespace Enterprise
                     }
 
                     foreach (Control c in cCollections) {
-                        if (c.Name == el.Name) {
-                            if (c.Name == "labelCurrentVersion") {
-                                c.Text = el.Value + FormMain.currentVersion;
-                            } else {
-                                c.Text = el.Value;
+                        if (c.Name.Contains("tabControl"))
+                        {
+                            foreach (Control p in c.Controls) {
+                                foreach (Control e in p.Controls) {
+                                    if (e.Name == el.Name)
+                                    {
+                                        if (e.Name == "labelCurrentVersion")
+                                        {
+                                            e.Text = el.Value + FormMain.currentVersion;
+                                        }
+                                        else
+                                        {
+                                            e.Text = el.Value;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (c.Name == el.Name)
+                            {
+                                if (c.Name == "labelCurrentVersion")
+                                {
+                                    c.Text = el.Value + FormMain.currentVersion;
+                                }
+                                else
+                                {
+                                    c.Text = el.Value;
+                                }
                             }
                         }
                     }
