@@ -50,6 +50,7 @@
             this.MaximumSize = new System.Drawing.Size(500, 300);
             this.MinimumSize = new System.Drawing.Size(500, 300);
             this.Name = "FormMainStaff";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Staff";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMainStaff_FormClosing);
             this.Load += new System.EventHandler(this.FormMainStaff_Load);

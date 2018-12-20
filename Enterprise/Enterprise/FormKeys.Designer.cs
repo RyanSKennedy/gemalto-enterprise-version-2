@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormKeys));
             this.labelAvaliableKeys = new System.Windows.Forms.Label();
             this.listBoxKeys = new System.Windows.Forms.ListBox();
             this.buttonCancel = new System.Windows.Forms.Button();
@@ -83,10 +84,11 @@
             this.Controls.Add(this.buttonCancel);
             this.Controls.Add(this.listBoxKeys);
             this.Controls.Add(this.labelAvaliableKeys);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(500, 300);
             this.MinimumSize = new System.Drawing.Size(500, 300);
             this.Name = "FormKeys";
-            this.ShowIcon = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Keys";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormKeys_FormClosing);
             this.Load += new System.EventHandler(this.FormKeys_Load);

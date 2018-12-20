@@ -15,107 +15,46 @@ namespace Enterprise
 {
     public partial class FormMain : Form
     {
-        public static string currentVersion = " v.2.0";
-        public static string featureIdAccounting, featureIdStock, featureIdStaff;
-        public static string baseDir, logFileName;
-        public static Dictionary<string, string> vCode = new Dictionary<string, string>(1);
-        public static string batchCode, kScope, kFormat, hInfo, eUrl, aSentinelUpCall;
-        public static int tPort;
-        public static bool lIsEnabled, aIsEnabled, adIsEnabled, keyIsConnected = false;
-        public static bool buttonAccountingEnabled = false, buttonStockEnabled = false, buttonStaffEnabled = false;
+        #region Init param's
+        public static string currentVersion = " v.1.0";
         public static string curentKeyId = "";
-        public static string langState, language, locale;
-        public static XDocument xmlKeyInfo;
-        public static bool logsIsExist = false, logsDirIsExist = false, logsFileIsExist = false;
-        public static MultiLanguage alp;
+        public static string featureIdAccounting;
+        public static string featureIdStock;
+        public static string featureIdStaff;
+        public static string baseDir;
+        public static string logFileName;
+        public static string batchCode;
+        public static string kScope;
+        public static string kFormat;
+        public static string hInfo;
+        public static string eUrl;
+        public static string aSentinelUpCall;
+        public static string langState;
+        public static string language;
+        public static string locale;
+        public static int tPort;
+        public static bool lIsEnabled;
+        public static bool aIsEnabled;
+        public static bool adIsEnabled;
+        public static bool nActMechanism;
+        public static bool keyIsConnected = false;
+        public static bool buttonAccountingEnabled = false;
+        public static bool buttonStockEnabled = false;
+        public static bool buttonStaffEnabled = false;     
+        public static bool logsIsExist = false;
+        public static bool logsDirIsExist = false;
+        public static bool logsFileIsExist = false;
         public HaspStatus hStatus = new HaspStatus();
-
-        private void backgroundWorkerCheckKey_DoWork(object sender, DoWorkEventArgs e)
-        {
-            timerCheckKey.Start();
-        }
-
-        private void timerCheckKey_Tick(object sender, EventArgs e)
-        {
-            var listKeys = GetKeyListWithPrioritySort();
-
-            if (listKeys != null && listKeys.Count() > 0)
-            {
-                string tmpScope = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
-                                      "<haspscope>" +
-                                      "    <hasp id=\"" + listKeys[0].Key + "\" />" +
-                                      "</haspscope>";
-
-                hStatus = Hasp.GetInfo(tmpScope, kFormat, vCode[batchCode], ref hInfo);
-                if (HaspStatus.StatusOk != hStatus)
-                {
-                    if (appSettings.enableLogs) Log.Write("Ошибка запроса информации с ключа с KeyID = " + listKeys[0].Key + ", статус: " + hStatus);
-                    keyIsConnected = false;
-                    curentKeyId = "";
-
-                    buttonAccounting.Enabled = false;
-                    buttonStock.Enabled = false;
-                    buttonStaff.Enabled = false;
-
-                    hInfo = "";
-                }
-                else
-                {
-                    if (appSettings.enableLogs) Log.Write("Результат выполнения запроса информации с ключа с KeyID = " + listKeys[0].Key + ", статус: " + hStatus);
-
-                    xmlKeyInfo = XDocument.Parse(hInfo);
-                    keyIsConnected = true;
-                }
-            } else {
-                if (appSettings.enableLogs) Log.Write("Ошибка запроса информации с ключа с KeyID = " + listKeys[0].Key + ", статус: " + hStatus);
-                keyIsConnected = false;
-                curentKeyId = "";
-
-                buttonAccounting.Enabled = false;
-                buttonStock.Enabled = false;
-                buttonStaff.Enabled = false;
-
-                hInfo = "";
-            } 
-
-            if (keyIsConnected == true)
-            {
-                if (xmlKeyInfo != null)
-                {
-                    foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
-                    {
-                        foreach (XElement elKeyId in elHasp.Elements("id"))
-                        {
-                            curentKeyId = elKeyId.Value;
-                        }
-                        foreach (XElement elProduct in elHasp.Elements("product"))
-                        {
-                            foreach (XElement elFeature in elProduct.Elements("feature"))
-                            {
-                                foreach (XElement elFeatureId in elFeature.Elements("id"))
-                                {
-                                    buttonAccounting.Enabled = (elFeatureId.Value == featureIdAccounting) ? true : buttonAccounting.Enabled;
-                                    buttonAccountingEnabled = buttonAccounting.Enabled;
-
-                                    buttonStock.Enabled = (elFeatureId.Value == featureIdStock) ? true : buttonStock.Enabled;
-                                    buttonStockEnabled = buttonStock.Enabled;
-
-                                    buttonStaff.Enabled = (elFeatureId.Value == featureIdStaff) ? true : buttonStaff.Enabled;
-                                    buttonStaffEnabled = buttonStaff.Enabled;
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        public static SentinelSettings.SentinelData standartData; 
-
+        public static MultiLanguage alp;
+        public static XDocument xmlKeyInfo;
+        public static SentinelData standartData;
+        public static Dictionary<string, string> vCode = new Dictionary<string, string>(1);
+        static settings.enterprise appSettings = new settings.enterprise();
         FormAbout AboutWindow;
         FormConfigInfo ConfigInfoWindow;
-        static Enterprise.settings.enterprise appSettings = new settings.enterprise();
+        #endregion
 
+        #region Init / Load / Closing
         public FormMain()
         {
             InitializeComponent();
@@ -155,6 +94,11 @@ namespace Enterprise
             // решаем откуда брать Port для проверки интернет соединения
             //============================================= 
             tPort = (String.IsNullOrEmpty(appSettings.portForTestConnection)) ? Convert.ToInt32(SentinelSettings.SentinelData.portForTestConnection) : Convert.ToInt32(appSettings.portForTestConnection);
+            //=============================================
+
+            // решаем какой механизм активации использовать
+            //============================================= 
+            nActMechanism = (Convert.ToString(appSettings.newActMechanism) == "") ? SentinelSettings.SentinelData.newActMechanism : appSettings.newActMechanism;
             //=============================================
 
             // решаем какой Scope использовать для поиска ключа с лицензиями и откуда его брать
@@ -281,7 +225,7 @@ namespace Enterprise
                     System.IO.Directory.CreateDirectory(baseDir + "\\logs");
                     logsDirIsExist = System.IO.Directory.Exists(baseDir + "\\logs");
                 } catch (Exception ex) {
-                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Can't create dir for logs").Replace("{0}", ex.Message));
+                    MessageBox.Show(standartData.ErrorMessageReplacer(locale, "Can't create dir for logs").Replace("{0}", ex.Message));
                 }
             }
             if (logsDirIsExist == true) { // если директория с логами есть, проверяем есть ли файл с логами если есть - используем его, если нет - создаём файл с логами 
@@ -295,7 +239,7 @@ namespace Enterprise
                             logsFileIsExist = System.IO.Directory.Exists(baseDir + "\\logs");
                         }
                     } catch (Exception ex) {
-                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Can't create log file").Replace("{0}", ex.Message));
+                        MessageBox.Show(standartData.ErrorMessageReplacer(locale, "Can't create log file").Replace("{0}", ex.Message));
                     }
                 }
             }
@@ -335,7 +279,7 @@ namespace Enterprise
             this.Text += currentVersion;
 
             FormMain mForm = (FormMain)Application.OpenForms["FormMain"];
-            bool isSetAlpFormMain = alp.SetLenguage(appSettings.language, baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, mForm);
+            bool isSetAlpFormMain = alp.SetLanguage(appSettings.language, baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, mForm);
 
             backgroundWorkerCheckKey.RunWorkerAsync();
         }
@@ -344,24 +288,110 @@ namespace Enterprise
         {
             if (appSettings.enableLogs) Log.Write("Закрываем приложение -------");
         }
+        #endregion
 
+        #region Background checking key
+        private void backgroundWorkerCheckKey_DoWork(object sender, DoWorkEventArgs e)
+        {
+            timerCheckKey.Start();
+        }
+
+        private void timerCheckKey_Tick(object sender, EventArgs e)
+        {
+            var listKeys = GetKeyListWithPrioritySort();
+
+            if (listKeys != null && listKeys.Count() > 0)
+            {
+                string tmpScope = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
+                                      "<haspscope>" +
+                                      "    <hasp id=\"" + listKeys[0].Key + "\" />" +
+                                      "</haspscope>";
+
+                hStatus = Hasp.GetInfo(tmpScope, kFormat, vCode[batchCode], ref hInfo);
+                if (HaspStatus.StatusOk != hStatus)
+                {
+                    keyIsConnected = false;
+                    curentKeyId = "";
+
+                    buttonAccounting.Enabled = false;
+                    buttonStock.Enabled = false;
+                    buttonStaff.Enabled = false;
+
+                    hInfo = "";
+                }
+                else
+                {
+                    xmlKeyInfo = XDocument.Parse(hInfo);
+                    keyIsConnected = true;
+                }
+            }
+            else
+            {
+                keyIsConnected = false;
+                curentKeyId = "";
+
+                buttonAccounting.Enabled = false;
+                buttonStock.Enabled = false;
+                buttonStaff.Enabled = false;
+
+                hInfo = "";
+            }
+
+            if (keyIsConnected == true)
+            {
+                if (xmlKeyInfo != null)
+                {
+                    foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
+                    {
+                        foreach (XElement elKeyId in elHasp.Elements("id"))
+                        {
+                            if (string.IsNullOrEmpty(curentKeyId) && !string.IsNullOrEmpty(elKeyId.Value))
+                            {
+                                if (appSettings.enableLogs) Log.Write("Используем ключ с KeyID = " + elKeyId.Value);
+                            } 
+                            curentKeyId = elKeyId.Value;
+                        }
+                        foreach (XElement elProduct in elHasp.Elements("product"))
+                        {
+                            foreach (XElement elFeature in elProduct.Elements("feature"))
+                            {
+                                foreach (XElement elFeatureId in elFeature.Elements("id"))
+                                {
+                                    buttonAccounting.Enabled = (elFeatureId.Value == featureIdAccounting) ? true : buttonAccounting.Enabled;
+                                    buttonAccountingEnabled = buttonAccounting.Enabled;
+
+                                    buttonStock.Enabled = (elFeatureId.Value == featureIdStock) ? true : buttonStock.Enabled;
+                                    buttonStockEnabled = buttonStock.Enabled;
+
+                                    buttonStaff.Enabled = (elFeatureId.Value == featureIdStaff) ? true : buttonStaff.Enabled;
+                                    buttonStaffEnabled = buttonStaff.Enabled;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region Buttons on Main Window
         private void buttonAccounting_Click(object sender, EventArgs e)
         {
             //MessageBox.Show("Should be run Accounting...");
 
-            if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Accounting.exe")) {
+            if (System.IO.File.Exists(baseDir + Path.DirectorySeparatorChar + "Accounting.exe")) {
                 string accountingParam = "vcode:" + vCode[batchCode] + " kid:" + curentKeyId + " fid:" + featureIdAccounting + " api:" + aIsEnabled + " language:" + language;
-                System.Diagnostics.ProcessStartInfo accountingConfig = new System.Diagnostics.ProcessStartInfo(FormMain.baseDir + Path.DirectorySeparatorChar + "Accounting.exe", accountingParam);
+                System.Diagnostics.ProcessStartInfo accountingConfig = new System.Diagnostics.ProcessStartInfo(baseDir + Path.DirectorySeparatorChar + "Accounting.exe", accountingParam);
                 if (appSettings.enableLogs) Log.Write("Пробуем запустить Accounting.exe с параметрами: " + accountingParam);
                 try {
                     System.Diagnostics.Process accountingProcess = System.Diagnostics.Process.Start(accountingConfig);
                 } catch (Exception ex) {
                     if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить Accounting.exe, ошибка: " + ex.Message);
-                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: ").Replace("{0}", ex.Message), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+                    MessageBox.Show(standartData.ErrorMessageReplacer(locale, "Error: ").Replace("{0}", ex.Message), standartData.ErrorMessageReplacer(locale, "Error"));
                 }
             } else {
                 if (appSettings.enableLogs) Log.Write("Error: нет Accounting.exe в директории с ПО.");
-                MessageBox.Show((FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: Accounting.exe not found in dir").Replace("{0}",  FormMain.baseDir)), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+                MessageBox.Show((standartData.ErrorMessageReplacer(locale, "Error: Accounting.exe not found in dir").Replace("{0}",  baseDir)), standartData.ErrorMessageReplacer(locale, "Error"));
             }
         }
 
@@ -369,19 +399,19 @@ namespace Enterprise
         {
             //MessageBox.Show("Should be run Stock...");
 
-            if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Stock.exe")) {
+            if (System.IO.File.Exists(baseDir + Path.DirectorySeparatorChar + "Stock.exe")) {
                 string stockParam = "vcode:" + vCode[batchCode] + " kid:" + curentKeyId + " fid:" + featureIdStock + " api:" + aIsEnabled + " language:" + language;
-                System.Diagnostics.ProcessStartInfo stockConfig = new System.Diagnostics.ProcessStartInfo(FormMain.baseDir + Path.DirectorySeparatorChar + "Stock.exe", stockParam);
+                System.Diagnostics.ProcessStartInfo stockConfig = new System.Diagnostics.ProcessStartInfo(baseDir + Path.DirectorySeparatorChar + "Stock.exe", stockParam);
                 if (appSettings.enableLogs) Log.Write("Пробуем запустить Stock.exe с параметрами: " + stockParam);
                 try {
                     System.Diagnostics.Process stockProcess = System.Diagnostics.Process.Start(stockConfig);
                 } catch (Exception ex) {
                     if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить Stock.exe, ошибка: " + ex.Message);
-                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: ").Replace("{0}", ex.Message), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+                    MessageBox.Show(standartData.ErrorMessageReplacer(locale, "Error: ").Replace("{0}", ex.Message), standartData.ErrorMessageReplacer(locale, "Error"));
                 }
             } else {
                 if (appSettings.enableLogs) Log.Write("Error: нет Stock.exe в директории с ПО.");
-                MessageBox.Show((FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: Stock.exe not found in dir").Replace("{0}", FormMain.baseDir)), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+                MessageBox.Show((standartData.ErrorMessageReplacer(locale, "Error: Stock.exe not found in dir").Replace("{0}", baseDir)), standartData.ErrorMessageReplacer(locale, "Error"));
             }
         }
 
@@ -389,19 +419,19 @@ namespace Enterprise
         {
             //MessageBox.Show("Should be run Staff...");
 
-            if (System.IO.File.Exists(FormMain.baseDir + Path.DirectorySeparatorChar + "Staff.exe")) {
+            if (System.IO.File.Exists(baseDir + Path.DirectorySeparatorChar + "Staff.exe")) {
                 string staffParam = "vcode:" + vCode[batchCode] + " kid:" + curentKeyId + " fid:" + featureIdStaff + " api:" + aIsEnabled + " language:" + language;
-                System.Diagnostics.ProcessStartInfo staffConfig = new System.Diagnostics.ProcessStartInfo(FormMain.baseDir + Path.DirectorySeparatorChar + "Staff.exe", staffParam);
+                System.Diagnostics.ProcessStartInfo staffConfig = new System.Diagnostics.ProcessStartInfo(baseDir + Path.DirectorySeparatorChar + "Staff.exe", staffParam);
                 if (appSettings.enableLogs) Log.Write("Пробуем запустить Staff.exe с параметрами: " + staffParam);
                 try {
                     System.Diagnostics.Process staffProcess = System.Diagnostics.Process.Start(staffConfig);
                 } catch (Exception ex) {
                     if (appSettings.enableLogs) Log.Write("Что-то пошло не так: не получилось запустить Staff.exe, ошибка: " + ex.Message);
-                    MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: ").Replace("{0}", ex.Message), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+                    MessageBox.Show(standartData.ErrorMessageReplacer(locale, "Error: ").Replace("{0}", ex.Message), standartData.ErrorMessageReplacer(locale, "Error"));
                 }
             } else {
                 if (appSettings.enableLogs) Log.Write("Error: нет Staff.exe в директории с ПО.");
-                MessageBox.Show((FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: Staff.exe not found in dir").Replace("{0}", FormMain.baseDir)), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+                MessageBox.Show((standartData.ErrorMessageReplacer(locale, "Error: Staff.exe not found in dir").Replace("{0}", baseDir)), standartData.ErrorMessageReplacer(locale, "Error"));
             }
         }
 
@@ -416,7 +446,9 @@ namespace Enterprise
             if (appSettings.enableLogs) Log.Write("Открываем окно \"О программе\"");
             AboutWindow.ShowDialog();
         }
+        #endregion
 
+        #region Methods for check key combinations
         private static void HandleValidationError(object src, ValidationEventArgs args)
         {
             Trace.Fail(string.Format("Invalid data format: {0}", args.Message));
@@ -430,6 +462,7 @@ namespace Enterprise
 
             return base.ProcessDialogKey(keyData);
         }
+        
         /// <summary>
         /// Проверяет вхождение заданных комбинаций (keys) в исходную (keyData).
         /// </summary>
@@ -446,7 +479,9 @@ namespace Enterprise
 
             return true;
         }
+        #endregion
 
+        #region Internal method: Get Key List with priority sort
         // получение уже отсортированного списка доступных ключей
         protected static List<KeyValuePair<string, int>> GetKeyListWithPrioritySort()
         {
@@ -518,5 +553,6 @@ namespace Enterprise
 
             return listKeys;
         }
+        #endregion
     }
 }

@@ -7,6 +7,7 @@ namespace Accounting
 {
     public partial class MultiLanguage : Component
     {
+        #region Init(default constructor) / Init(constructor with param)
         public MultiLanguage()
         {
             InitializeComponent();
@@ -18,8 +19,10 @@ namespace Accounting
 
             InitializeComponent();
         }
+        #endregion
 
-        public bool SetLenguage(string languageCode, string alpDirPath, Control.ControlCollection cCollections, Form currentForm)
+        #region Methods: SetLanguage
+        public bool SetLanguage(string languageCode, string alpDirPath, Control.ControlCollection cCollections, Form currentForm)
         {
             if (System.IO.File.Exists(alpDirPath)) {
                 XDocument alp = XDocument.Load(alpDirPath);
@@ -45,5 +48,6 @@ namespace Accounting
                 return false;
             }
         }
+        #endregion
     }
 }

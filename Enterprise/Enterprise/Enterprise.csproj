@@ -10,6 +10,21 @@
     <AssemblyName>Enterprise</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,8 +52,9 @@
     <Reference Include="hasp_net_windows">
       <HintPath>.\hasp_net_windows.dll</HintPath>
     </Reference>
-    <Reference Include="SentinelConnector">
-      <HintPath>.\SentinelConnector.dll</HintPath>
+    <Reference Include="SentinelConnector, Version=1.0.6773.27344, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\SentinelConnector\SentinelConnector\bin\Debug\SentinelConnector.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -70,6 +86,12 @@
     </Compile>
     <Compile Include="FormLicense.Designer.cs">
       <DependentUpon>FormLicense.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormRegistration.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormRegistration.Designer.cs">
+      <DependentUpon>FormRegistration.cs</DependentUpon>
     </Compile>
     <Compile Include="MultiLanguage.cs">
       <SubType>Component</SubType>
@@ -117,6 +139,9 @@
     <EmbeddedResource Include="FormAbout.resx">
       <DependentUpon>FormAbout.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="FormRegistration.resx">
+      <DependentUpon>FormRegistration.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -159,8 +184,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="icons\AboutIcon.ico" />
+    <Content Include="icons\KeysIcon.ico" />
     <Content Include="icons\LicenseIcon.ico" />
     <Content Include="icons\MainIcon.ico" />
+    <Content Include="icons\RegistrationWizardIcon.ico" />
     <Content Include="icons\SettingsIcon.ico" />
     <Content Include="MainIcon.ico" />
     <Content Include="MainLogo.ico" />
@@ -170,6 +197,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Enterprise_logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SentinelSettings\SentinelSettings.csproj">

@@ -7,6 +7,7 @@ namespace Enterprise
 {
     public partial class MultiLanguage : Component
     {
+        #region Init(default constructor) / Init(constructor with param)
         public MultiLanguage()
         {
             InitializeComponent();
@@ -18,8 +19,10 @@ namespace Enterprise
 
             InitializeComponent();
         }
+        #endregion
 
-        public bool SetLenguage(string languageCode, string alpDirPath, Control.ControlCollection cCollections, Form currentForm)
+        #region Methods: SetLanguage
+        public bool SetLanguage(string languageCode, string alpDirPath, Control.ControlCollection cCollections, Form currentForm)
         {
             if (System.IO.File.Exists(alpDirPath)) {
                 XDocument alp = XDocument.Load(alpDirPath);
@@ -36,11 +39,36 @@ namespace Enterprise
                     }
 
                     foreach (Control c in cCollections) {
-                        if (c.Name == el.Name) {
-                            if (c.Name == "labelCurrentVersion") {
-                                c.Text = el.Value + FormMain.currentVersion;
-                            } else {
-                                c.Text = el.Value;
+                        if (c.Name.Contains("tabControl"))
+                        {
+                            foreach (Control p in c.Controls) {
+                                foreach (Control e in p.Controls) {
+                                    if (e.Name == el.Name)
+                                    {
+                                        if (e.Name == "labelCurrentVersion")
+                                        {
+                                            e.Text = el.Value + FormMain.currentVersion;
+                                        }
+                                        else
+                                        {
+                                            e.Text = el.Value;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if (c.Name == el.Name)
+                            {
+                                if (c.Name == "labelCurrentVersion")
+                                {
+                                    c.Text = el.Value + FormMain.currentVersion;
+                                }
+                                else
+                                {
+                                    c.Text = el.Value;
+                                }
                             }
                         }
                     }
@@ -51,5 +79,6 @@ namespace Enterprise
                 return false;
             }
         }
+        #endregion
     }
 }

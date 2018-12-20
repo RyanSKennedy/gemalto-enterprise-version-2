@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Net;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
 using System.Collections.Generic;
@@ -18,7 +20,11 @@ namespace TestConsoleUtility
             //SentinelEMSClass emsClass = new SentinelEMSClass("http://10.211.55.3:8080/emsA/v78/ws"); // wrong link for test
 
             // Defaulft PK from DEMOMA Batch code in EMS default data
-            string pKey = "c03e2c49-225e-4984-b75f-d8ffe5c84a2b"; // right PK for test
+            //string pKey = "c03e2c49-225e-4984-b75f-d8ffe5c84a2b"; // right PK for test REG IS NOT REQUIRED
+            //string pKey = "325c2607-e722-42c8-9d9f-5ab55c04213a"; // right PK for test REG IS MANDATORY
+            string pKey = "01e8f059-4d54-48c8-8a7a-a88ea2f65fdd"; // right PK for test REG IS MANDATORY
+            //string pKey = "ea6b8253-78d4-44e8-9047-d6ac7ae41f7c"; // right PK for test REG IS DESIRED
+            //string pKey = "f6f1ad75-7db3-4874-b5ec-cbb160bd7b5c"; // right PK for test REG IS DESIRED
             //string pKey = "c03e2c49-225e-4984-b75f-d8ffe5c84a2b_e"; // wrong PK for test
 
             // Pattern PK for Regex
@@ -50,6 +56,29 @@ namespace TestConsoleUtility
                                   "<comments>New Comments Added By Web Services</comments>" +
                                "</activationInput>" +
                             "</activation>";
+
+            // Default XML for create customer by PK
+            string desc = "test desc";
+            string email = System.DateTime.UtcNow.Millisecond + "_test@mail.ru";
+            string fName = "test first name";
+            string lName = "test last name";
+            string newCustomerXml = "<customer>" +
+                                        "<type>ind</type>" +
+                                        "<enabled>true</enabled>" +
+                                        "<description>" + desc + "</description>" +
+                                        //"<vendorId>1</vendorId>" +
+                                        "<defaultContact>" +
+                                            "<emailId>" + email + "</emailId>" +
+                                            "<firstName>" + fName + "</firstName>" +
+                                            "<lastName>" + lName + "</lastName>" +
+                                        "</defaultContact>" +
+                                    "</customer>";
+
+            // Default XML for update PK (set exist customer by e-mail) 
+            string existCustomerXml = "<productKey>" + 
+                                        "<productKeyId></productKeyId>" +
+                                        "<customerEmail></customerEmail>" + 
+                                      "</productKey>";
 
             // C2V from DEMOMA Sentinel HL Max Micro Driverless with Key ID = 1709529435
             string targetXml = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
@@ -250,6 +279,8 @@ namespace TestConsoleUtility
                               "i - for get info about ProductKey after login;" + Environment.NewLine +
                               "l - for ISV login request;" + Environment.NewLine +
                               "u - for update request via C2V;" + Environment.NewLine +
+                              "n - for create new customer and associate him with PK request;" + Environment.NewLine +
+                              "c - for update PK details, assoc exist customer by PK request;" + Environment.NewLine +
                               "e - for Exit." + Environment.NewLine +
                               "h - for Help." + Environment.NewLine);
 
@@ -257,8 +288,6 @@ namespace TestConsoleUtility
 
             if (action.Length > 1 && (action.StartsWith('a') || action.StartsWith('l') || action.StartsWith('u')) && action.Contains("sc:") && !action.Contains("pk:"))
             {
-                //int s = action.LastIndexOf("sc:");
-                //int ss = action.Length - action.LastIndexOf("sc:") - 5;                         
                 string pathToFile = action.Substring(action.LastIndexOf("sc:") + 5, action.Length - action.LastIndexOf("sc:") - 6);
 
                 try
@@ -317,33 +346,62 @@ namespace TestConsoleUtility
                 } 
             }
 
-            Console.WriteLine("/-------------------------/" + Environment.NewLine);
+            Console.WriteLine(Environment.NewLine + "/-------------------------/" + Environment.NewLine);
+            RequestData res = new RequestData();
 
             switch (action.Substring(0, 1))
             {
                 case "k":
+                    res = emsClass.GetRequest("loginByProductKey.ws", HttpMethod.Post, new KeyValuePair<string, string>("productKey", pKey));
                     Console.WriteLine("Let's try doing login by PK..." + Environment.NewLine);
-                    Console.WriteLine(emsClass.GetRequest("loginByProductKey.ws", new KeyValuePair<string, string>("productKey", pKey)) + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStr + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStatus + Environment.NewLine);
                     break;
 
                 case "a":
+                    res = emsClass.GetRequest("productKey/" + pKey + "/activation.ws", HttpMethod.Post, new KeyValuePair<string, string>("activationXml", actXml));
                     Console.WriteLine("Let's try doing activation..." + Environment.NewLine);
-                    Console.WriteLine(emsClass.GetRequest("productKey/" + pKey + "/activation.ws", new KeyValuePair<string, string>("activationXml", actXml)) + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStr + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStatus + Environment.NewLine);
                     break;
 
                 case "i":
+                    res = emsClass.GetRequest("loginByProductKey.ws", HttpMethod.Post, new KeyValuePair<string, string>("productKey", pKey));
+                    res = emsClass.GetRequest("productKey/" + pKey + ".ws", HttpMethod.Get, new KeyValuePair<string, string>("productKey", pKey), res);
                     Console.WriteLine("Let's try get info about PK..." + Environment.NewLine);
-                    Console.WriteLine(emsClass.GetRequest("productKey/" + pKey + ".ws", new KeyValuePair<string, string>("productKey", pKey)) + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStr + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStatus + Environment.NewLine);
                     break;
 
                 case "l":
+                    res = emsClass.GetRequest("login.ws", HttpMethod.Post, new KeyValuePair<string, string>("authenticationDetail", authXml));
                     Console.WriteLine("Let's try doing ISV login..." + Environment.NewLine);
-                    Console.WriteLine(emsClass.GetRequest("login.ws", new KeyValuePair<string, string>("authenticationDetail", authXml)) + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStr + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStatus + Environment.NewLine);
                     break;
 
                 case "u":
+                    res = emsClass.GetRequest("activation/target.ws", HttpMethod.Post, new KeyValuePair<string, string>("targetXml", targetXml));
                     Console.WriteLine("Let's try get update via C2V..." + Environment.NewLine);
-                    Console.WriteLine(emsClass.GetRequest("activation/target.ws", new KeyValuePair<string, string>("targetXml", targetXml)) + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStr + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStatus + Environment.NewLine);
+                    break;
+
+                case "n":
+                    res = emsClass.GetRequest("loginByProductKey.ws", HttpMethod.Post, new KeyValuePair<string, string>("productKey", pKey));
+                    res = emsClass.GetRequest("customer.ws", HttpMethod.Put, new KeyValuePair<string, string>("customerXml", newCustomerXml), res);
+                    Console.WriteLine("Let's try to create customer and assoc him with PK..." + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStr + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStatus + Environment.NewLine);
+                    break;
+
+                case "c":
+                    string customerEmail = "pmahajan@miain.com";
+                    res = emsClass.GetRequest("loginByProductKey.ws", HttpMethod.Post, new KeyValuePair<string, string>("productKey", pKey));
+                    res = emsClass.GetRequest("productKey/" + pKey + ".ws", HttpMethod.Post, new KeyValuePair<string, string>("productKeyXml", existCustomerXml.Replace("<productKeyId></productKeyId>", "<productKeyId>" + pKey + "</productKeyId>").Replace("<customerEmail></customerEmail>", "<customerEmail>" + customerEmail + "</customerEmail>")), res);
+                    Console.WriteLine("Let's try to assoc exist customer with PK..." + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStr + Environment.NewLine);
+                    Console.WriteLine(res.httpClientResponseStatus + Environment.NewLine);
                     break;
 
                 case "e":

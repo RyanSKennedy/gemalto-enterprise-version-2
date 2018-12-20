@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using System.Diagnostics;
-using System.Reflection;
 
 namespace MyLogClass
 {
     public class Log
     {
+        #region Init Params
         private static object sync = new object();
+        #endregion
+
+        #region Methods: Write
         public static void Write(string eventString)
         {
             try {
@@ -26,5 +25,6 @@ namespace MyLogClass
                 //перехватываем всё иничего не делаем
             }
         }
+        #endregion 
     }
 }
