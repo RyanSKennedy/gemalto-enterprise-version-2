@@ -33,9 +33,11 @@ namespace Enterprise
         public static string language;
         public static string locale;
         public static int tPort;
+        public static string tAddress;
         public static bool lIsEnabled;
         public static bool aIsEnabled;
         public static bool adIsEnabled;
+        public static bool tIsEnabled;
         public static bool nActMechanism;
         public static bool keyIsConnected = false;
         public static bool buttonAccountingEnabled = false;
@@ -94,6 +96,16 @@ namespace Enterprise
             // решаем откуда брать Port для проверки интернет соединения
             //============================================= 
             tPort = (String.IsNullOrEmpty(appSettings.portForTestConnection)) ? Convert.ToInt32(SentinelSettings.SentinelData.portForTestConnection) : Convert.ToInt32(appSettings.portForTestConnection);
+            //=============================================
+
+            // решаем откуда брать Address для проверки интернет соединения
+            //============================================= 
+            tAddress = (String.IsNullOrEmpty(appSettings.addressForTestConnection)) ? SentinelSettings.SentinelData.addressForTestConnection : appSettings.addressForTestConnection;
+            //=============================================
+
+            // решаем включать тестирование интернета или нет
+            //============================================= 
+            tIsEnabled = (Convert.ToString(appSettings.enableInternetTest) == "") ? SentinelSettings.SentinelData.enableInternetTest : appSettings.enableInternetTest;
             //=============================================
 
             // решаем какой механизм активации использовать

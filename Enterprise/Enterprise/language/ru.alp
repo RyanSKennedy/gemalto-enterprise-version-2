@@ -27,6 +27,7 @@
   <labelCurrentSettings>Используемые настройки:</labelCurrentSettings>
   <labelLogsState>Логи:</labelLogsState>
   <labelLanguageState>Язык:</labelLanguageState>
+  <labelTestInet>Тест инета:</labelTestInet>
   <!-- FormLicense -->
   <FormLicense>Лицензия</FormLicense>
   <labelLicense>Вы можете сохранить лицензию тут:</labelLicense>

@@ -199,5 +199,23 @@ namespace Enterprise.settings {
                 return ((bool)(this["newActMechanism"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("8.8.8.8")]
+        public string addressForTestConnection {
+            get {
+                return ((string)(this["addressForTestConnection"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool enableInternetTest {
+            get {
+                return ((bool)(this["enableInternetTest"]));
+            }
+        }
     }
 }
