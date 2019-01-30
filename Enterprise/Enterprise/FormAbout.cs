@@ -497,14 +497,19 @@ namespace Enterprise
             }
 
             bool isConnected = false;
-            using (var tcpClient = new TcpClient())
+            if (FormMain.tIsEnabled)
             {
-                try {
-                    tcpClient.Connect("8.8.8.8", FormMain.tPort); // google
-                    isConnected = tcpClient.Connected;
-                } catch (Exception ex) {
-                    if (appSettings.enableLogs) Log.Write("Проблема с проверкой соединения с интернетом. Ошибка: " + ex.Message);
+                using (var tcpClient = new TcpClient())
+                {
+                    try {
+                        tcpClient.Connect(FormMain.tAddress, FormMain.tPort); 
+                        isConnected = tcpClient.Connected;
+                    } catch (Exception ex) {
+                        if (appSettings.enableLogs) Log.Write("Проблема с проверкой соединения с интернетом. Ошибка: " + ex.Message);
+                    }
                 }
+            } else {
+                isConnected = true;
             }
 
             if (!isConnected) {

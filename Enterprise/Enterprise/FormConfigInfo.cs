@@ -36,7 +36,7 @@ namespace Enterprise
             textBoxFormat.Text += kFormatXml;
             textBoxClientCall.Text = FormMain.aSentinelUpCall;
             textBoxApi.Text = (FormMain.aIsEnabled) ? "Enabled" : "Disabled";
-            textBoxPort.Text = FormMain.tPort.ToString();
+            textBoxTestInet.Text = FormMain.tIsEnabled.ToString() + " | " + FormMain.tAddress.ToString() + ":" + FormMain.tPort.ToString();
             textBoxAdvancedData.Text = (FormMain.adIsEnabled) ? "Enabled" : "Disabled";
             textBoxActivationMechanism.Text = (FormMain.nActMechanism) ? "New (with reqistration)" : "Old (simple)";
         }

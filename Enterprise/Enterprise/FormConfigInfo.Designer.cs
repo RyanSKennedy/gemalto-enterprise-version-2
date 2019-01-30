@@ -46,8 +46,8 @@
             this.labelClientCall = new System.Windows.Forms.Label();
             this.textBoxApi = new System.Windows.Forms.TextBox();
             this.labelApi = new System.Windows.Forms.Label();
-            this.textBoxPort = new System.Windows.Forms.TextBox();
-            this.labelPort = new System.Windows.Forms.Label();
+            this.textBoxTestInet = new System.Windows.Forms.TextBox();
+            this.labelTestInet = new System.Windows.Forms.Label();
             this.textBoxAdvancedData = new System.Windows.Forms.TextBox();
             this.labelAdvancedData = new System.Windows.Forms.Label();
             this.textBoxActivationMechanism = new System.Windows.Forms.TextBox();
@@ -240,26 +240,26 @@
             this.labelApi.Text = "API:";
             this.labelApi.UseWaitCursor = true;
             // 
-            // textBoxPort
+            // textBoxTestInet
             // 
-            this.textBoxPort.Location = new System.Drawing.Point(170, 672);
-            this.textBoxPort.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.textBoxPort.Name = "textBoxPort";
-            this.textBoxPort.ReadOnly = true;
-            this.textBoxPort.Size = new System.Drawing.Size(384, 31);
-            this.textBoxPort.TabIndex = 18;
-            this.textBoxPort.UseWaitCursor = true;
+            this.textBoxTestInet.Location = new System.Drawing.Point(170, 672);
+            this.textBoxTestInet.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.textBoxTestInet.Name = "textBoxTestInet";
+            this.textBoxTestInet.ReadOnly = true;
+            this.textBoxTestInet.Size = new System.Drawing.Size(384, 31);
+            this.textBoxTestInet.TabIndex = 18;
+            this.textBoxTestInet.UseWaitCursor = true;
             // 
-            // labelPort
+            // labelTestInet
             // 
-            this.labelPort.AutoSize = true;
-            this.labelPort.Location = new System.Drawing.Point(20, 677);
-            this.labelPort.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelPort.Name = "labelPort";
-            this.labelPort.Size = new System.Drawing.Size(57, 25);
-            this.labelPort.TabIndex = 17;
-            this.labelPort.Text = "Port:";
-            this.labelPort.UseWaitCursor = true;
+            this.labelTestInet.AutoSize = true;
+            this.labelTestInet.Location = new System.Drawing.Point(20, 677);
+            this.labelTestInet.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelTestInet.Name = "labelTestInet";
+            this.labelTestInet.Size = new System.Drawing.Size(101, 25);
+            this.labelTestInet.TabIndex = 17;
+            this.labelTestInet.Text = "Test Inet:";
+            this.labelTestInet.UseWaitCursor = true;
             // 
             // textBoxAdvancedData
             // 
@@ -312,8 +312,8 @@
             this.Controls.Add(this.labelActivationMechanism);
             this.Controls.Add(this.textBoxAdvancedData);
             this.Controls.Add(this.labelAdvancedData);
-            this.Controls.Add(this.textBoxPort);
-            this.Controls.Add(this.labelPort);
+            this.Controls.Add(this.textBoxTestInet);
+            this.Controls.Add(this.labelTestInet);
             this.Controls.Add(this.textBoxApi);
             this.Controls.Add(this.labelApi);
             this.Controls.Add(this.textBoxClientCall);
@@ -365,8 +365,8 @@
         private System.Windows.Forms.Label labelClientCall;
         private System.Windows.Forms.TextBox textBoxApi;
         private System.Windows.Forms.Label labelApi;
-        private System.Windows.Forms.TextBox textBoxPort;
-        private System.Windows.Forms.Label labelPort;
+        private System.Windows.Forms.TextBox textBoxTestInet;
+        private System.Windows.Forms.Label labelTestInet;
         private System.Windows.Forms.TextBox textBoxAdvancedData;
         private System.Windows.Forms.Label labelAdvancedData;
         private System.Windows.Forms.TextBox textBoxActivationMechanism;

@@ -27,6 +27,7 @@
   <labelCurrentSettings>Current settings:</labelCurrentSettings>
   <labelLogsState>Logs:</labelLogsState>
   <labelLanguageState>Language:</labelLanguageState>
+  <labelTestInet>Test Inet:</labelTestInet>
   <!-- FormLicense -->
   <FormLicense>License</FormLicense>
   <labelLicense>You can save the license:</labelLicense>

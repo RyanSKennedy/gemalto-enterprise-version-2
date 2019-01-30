@@ -124,6 +124,10 @@ namespace SentinelSettings
 
         public static string portForTestConnection = "8080";
 
+        public static string addressForTestConnection = "8.8.8.8"; // google
+
+        public static bool enableInternetTest = true;
+
         public static string regExForValidatingPK = @"\w{8}-\w{4}-\w{4}-\w{4}-\w{12}";
         #endregion
 
