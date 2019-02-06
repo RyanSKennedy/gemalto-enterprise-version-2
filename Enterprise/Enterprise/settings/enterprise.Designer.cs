@@ -26,7 +26,7 @@ namespace Enterprise.settings {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
-        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8080/ems/v78/ws")]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:8080/ems/v79/ws")]
         public string emsUrl {
             get {
                 return ((string)(this["emsUrl"]));
@@ -130,8 +130,8 @@ namespace Enterprise.settings {
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
 <vendorData>
-  <batchCode>CDQDR</batchCode>
-  <vendorCode>s6aRT+BgZhGQ5pnhfV178lXbsM1vxQkFDP8VdW5wKdGd/MnqsJccVuVH7KONQK0yuJQgVallmmjE9E6Uw7Sufx2/fklM6FmSoJIqjTqrIhlTz7IddIDGZhBvEigGf3HzWfYZK8urYbm0e4Kp4G9Mve3WXLWKG5mExNiVqj0peMpwrAPOe/XbKPxRj4xlQ6fekR80FmBlk1WNyCQm+v9EI1LjsaAju23UeryHabz8xn6XJjMhd4hlrFbWRHVcCSab5VPOiGO3ImGztZ5QhWbT1Q7mzbJXX31+EdMhwy8Rx+UMZJeDLLLoxq1qGkT93ffcDy/hcuKK440BiP38icvFMLIyCopmycHBxewPvTUk7NwrUSB0iQRu6pxBj4RWJU3feh5i2XlSI5mQcD3cyFh8wIXfXtjZ92XH8ejaBnruAgfffFKKyUzsWAcadMX8F6UMnp1LL9R3LjkKmn0hwMySTvnU3qkVpqOU3cr6gD9h0TxgS0ym1Q8Jojl/FiBpiKp0gDmUr0H57FMu1xx/cEvC0O5CSfiFMNSHWYuGjc7QvpANfDEdjWCVlvKSK5q7igXmLTe1ykfAceHH2CDXg22tnEHMa85tGZNilE7iw0r4Fx1kLflOOM7xOupj5mmJdKiNSL0WhZyM1Znpaz2IAEcQbNJzsXT1SoCz22ZXeMiM66qmkwv/k0/4p8SCEe3l6ggF31ir39yFL940Bs5flOa5s8HUlHJXclee1s4trwWowCxL80lpS0/YntugLBlIXsR+bfXl/46Tmw3GwGK6EfX9KAx1lQVepamTb8ENXQPoJuHm5Rx4U8oP+M2Lryvb1ZcRHREKJ6iACk7qcfeRuKhiFGLDHMjy7Ld/h1A/RNamUOkpDrZfTY+CpHm3PZ+La56O3ScR0uawz/FeCVyySlWy+aNEmS/lqdZk91cqwr+9EqrCb8vtEQYLiwtU11qH/epENUsXUoGzkKbD9gtkmSiWyg==</vendorCode>
+  <batchCode>DEMOMA</batchCode>
+  <vendorCode>AzIceaqfA1hX5wS+M8cGnYh5ceevUnOZIzJBbXFD6dgf3tBkb9cvUF/Tkd/iKu2fsg9wAysYKw7RMAsVvIp4KcXle/v1RaXrLVnNBJ2H2DmrbUMOZbQUFXe698qmJsqNpLXRA367xpZ54i8kC5DTXwDhfxWTOZrBrh5sRKHcoVLumztIQjgWh37AzmSd1bLOfUGI0xjAL9zJWO3fRaeB0NS2KlmoKaVT5Y04zZEc06waU2r6AU2Dc4uipJqJmObqKM+tfNKAS0rZr5IudRiC7pUwnmtaHRe5fgSI8M7yvypvm+13Wm4Gwd4VnYiZvSxf8ImN3ZOG9wEzfyMIlH2+rKPUVHI+igsqla0Wd9m7ZUR9vFotj1uYV0OzG7hX0+huN2E/IdgLDjbiapj1e2fKHrMmGFaIvI6xzzJIQJF9GiRZ7+0jNFLKSyzX/K3JAyFrIPObfwM+y+zAgE1sWcZ1YnuBhICyRHBhaJDKIZL8MywrEfB2yF+R3k9wFG1oN48gSLyfrfEKuB/qgNp+BeTruWUk0AwRE9XVMUuRbjpxa4YA67SKunFEgFGgUfHBeHJTivvUl0u4Dki1UKAT973P+nXy2O0u239If/kRpNUVhMg8kpk7s8i6Arp7l/705/bLCx4kN5hHHSXIqkiG9tHdeNV8VYo5+72hgaCx3/uVoVLmtvxbOIvo120uTJbuLVTvT8KtsOlb3DxwUrwLzaEMoAQAFk6Q9bNipHxfkRQER4kR7IYTMzSoW5mxh3H9O8Ge5BqVeYMEW36q9wnOYfxOLNw6yQMf8f9sJN4KhZty02xm707S7VEfJJ1KNq7b5pP/3RjE0IKtB2gE6vAPRvRLzEohu0m7q1aUp8wAvSiqjZy7FLaTtLEApXYvLvz6PEJdj4TegCZugj7c8bIOEqLXmloZ6EgVnjQ7/ttys7VFITB3mazzFiyQuKf4J6+b/a/Y</vendorCode>
 </vendorData>")]
         public global::System.Xml.XmlDocument vendorCode {
             get {
@@ -149,11 +149,11 @@ namespace Enterprise.settings {
   </param>
   <param>
     <key>-k</key>
-    <value>eafe87d22cc2a49793276f4141c0ebb0</value>
+    <value>ace0dcbbce7597e2302dc6f79224b458</value>
   </param>
   <param>
     <key>-pc</key>
-    <value>81fb31d4-0fbd-4699-91e8-a8d89361c7f8</value>
+    <value>0c89790a-b1d2-4743-bf95-f6591fca72ac</value>
   </param>
   <param>
     <key>-v</key>

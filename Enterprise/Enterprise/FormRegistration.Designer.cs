@@ -597,6 +597,7 @@
             this.textBoxSuccessDescSuccessTab.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.textBoxSuccessDescSuccessTab.Size = new System.Drawing.Size(791, 277);
             this.textBoxSuccessDescSuccessTab.TabIndex = 9;
+            this.textBoxSuccessDescSuccessTab.Visible = false;
             // 
             // labelSuccessDescSuccessTab
             // 
@@ -605,9 +606,9 @@
             this.labelSuccessDescSuccessTab.ForeColor = System.Drawing.Color.Green;
             this.labelSuccessDescSuccessTab.Location = new System.Drawing.Point(13, 8);
             this.labelSuccessDescSuccessTab.Name = "labelSuccessDescSuccessTab";
-            this.labelSuccessDescSuccessTab.Size = new System.Drawing.Size(467, 25);
+            this.labelSuccessDescSuccessTab.Size = new System.Drawing.Size(334, 25);
             this.labelSuccessDescSuccessTab.TabIndex = 8;
-            this.labelSuccessDescSuccessTab.Text = "License installed successfully! Description:";
+            this.labelSuccessDescSuccessTab.Text = "License installed successfully!";
             // 
             // FormRegistration
             // 

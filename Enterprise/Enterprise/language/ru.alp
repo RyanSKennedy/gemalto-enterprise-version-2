@@ -57,7 +57,7 @@
   <labelReqFNLoginTab>*</labelReqFNLoginTab>
   <labelReqLNLoginTab>*</labelReqLNLoginTab>
   <labelReqMailLoginTab>*</labelReqMailLoginTab>
-  <labelSuccessDescSuccessTab>Лицензия установлена успешно! Описание:</labelSuccessDescSuccessTab>
+  <labelSuccessDescSuccessTab>Лицензия установлена успешно!</labelSuccessDescSuccessTab>
   <checkBoxSkipRegInfoTab>Пропустить регистрацию</checkBoxSkipRegInfoTab>
   <linkLabelSaveV2CErrorTab>Сохранить V2C</linkLabelSaveV2CErrorTab>
   <linkLabelSaveV2CSuccessTab>Сохранить V2C</linkLabelSaveV2CSuccessTab>
@@ -500,7 +500,7 @@
     </error>
     <error>
       <language type="origin" name="En">RehostAlreadyApplied</language>
-      <language type="translate" name="En">Old rehost license cannot be applied. A rehost-counter mismatch occurred.</language>
+      <language type="translate" name="En">Old rehost   cannot be applied. A rehost-counter mismatch occurred.</language>
       <language type="translate" name="Ru">Старая лицензия на восстановление не может применяться. Произошло несоответствие регресса-счетчика.</language>
     </error>
     <error>

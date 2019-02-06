@@ -57,7 +57,7 @@
   <labelReqFNLoginTab>*</labelReqFNLoginTab>
   <labelReqLNLoginTab>*</labelReqLNLoginTab>
   <labelReqMailLoginTab>*</labelReqMailLoginTab>
-  <labelSuccessDescSuccessTab>License installed successfully! Description:</labelSuccessDescSuccessTab>
+  <labelSuccessDescSuccessTab>License installed successfully!</labelSuccessDescSuccessTab>
   <checkBoxSkipRegInfoTab>Skip registration</checkBoxSkipRegInfoTab>
   <linkLabelSaveV2CErrorTab>Save V2C</linkLabelSaveV2CErrorTab>
   <linkLabelSaveV2CSuccessTab>Save V2C</linkLabelSaveV2CSuccessTab>
