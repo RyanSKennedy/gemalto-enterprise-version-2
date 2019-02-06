@@ -541,7 +541,7 @@ namespace Enterprise
             if (File.Exists(trialLicense))
             {
                 DialogResult installTrial = DialogResult.None;
-                installTrial = MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Do you want to install trial license"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Request"), MessageBoxButtons.YesNo);
+                installTrial = MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Do you want to install trial license"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Request "), MessageBoxButtons.YesNo);
                 if (installTrial == DialogResult.Yes)
                 {
                     // применяем триальную лицензию
@@ -554,14 +554,14 @@ namespace Enterprise
                         if (appSettings.enableLogs) Log.Write("Ошибка применения V2C с триальной лицензией, статус: " + hStatus);
 
                         // error
-                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Trial license can't be applied! Error: ") + hStatus, FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
+                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Trial license can't be applied! Error") + hStatus, FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
                     }
                     else
                     {
                         if (appSettings.enableLogs) Log.Write("Результат применения V2C с триальной лицензией, статус: " + hStatus);
 
                         // successfully
-                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Trial license successfully installed!"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Successfully"));
+                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Trial license successfully installed"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Successfully"));
                     }
                 }
                 else if (installTrial == DialogResult.No)
