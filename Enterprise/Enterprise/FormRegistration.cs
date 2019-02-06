@@ -272,6 +272,11 @@ namespace Enterprise
 
                     tabControlRegForm.SelectTab(4); // success tab
 
+                    if (FormMain.adIsEnabled)
+                    {
+                        textBoxSuccessDescSuccessTab.Visible = true;
+                    }
+                    
                     XDocument licXml = XDocument.Parse(FormAbout.instance.httpClientResponseStr);
 
                     foreach (XElement el in licXml.Root.Elements())
