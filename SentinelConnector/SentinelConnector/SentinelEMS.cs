@@ -234,7 +234,7 @@ namespace SentinelConnector
                 case "activation.ws":
                     if (client != null && client.httpClient != null)
                     {
-                        if (client.httpClientResponseStatus == "OK")
+                        if (client.httpClientResponseStatus == "OK" || client.httpClientResponseStatus == "Created")
                         {
                             try
                             {
