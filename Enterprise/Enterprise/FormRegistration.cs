@@ -278,12 +278,12 @@ namespace Enterprise
                     {
                         foreach (XElement elAid in el.Elements("AID"))
                         {
-                            textBoxSuccessDescSuccessTab.Text += "AID: " + elAid.Value;
+                            textBoxSuccessDescSuccessTab.Text += "AID: " + elAid.Value + Environment.NewLine;
                         }
 
                         foreach (XElement elProtectionKeyId in el.Elements("protectionKeyId"))
                         {
-                            textBoxSuccessDescSuccessTab.Text += "Protection Key ID: " + elProtectionKeyId.Value;
+                            textBoxSuccessDescSuccessTab.Text += "Protection Key ID: " + elProtectionKeyId.Value + Environment.NewLine;
                         }
 
                         foreach (XElement elActivationString in el.Elements("activationString"))
