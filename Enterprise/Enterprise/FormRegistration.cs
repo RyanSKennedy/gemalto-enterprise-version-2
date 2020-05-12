@@ -572,7 +572,7 @@ namespace Enterprise
             "</haspformat>";
 
             string info = null;
-            HaspStatus status = Hasp.GetInfo(scope, format, FormMain.vCode[FormMain.batchCode], ref info);
+            HaspStatus status = Hasp.GetInfo(scope, format, FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], ref info);
 
             if (HaspStatus.StatusOk != status)
             {
@@ -628,7 +628,7 @@ namespace Enterprise
                 format = "<haspformat format=\"updateinfo\"/>";
             }
 
-            hStatus = Hasp.GetInfo(scope, format, FormMain.vCode[FormMain.batchCode], ref info);
+            hStatus = Hasp.GetInfo(scope, format, FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], ref info);
 
             if (HaspStatus.StatusOk != hStatus)
             {

@@ -2,6 +2,7 @@
 using System.Xml.Linq;
 using System.Windows.Forms;
 using MyLogClass;
+using System.Linq;
 
 namespace Enterprise
 {
@@ -25,7 +26,7 @@ namespace Enterprise
             textBoxEmsUrl.Text = FormMain.eUrl;
             textBoxLogsState.Text = (FormMain.lIsEnabled) ? "Enabled" : "Disabled";
             textBoxLanguageState.Text = FormMain.langState;
-            textBoxVendorCode.Text = FormMain.batchCode + ": " + Environment.NewLine + FormMain.vCode[FormMain.batchCode];
+            textBoxVendorCode.Text = FormMain.batchCode + "-" + FormMain.vendorId + ": " + Environment.NewLine + FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()];
 
             XDocument kScopeXml = XDocument.Parse(FormMain.kScope);
             textBoxScope.Text = "";
