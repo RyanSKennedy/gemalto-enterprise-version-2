@@ -17,11 +17,16 @@
   <buttonGetUpdateByKeyID>Check</buttonGetUpdateByKeyID>
   <buttonGetUpdateForApp>Request update for app</buttonGetUpdateForApp>
   <buttonGetTrial>Get Trial!</buttonGetTrial>
+  <buttonDetach>Cache</buttonDetach>
+  <buttonCancelDetach>Return</buttonCancelDetach>
+  <buttonAddNewIbaStr>Add</buttonAddNewIbaStr>
   <labelUpdateType>Activate/Update:</labelUpdateType>
   <labelLicenseInfo>License info:</labelLicenseInfo>
   <labelCurrentVersion>Current version application:</labelCurrentVersion>
+  <labelNumberOfDaysForDetach>Number of days for Cache:</labelNumberOfDaysForDetach>
   <radioButtonByPK>By PK:</radioButtonByPK>
   <radioButtonByKeyID>For exist key:</radioButtonByKeyID>
+  <checkBoxAddNewIbaStr>Add new IBA string:</checkBoxAddNewIbaStr>
   <!-- FormConfigInfo -->
   <FormConfigInfo>Settings</FormConfigInfo>
   <labelCurrentSettings>Current settings:</labelCurrentSettings>
