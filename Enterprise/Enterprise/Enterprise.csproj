@@ -56,6 +56,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\SentinelConnector\SentinelConnector\bin\Debug\SentinelConnector.dll</HintPath>
     </Reference>
+    <Reference Include="sntl_adminapi_net_windows">
+      <HintPath>.\sntl_adminapi_net_windows.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

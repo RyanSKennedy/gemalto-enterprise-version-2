@@ -44,13 +44,16 @@
             this.numericUpDownDaysForDetach = new System.Windows.Forms.NumericUpDown();
             this.labelNumberOfDaysForDetach = new System.Windows.Forms.Label();
             this.buttonDetach = new System.Windows.Forms.Button();
+            this.buttonAddNewIbaStr = new System.Windows.Forms.Button();
+            this.checkBoxAddNewIbaStr = new System.Windows.Forms.CheckBox();
+            this.textBoxAddNewIbaStr = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDaysForDetach)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonGetUpdateForApp
             // 
             this.buttonGetUpdateForApp.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonGetUpdateForApp.Location = new System.Drawing.Point(9, 207);
+            this.buttonGetUpdateForApp.Location = new System.Drawing.Point(9, 247);
             this.buttonGetUpdateForApp.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.buttonGetUpdateForApp.Name = "buttonGetUpdateForApp";
             this.buttonGetUpdateForApp.Size = new System.Drawing.Size(314, 29);
@@ -156,7 +159,7 @@
             // labelCurrentVersion
             // 
             this.labelCurrentVersion.AutoSize = true;
-            this.labelCurrentVersion.Location = new System.Drawing.Point(6, 239);
+            this.labelCurrentVersion.Location = new System.Drawing.Point(6, 279);
             this.labelCurrentVersion.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelCurrentVersion.Name = "labelCurrentVersion";
             this.labelCurrentVersion.Size = new System.Drawing.Size(135, 13);
@@ -167,7 +170,7 @@
             // 
             this.buttonGetTrial.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.875F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.buttonGetTrial.Location = new System.Drawing.Point(9, 71);
-            this.buttonGetTrial.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonGetTrial.Margin = new System.Windows.Forms.Padding(2);
             this.buttonGetTrial.Name = "buttonGetTrial";
             this.buttonGetTrial.Size = new System.Drawing.Size(314, 20);
             this.buttonGetTrial.TabIndex = 10;
@@ -227,11 +230,48 @@
             this.buttonDetach.Visible = false;
             this.buttonDetach.Click += new System.EventHandler(this.buttonDetach_Click);
             // 
+            // buttonAddNewIbaStr
+            // 
+            this.buttonAddNewIbaStr.Enabled = false;
+            this.buttonAddNewIbaStr.Location = new System.Drawing.Point(269, 205);
+            this.buttonAddNewIbaStr.Name = "buttonAddNewIbaStr";
+            this.buttonAddNewIbaStr.Size = new System.Drawing.Size(55, 22);
+            this.buttonAddNewIbaStr.TabIndex = 15;
+            this.buttonAddNewIbaStr.Text = "Add";
+            this.buttonAddNewIbaStr.UseVisualStyleBackColor = true;
+            this.buttonAddNewIbaStr.Visible = false;
+            this.buttonAddNewIbaStr.Click += new System.EventHandler(this.buttonAddNewIbaStr_Click);
+            // 
+            // checkBoxAddNewIbaStr
+            // 
+            this.checkBoxAddNewIbaStr.AutoSize = true;
+            this.checkBoxAddNewIbaStr.Location = new System.Drawing.Point(9, 208);
+            this.checkBoxAddNewIbaStr.Name = "checkBoxAddNewIbaStr";
+            this.checkBoxAddNewIbaStr.Size = new System.Drawing.Size(119, 17);
+            this.checkBoxAddNewIbaStr.TabIndex = 16;
+            this.checkBoxAddNewIbaStr.Text = "Add new IBA string:";
+            this.checkBoxAddNewIbaStr.UseVisualStyleBackColor = true;
+            this.checkBoxAddNewIbaStr.Visible = false;
+            this.checkBoxAddNewIbaStr.CheckedChanged += new System.EventHandler(this.checkBoxAddNewIbaStr_CheckedChanged);
+            // 
+            // textBoxAddNewIbaStr
+            // 
+            this.textBoxAddNewIbaStr.Enabled = false;
+            this.textBoxAddNewIbaStr.Location = new System.Drawing.Point(154, 206);
+            this.textBoxAddNewIbaStr.Name = "textBoxAddNewIbaStr";
+            this.textBoxAddNewIbaStr.Size = new System.Drawing.Size(109, 20);
+            this.textBoxAddNewIbaStr.TabIndex = 17;
+            this.textBoxAddNewIbaStr.Visible = false;
+            this.textBoxAddNewIbaStr.TextChanged += new System.EventHandler(this.textBoxAddNewIbaStr_TextChanged);
+            // 
             // FormAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(332, 261);
+            this.ClientSize = new System.Drawing.Size(332, 301);
+            this.Controls.Add(this.textBoxAddNewIbaStr);
+            this.Controls.Add(this.checkBoxAddNewIbaStr);
+            this.Controls.Add(this.buttonAddNewIbaStr);
             this.Controls.Add(this.buttonCancelDetach);
             this.Controls.Add(this.numericUpDownDaysForDetach);
             this.Controls.Add(this.labelNumberOfDaysForDetach);
@@ -249,8 +289,8 @@
             this.Controls.Add(this.buttonGetUpdateForApp);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.MaximumSize = new System.Drawing.Size(348, 300);
-            this.MinimumSize = new System.Drawing.Size(348, 300);
+            this.MaximumSize = new System.Drawing.Size(348, 340);
+            this.MinimumSize = new System.Drawing.Size(348, 340);
             this.Name = "FormAbout";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About";
@@ -272,12 +312,15 @@
         private System.Windows.Forms.Button buttonActivatePK;
         private System.Windows.Forms.Button buttonGetUpdateByKeyID;
         private System.Windows.Forms.Label labelLicenseInfo;
-        private System.Windows.Forms.TextBox textBoxLicenseInfo;
         private System.Windows.Forms.Label labelCurrentVersion;
         private System.Windows.Forms.Button buttonGetTrial;
         private System.Windows.Forms.Button buttonCancelDetach;
         private System.Windows.Forms.NumericUpDown numericUpDownDaysForDetach;
         private System.Windows.Forms.Label labelNumberOfDaysForDetach;
         private System.Windows.Forms.Button buttonDetach;
+        private System.Windows.Forms.Button buttonAddNewIbaStr;
+        private System.Windows.Forms.CheckBox checkBoxAddNewIbaStr;
+        private System.Windows.Forms.TextBox textBoxAddNewIbaStr;
+        public System.Windows.Forms.TextBox textBoxLicenseInfo;
     }
 }

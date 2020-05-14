@@ -56,6 +56,7 @@ namespace Enterprise
         static settings.enterprise appSettings = new settings.enterprise();
         FormAbout AboutWindow;
         FormConfigInfo ConfigInfoWindow;
+        FormMain mForm;
         #endregion
 
         #region Init / Load / Closing
@@ -300,7 +301,7 @@ namespace Enterprise
         {
             this.Text += currentVersion;
 
-            FormMain mForm = (FormMain)Application.OpenForms["FormMain"];
+            mForm = (FormMain)Application.OpenForms["FormMain"];
             bool isSetAlpFormMain = alp.SetLanguage(appSettings.language, baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, mForm);
 
             backgroundWorkerCheckKey.RunWorkerAsync();
@@ -372,6 +373,7 @@ namespace Enterprise
                                 if (appSettings.enableLogs) Log.Write("Используем ключ с KeyID = " + elKeyId.Value);
                             } 
                             curentKeyId = elKeyId.Value;
+                            AboutWindow.textBoxLicenseInfo.Text = xmlKeyInfo.ToString();
                         }
                         foreach (XElement elProduct in elHasp.Elements("product"))
                         {

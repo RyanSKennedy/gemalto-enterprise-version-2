@@ -176,6 +176,12 @@ namespace SentinelSettings
                                                              "    </hasp>" +
                                                              "</haspformat>";
 
+        public string actionForAddIbaStr = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
+                                                "<config>" + 
+                                                    "<serveraddr>{IBA_STR}</serveraddr>" + 
+                                                    "<writeconfig/>" + 
+                                                "</config>";
+
         public static string emsUrl = "http://localhost:8080/ems/v78/ws";
 
         public static bool logIsEnabled = true;
@@ -194,11 +200,19 @@ namespace SentinelSettings
 
         public static string regExForValidatingPK = @"\w{8}-\w{4}-\w{4}-\w{4}-\w{12}";
 
-        public string urlForCancelDetachLicense = @"http://{HOST}:{PORT}/_int_/cancel2.html?haspid={KEY_ID}&vendorid={VENDOR_ID}&productid={PRODUCT_ID}";
-       
+        public string accProtocol = "http";
+
         public string accHost = "127.0.0.1";
-        
+
         public string accPort = "1947";
+
+        public string accPassword = "";
+
+        public string urlForCancelDetachLicense = @"{PROTOCOL}://{HOST}:{PORT}/_int_/cancel2.html?haspid={KEY_ID}&vendorid={VENDOR_ID}&productid={PRODUCT_ID}";
+
+        public string urlForAddIbaToAcc = @"{PROTOCOL}://{HOST}:{PORT}/";
+
+        
         #endregion
 
         #region Constructor

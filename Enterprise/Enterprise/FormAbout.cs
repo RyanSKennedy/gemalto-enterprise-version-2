@@ -40,6 +40,7 @@ namespace Enterprise
         FormLicense LicenseWindow;
         FormKeys KeysForSelect;
         FormRegistration RegistrationWindow;
+        FormAbout aForm;
         #endregion
 
         #region Create Struct
@@ -76,7 +77,7 @@ namespace Enterprise
 
         private void FormAbout_Load(object sender, EventArgs e)
         {
-            FormAbout aForm = (FormAbout)Application.OpenForms["FormAbout"];
+            aForm = (FormAbout)Application.OpenForms["FormAbout"];
             bool isSetAlpFormAbout = FormMain.alp.SetLanguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, aForm);
 
             LicenseInfoRefresh();
@@ -658,6 +659,45 @@ namespace Enterprise
                 MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Status request: {0} \nSomething goes wrong... Please, try again later!").Replace("{0}", myCancelDetachStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Cancel Detaching error!"));
             }
         }
+
+        private void buttonAddNewIbaStr_Click(object sender, EventArgs e)
+        {
+            string return_status = null;
+            SafeNet.Sentinel.AdminStatus myStatus = new SafeNet.Sentinel.AdminStatus();
+            SafeNet.Sentinel.AdminApi myAdminApiContext = new SafeNet.Sentinel.AdminApi(FormMain.standartData.accHost, Convert.ToUInt16(FormMain.standartData.accPort), FormMain.standartData.accPassword);
+            myAdminApiContext.connect();
+
+            myStatus = myAdminApiContext.adminSet(FormMain.standartData.actionForAddIbaStr.Replace("{IBA_STR}", textBoxAddNewIbaStr.Text), ref return_status);
+
+            if (XDocument.Parse(return_status).Root.Elements("admin_status").Descendants().FirstOrDefault(m => m.Name.LocalName == "text").Value != "SNTL_ADMIN_STATUS_OK")
+            {
+                //handle error
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Something goes wrong...") +
+                    Environment.NewLine + FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: ") +
+                    Environment.NewLine + return_status,
+                    FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Adding IBA string error!"));
+            }
+            else 
+            {
+                checkBoxAddNewIbaStr.Checked = false;
+                LicenseInfoRefresh();
+            }
+        }
+        #endregion
+
+        #region CheckBox
+        private void checkBoxAddNewIbaStr_CheckedChanged(object sender, EventArgs e)
+        {
+            textBoxAddNewIbaStr.Enabled = checkBoxAddNewIbaStr.Checked;
+            textBoxAddNewIbaStr.Text = "";
+        }
+        #endregion
+
+        #region TextBox
+        private void textBoxAddNewIbaStr_TextChanged(object sender, EventArgs e)
+        {
+            buttonAddNewIbaStr.Enabled = (textBoxAddNewIbaStr.Text != "") ? true : false;
+        }
         #endregion
 
         #region Methods for check key combinations
@@ -668,16 +708,22 @@ namespace Enterprise
                     labelLicenseInfo.Visible = false;
                     labelNumberOfDaysForDetach.Visible = false;
                     textBoxLicenseInfo.Visible = false;
+                    textBoxAddNewIbaStr.Visible = false;
                     numericUpDownDaysForDetach.Visible = false;
+                    checkBoxAddNewIbaStr.Visible = false;
                     buttonDetach.Visible = false;
                     buttonCancelDetach.Visible = false;
+                    buttonAddNewIbaStr.Visible = false;
                 } else {
                     labelLicenseInfo.Visible = true;
                     labelNumberOfDaysForDetach.Visible = true;
                     textBoxLicenseInfo.Visible = true;
+                    textBoxAddNewIbaStr.Visible = true;
                     numericUpDownDaysForDetach.Visible = true;
+                    checkBoxAddNewIbaStr.Visible = true;
                     buttonDetach.Visible = true;
                     buttonCancelDetach.Visible = true;
+                    buttonAddNewIbaStr.Visible = true;
                 }
             }
 
@@ -706,7 +752,7 @@ namespace Enterprise
         public static string CancelDetachViaUrl(string productId, string targetKeyId = "")
         {
             HttpClient httpClient = new HttpClient();
-            Uri fullUri = new Uri(FormMain.standartData.urlForCancelDetachLicense.Replace("{HOST}", FormMain.standartData.accHost).Replace("{PORT}", FormMain.standartData.accPort).Replace("{KEY_ID}", targetKeyId).Replace("{VENDOR_ID}", FormMain.vendorId).Replace("{PRODUCT_ID}", productId));
+            Uri fullUri = new Uri(FormMain.standartData.urlForCancelDetachLicense.Replace("{PROTOCOL}", FormMain.standartData.accProtocol).Replace("{HOST}", FormMain.standartData.accHost).Replace("{PORT}", FormMain.standartData.accPort).Replace("{KEY_ID}", targetKeyId).Replace("{VENDOR_ID}", FormMain.vendorId).Replace("{PRODUCT_ID}", productId));
             HttpResponseMessage httpClientResponse = httpClient.GetAsync(fullUri).Result;
 
             return httpClientResponse.StatusCode.ToString();
