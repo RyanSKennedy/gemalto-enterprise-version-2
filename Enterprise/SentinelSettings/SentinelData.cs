@@ -211,8 +211,6 @@ namespace SentinelSettings
         public string urlForCancelDetachLicense = @"{PROTOCOL}://{HOST}:{PORT}/_int_/cancel2.html?haspid={KEY_ID}&vendorid={VENDOR_ID}&productid={PRODUCT_ID}";
 
         public string urlForAddIbaToAcc = @"{PROTOCOL}://{HOST}:{PORT}/";
-
-        
         #endregion
 
         #region Constructor

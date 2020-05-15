@@ -280,7 +280,7 @@ namespace Enterprise
 
             buttonAccounting.Visible = true;
             buttonStock.Visible = true;
-            buttonStaff.Visible = (currentVersion == " v.2.0") ? true : false; // Видимость/невидимость этой кнопки и есть разница между версией v1 и v2 приложения Enterprise
+            buttonStaff.Visible = (currentVersion.Contains("v.2.0")) ? true : false; // Видимость/невидимость этой кнопки и есть разница между версией v1 и v2 приложения Enterprise
 
             labelAccountingFID.Visible = false;
             labelAccountingFID.Text += featureIdAccounting;

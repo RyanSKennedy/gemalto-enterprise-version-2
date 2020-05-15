@@ -524,17 +524,22 @@ namespace Enterprise
             }
             else
             {
+                if (appSettings.enableLogs) Log.Write("Ошибка, не найдена триальная лицензия \"trial_license\", - в корневой директории приложения");
+                
                 MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Not found trial license: \"trial_license\", -  in base dir"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
             }
         }
 
         private void buttonDetach_Click(object sender, EventArgs e)
         {
+            if (appSettings.enableLogs) Log.Write("Пробуем кэшировать лицензию из сетевого ключа...");
             var myId = GetInfo(FormMain.standartData.scopeForLocal, FormMain.standartData.formatForGetId);
 
             string info = null;
             int detachingTime = (Convert.ToInt32(numericUpDownDaysForDetach.Value) * 24 * 60 * 60);
-
+            if (appSettings.enableLogs) Log.Write("Время кэширования лицензии (в днях): " + numericUpDownDaysForDetach.Value);
+            if (appSettings.enableLogs) Log.Write("ID продукта который пробуем кэшировать: " + FormMain.productId);
+            if (appSettings.enableLogs) Log.Write("Key ID родительского ключа, из которого пробуем кэшировать лицензию: " + FormMain.curentKeyId);
             HaspStatus myDetachStatus = Hasp.Transfer(FormMain.standartData.actionForDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString()), FormMain.standartData.scopeForSpecificKeyId.Replace("{KEY_ID}", FormMain.curentKeyId), FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], myId, ref info);
 
             if (myDetachStatus == HaspStatus.StatusOk)
@@ -547,18 +552,25 @@ namespace Enterprise
                 {
                     //handle success
                     //MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Current status of the opperation is: {0} \nPlease, re-login in application, for using LOCALLY license.").Replace("{0}", myUpdateStatus.ToString()), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Successfully Detached!"));
+                    if (appSettings.enableLogs) Log.Write("Лицензия кэширована и применена успешно!");
                     LicenseInfoRefresh();
                 }
                 else
                 {
                     //handle error
+                    if (appSettings.enableLogs) Log.Write("Ошибка при применении полученной в результате кэширования лизензии, код ошибки: " + myUpdateStatus);
+                    if (appSettings.enableLogs) Log.Write("Полученная в результате кэширования лицензия (с приминением которой возникла ошибка): " + Environment.NewLine + info);
                     MessageBox.Show(myUpdateStatus.ToString(), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Detaching apply update error!"));
                 }
             }
             else
             {
+                if (appSettings.enableLogs) Log.Write("Ошибка при попытке кэшщирования лицензии, код ошибки: " + myDetachStatus);
+
                 if (myDetachStatus != HaspStatus.InvalidDuration) 
                 {
+                    if (appSettings.enableLogs) Log.Write("Пробуем повторно выполнить кэширование...");
+                    if (appSettings.enableLogs) Log.Write("Предварительно пробуем получить родительский ключ, из которого мы хотим кешировать лицензию...");
                     parentKeyId = "";
                     var tmpXmlGetInfoResult = XDocument.Parse(GetInfo(FormMain.standartData.scopeForNoLocal, FormMain.standartData.formatForGetAvailableLicenses));
 
@@ -571,25 +583,34 @@ namespace Enterprise
                                 elFeatureLevel.Attribute("id").Value == FormMain.featureIdStock)
                             {
                                 parentKeyId = elHasp.Attribute("id").Value;
+                                
                                 break;
                             }
                         }
                         if (!String.IsNullOrEmpty(parentKeyId)) break;
                     }
-
+                    
+                    if (appSettings.enableLogs) Log.Write("Родительский ключ с Key ID: " + parentKeyId);
                     myDetachStatus = Hasp.Transfer(FormMain.standartData.actionForDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString()), FormMain.standartData.scopeForSpecificKeyId.Replace("{KEY_ID}", parentKeyId), FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], myId, ref info);
+                    if (appSettings.enableLogs) Log.Write("Результат повторной попытки кэширования лицензии: " + myDetachStatus);
                 }
 
                 if (myDetachStatus == HaspStatus.InvalidDuration)
                 {
+                    if (appSettings.enableLogs) Log.Write("Пробуем предварительно вернуть ранее кэшированную лицензию...");
                     string myCancelDetachStatus = CancelDetachViaUrl(FormMain.productId, FormMain.curentKeyId);
 
                     if (myCancelDetachStatus == HttpStatusCode.OK.ToString() || myCancelDetachStatus == HaspStatus.StatusOk.ToString())
                     {
+                        if (appSettings.enableLogs) Log.Write("Возврат ранее кэшированной лицензии прошёл успешно! Код: " + myCancelDetachStatus);
+                        if (appSettings.enableLogs) Log.Write("Пробуем повторно выполнить кэширование лицензии...");
+                        if (appSettings.enableLogs) Log.Write("Key ID родительского ключа, из которого пробуем кэшировать лицензию: " + parentKeyId);
+                        
                         myDetachStatus = Hasp.Transfer(FormMain.standartData.actionForDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString()), FormMain.standartData.scopeForSpecificKeyId.Replace("{KEY_ID}", parentKeyId), FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], myId, ref info);
 
                         if (myDetachStatus == HaspStatus.StatusOk)
                         {
+                            if (appSettings.enableLogs) Log.Write("Повторное кэширование лицензии после возврата ранее кэшированной лицензии прошло успешно! Код: " + myDetachStatus);
                             // hasp_update
                             string ack = null;
                             HaspStatus myUpdateStatus = Hasp.Update(info, ref ack);
@@ -598,28 +619,34 @@ namespace Enterprise
                             {
                                 //handle success
                                 //MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Current status of the opperation is: {0} \nPlease, re-login in application, for using LOCALLY license.").Replace("{0}", myUpdateStatus.ToString()), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Successfully Detached!"));
+                                if (appSettings.enableLogs) Log.Write("Лицензия кэширована и применена успешно!");
                                 LicenseInfoRefresh();
                             }
                             else
                             {
                                 //handle error
+                                if (appSettings.enableLogs) Log.Write("Ошибка при применении полученной в результате кэширования лизензии, код ошибки: " + myUpdateStatus);
+                                if (appSettings.enableLogs) Log.Write("Полученная в результате кэширования лицензия (с приминением которой возникла ошибка): " + Environment.NewLine + info);
                                 MessageBox.Show(myUpdateStatus.ToString(), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Detaching apply update error!"));
                             }
                         }
                         else
                         {
                             //handle error
+                            if (appSettings.enableLogs) Log.Write("Ошибка при повторной попытки кэширования лицензии (после успешного возврата ранее кэшированной лицензии), код: " + myDetachStatus);
                             MessageBox.Show(myDetachStatus.ToString(), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Re-Detaching error!"));
                         }
                     }
                     else
                     {
                         //handle error
+                        if (appSettings.enableLogs) Log.Write("Ошибка возврата ранее кэшированной лицензии, код: " + myCancelDetachStatus);
                         MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Status request: {0} \nSomething goes wrong... Please, try again later!").Replace("{0}", myCancelDetachStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Cancel Detaching error (In Re-Detach)!"));
                     }
                 }
                 else if (myDetachStatus == HaspStatus.StatusOk) 
                 {
+                    if (appSettings.enableLogs) Log.Write("Повторная попытка кэширования завершилась успешно!");
                     // hasp_update
                     string ack = null;
                     HaspStatus myUpdateStatus = Hasp.Update(info, ref ack);
@@ -628,17 +655,21 @@ namespace Enterprise
                     {
                         //handle success
                         //MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Current status of the opperation is: {0} \nPlease, re-login in application, for using LOCALLY license.").Replace("{0}", myUpdateStatus.ToString()), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Successfully Detached!"));
+                        if (appSettings.enableLogs) Log.Write("Лицензия кэширована и применена успешно!");
                         LicenseInfoRefresh();
                     }
                     else
                     {
                         //handle error
+                        if (appSettings.enableLogs) Log.Write("Ошибка при применении полученной в результате повторной попытки кэширования лизензии, код ошибки: " + myUpdateStatus);
+                        if (appSettings.enableLogs) Log.Write("Полученная в результате кэширования лицензия (с приминением которой возникла ошибка): " + Environment.NewLine + info);
                         MessageBox.Show(myUpdateStatus.ToString(), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Detaching apply update error!"));
                     }
                 }
                 else
                 {
                     //handle error
+                    if (appSettings.enableLogs) Log.Write("Ошибка при повторной попытке кэширования лицензии! Код: " + myDetachStatus);
                     MessageBox.Show(myDetachStatus.ToString(), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Detaching error!"));
                 }
             }
@@ -646,32 +677,38 @@ namespace Enterprise
 
         private void buttonCancelDetach_Click(object sender, EventArgs e)
         {
+            if (appSettings.enableLogs) Log.Write("Пробуем вернуть ранее кэшированную лицензию...");
             string myCancelDetachStatus = CancelDetachViaUrl(FormMain.productId, FormMain.curentKeyId);
 
             if (myCancelDetachStatus == HttpStatusCode.OK.ToString())
             {
                 //MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Current status of the opperation is: {0} \nPlease, re-login in application, for using CLOUD license.").Replace("{0}", myCancelDetachStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Successfully Canceled Detaching license!"));
+                if (appSettings.enableLogs) Log.Write("Возврат ранее кэшированной лицензии успешно произведён!");
                 LicenseInfoRefresh();
             }
             else
             {
                 //handle error
+                if (appSettings.enableLogs) Log.Write("Ошибка при попытке возврата ранее кэшированной лицензии. Код: " + myCancelDetachStatus);
                 MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Status request: {0} \nSomething goes wrong... Please, try again later!").Replace("{0}", myCancelDetachStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Cancel Detaching error!"));
             }
         }
 
         private void buttonAddNewIbaStr_Click(object sender, EventArgs e)
         {
+            if (appSettings.enableLogs) Log.Write("Пробуем добавить новую IBA строку доступа к лицензии в локальный АСС...");
             string return_status = null;
             SafeNet.Sentinel.AdminStatus myStatus = new SafeNet.Sentinel.AdminStatus();
             SafeNet.Sentinel.AdminApi myAdminApiContext = new SafeNet.Sentinel.AdminApi(FormMain.standartData.accHost, Convert.ToUInt16(FormMain.standartData.accPort), FormMain.standartData.accPassword);
             myAdminApiContext.connect();
-
+            if (appSettings.enableLogs) Log.Write("Добавляема строка IBA: " + textBoxAddNewIbaStr.Text);
             myStatus = myAdminApiContext.adminSet(FormMain.standartData.actionForAddIbaStr.Replace("{IBA_STR}", textBoxAddNewIbaStr.Text), ref return_status);
 
             if (XDocument.Parse(return_status).Root.Elements("admin_status").Descendants().FirstOrDefault(m => m.Name.LocalName == "text").Value != "SNTL_ADMIN_STATUS_OK")
             {
                 //handle error
+                if (appSettings.enableLogs) Log.Write("Ошибка при добавлении IBA строки доступа к лицензии в АСС. Код: " + myStatus);
+                if (appSettings.enableLogs) Log.Write("Расширенный код ошибки: " + return_status);
                 MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Something goes wrong...") +
                     Environment.NewLine + FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: ") +
                     Environment.NewLine + return_status,
@@ -679,6 +716,7 @@ namespace Enterprise
             }
             else 
             {
+                if (appSettings.enableLogs) Log.Write("IBA строка доступа добавлена успешно!");
                 checkBoxAddNewIbaStr.Checked = false;
                 LicenseInfoRefresh();
             }
