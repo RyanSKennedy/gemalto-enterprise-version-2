@@ -614,6 +614,43 @@
       <language type="origin" name="En">Invalid ProductKey!</language>
       <language type="translate" name="En">Invalid ProductKey!</language>
     </error>
+    <!--  New Messages -->
+    <error>
+      <language type="origin" name="En">Detaching apply update error!</language>
+      <language type="translate" name="En">Detaching apply update error!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Re-Detaching error!</language>
+      <language type="translate" name="En">Re-Detaching error!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Status request: {0} \nSomething goes wrong... Please, try again later!</language>
+      <language type="translate" name="En">Status request: {0} \nSomething goes wrong... Please, try again later!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Cancel Detaching error (In Re-Detach)!</language>
+      <language type="translate" name="En">Cancel Detaching error (In Re-Detach)!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Detaching error!</language>
+      <language type="translate" name="En">Detaching error!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Cancel Detaching error!</language>
+      <language type="translate" name="En">Cancel Detaching error!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Something goes wrong...</language>
+      <language type="translate" name="En">Something goes wrong...</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Error: </language>
+      <language type="translate" name="En">Error: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Adding IBA string error!</language>
+      <language type="translate" name="En">Adding IBA string error!</language>
+    </error>
     <!--  Other Messages -->
     <error>
       <language type="origin" name="En">Product:</language>

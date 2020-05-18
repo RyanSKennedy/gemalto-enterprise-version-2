@@ -703,7 +703,7 @@
       <language type="translate" name="Ru">Ошибка: Staff.exe не найден в директории: {0}</language>
     </error>
     <error>
-      <language type="origin" name="En">Error: </language>
+      <language type="origin" name="En">Error: {0}</language>
       <language type="translate" name="En">Error: {0}</language>
       <language type="translate" name="Ru">Ошибка: {0}</language>
     </error>
@@ -766,6 +766,52 @@
       <language type="origin" name="En">Invalid ProductKey!</language>
       <language type="translate" name="En">Invalid ProductKey!</language>
       <language type="translate" name="Ru">Не валидный ключ активации!</language>
+    </error>
+    <!--  New Messages -->
+    <error>
+      <language type="origin" name="En">Detaching apply update error!</language>
+      <language type="translate" name="En">Detaching apply update error!</language>
+      <language type="translate" name="Ru">Ошибка при приминении кэшированной лицензии!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Re-Detaching error!</language>
+      <language type="translate" name="En">Re-Detaching error!</language>
+      <language type="translate" name="Ru">Ошибка при пере-кэшировании лицензии!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Status request: {0} \nSomething goes wrong... Please, try again later!</language>
+      <language type="translate" name="En">Status request: {0} \nSomething goes wrong... Please, try again later!</language>
+      <language type="translate" name="Ru">Статус запроса: {0} \nЧто-то пошло не так... Пожалуйста, повторите попытку позже!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Cancel Detaching error (In Re-Detach)!</language>
+      <language type="translate" name="En">Cancel Detaching error (In Re-Detach)!</language>
+      <language type="translate" name="Ru">Ошибка при возврате ранее кэшированной лицензии (при пере-кэшировании)!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Detaching error!</language>
+      <language type="translate" name="En">Detaching error!</language>
+      <language type="translate" name="Ru">Ошибка при кэшировании лицензии!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Cancel Detaching error!</language>
+      <language type="translate" name="En">Cancel Detaching error!</language>
+      <language type="translate" name="Ru">Ошибка при возврате ранее кэшированной лицензии!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Something goes wrong...</language>
+      <language type="translate" name="En">Something goes wrong...</language>
+      <language type="translate" name="Ru">Что-то пошло не так...</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Error: </language>
+      <language type="translate" name="En">Error: </language>
+      <language type="translate" name="Ru">Ошибка: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Adding IBA string error!</language>
+      <language type="translate" name="En">Adding IBA string error!</language>
+      <language type="translate" name="Ru">Ошибка при добавлении IBA строки доступа в настройки АСС!</language>
     </error>
     <!--  Other Messages -->
     <error>
