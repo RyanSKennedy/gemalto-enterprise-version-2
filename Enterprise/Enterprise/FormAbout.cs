@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using MyLogClass;
 using Aladdin.HASP;
 using SentinelConnector;
+using System.Net;
 
 namespace Enterprise
 {
@@ -23,12 +24,13 @@ namespace Enterprise
         public static string protectionKeyId = "";
         public static string getPKInfoStatus = "";
         public static string productKey = "";
-        Point textBoxPKWithRadioButtonPoint = new Point(100, 24);
-        Point textBoxPKDefaultPoint = new Point(12, 24);
-        Point buttonGetTrialVisiblePoint = new Point(8, 47);
-        Point buttonGetTrialDefaultPoint = new Point(8, 70);
-        Size textBoxPKWithRadioButtonSize = new Size(134, 22);
-        Size textBoxPKDefaultSize = new Size(220, 22);
+        public static string parentKeyId = "";
+        Point textBoxPKWithRadioButtonPoint = new Point(100, 26);
+        Point textBoxPKDefaultPoint = new Point(11, 26);
+        Point buttonGetTrialVisiblePoint = new Point(10, 52);
+        Point buttonGetTrialDefaultPoint = new Point(10, 75);
+        Size textBoxPKWithRadioButtonSize = new Size(163, 20);
+        Size textBoxPKDefaultSize = new Size(250, 20);
         Enterprise.settings.enterprise appSettings = new settings.enterprise();
         public HaspStatus hStatus = new HaspStatus();
         public static SentinelEMSClass sentinelObject = new SentinelEMSClass(FormMain.eUrl);
@@ -38,6 +40,7 @@ namespace Enterprise
         FormLicense LicenseWindow;
         FormKeys KeysForSelect;
         FormRegistration RegistrationWindow;
+        FormAbout aForm;
         #endregion
 
         #region Create Struct
@@ -74,61 +77,10 @@ namespace Enterprise
 
         private void FormAbout_Load(object sender, EventArgs e)
         {
-            FormAbout aForm = (FormAbout)Application.OpenForms["FormAbout"];
+            aForm = (FormAbout)Application.OpenForms["FormAbout"];
             bool isSetAlpFormAbout = FormMain.alp.SetLanguage(appSettings.language, FormMain.baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, aForm);
 
-            if (!string.IsNullOrEmpty(FormMain.curentKeyId) && (FormMain.buttonAccountingEnabled == true || FormMain.buttonStockEnabled == true || FormMain.buttonStaffEnabled == true))
-            {
-                textBoxPK.Size = textBoxPKWithRadioButtonSize;
-                textBoxPK.Location = textBoxPKWithRadioButtonPoint;
-
-                radioButtonByKeyID.Visible = true;
-                radioButtonByPK.Visible = true;
-
-                buttonGetUpdateByKeyID.Visible = true;
-                buttonGetTrial.Visible = false;
-                buttonGetTrial.Location = buttonGetTrialDefaultPoint;
-
-                textBoxLicenseInfo.Text = "";
-                if (FormMain.xmlKeyInfo != null)
-                {
-                    textBoxLicenseInfo.Text += FormMain.xmlKeyInfo;
-                }
-            }
-            else if (!string.IsNullOrEmpty(FormMain.curentKeyId) && !(FormMain.buttonAccountingEnabled == true || FormMain.buttonStockEnabled == true || FormMain.buttonStaffEnabled == true))
-            {
-                textBoxPK.Size = textBoxPKWithRadioButtonSize;
-                textBoxPK.Location = textBoxPKWithRadioButtonPoint;
-
-                radioButtonByKeyID.Visible = true;
-                radioButtonByPK.Visible = true;
-
-                buttonGetUpdateByKeyID.Visible = true;
-                buttonGetTrial.Visible = true;
-                buttonGetTrial.Location = buttonGetTrialDefaultPoint;
-
-                textBoxLicenseInfo.Text = "";
-                if (FormMain.xmlKeyInfo != null)
-                {
-                    textBoxLicenseInfo.Text += FormMain.xmlKeyInfo;
-                }
-            }
-            else
-            {
-                radioButtonByPK.Checked = true;
-                
-                textBoxPK.Size = textBoxPKDefaultSize;
-                textBoxPK.Location = textBoxPKDefaultPoint;
-
-                radioButtonByKeyID.Visible = false;
-                radioButtonByPK.Visible = false;
-
-                buttonGetUpdateByKeyID.Visible = false;
-                buttonGetTrial.Visible = true;
-                buttonGetTrial.Location = buttonGetTrialVisiblePoint;
-
-                textBoxLicenseInfo.Text = "";
-            }
+            LicenseInfoRefresh();
         }
 
         private void FormAbout_FormClosing(object sender, FormClosingEventArgs e)
@@ -208,7 +160,7 @@ namespace Enterprise
                                         "</hasp>" +
                                     "</haspformat>";
 
-                        hStatus = Hasp.GetInfo(tScope, tFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
+                        hStatus = Hasp.GetInfo(tScope, tFormat, FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], ref hInfo);
                         if (HaspStatus.StatusOk != hStatus)
                         {
                             if (appSettings.enableLogs) Log.Write("Ошибка запроса информации о доступных ключах, статус: " + hStatus);
@@ -295,7 +247,7 @@ namespace Enterprise
                                      :
                                      "<haspformat format=\"host_fingerprint\"/>";
 
-                    hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
+                    hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], ref hInfo);
                     if (HaspStatus.StatusOk != hStatus)
                     {
                         if (appSettings.enableLogs) Log.Write("Ошибка запроса C2V, статус: " + hStatus);
@@ -427,7 +379,7 @@ namespace Enterprise
 
             string aFormat = "<haspformat format =\"updateinfo\"/>";
 
-            hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode[FormMain.batchCode], ref hInfo);
+            hStatus = Hasp.GetInfo(aScope, aFormat, FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], ref hInfo);
             if (HaspStatus.StatusOk != hStatus) {
                 if (appSettings.enableLogs) Log.Write("Ошибка запроса C2V, статус: " + hStatus);
                 MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error in request C2V"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
@@ -572,8 +524,217 @@ namespace Enterprise
             }
             else
             {
+                if (appSettings.enableLogs) Log.Write("Ошибка, не найдена триальная лицензия \"trial_license\", - в корневой директории приложения");
+                
                 MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Not found trial license: \"trial_license\", -  in base dir"), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error"));
             }
+        }
+
+        private void buttonDetach_Click(object sender, EventArgs e)
+        {
+            if (appSettings.enableLogs) Log.Write("Пробуем кэшировать лицензию из сетевого ключа...");
+            var myId = GetInfo(FormMain.standartData.scopeForLocal, FormMain.standartData.formatForGetId);
+
+            string info = null;
+            int detachingTime = (Convert.ToInt32(numericUpDownDaysForDetach.Value) * 24 * 60 * 60);
+            if (appSettings.enableLogs) Log.Write("Время кэширования лицензии (в днях): " + numericUpDownDaysForDetach.Value);
+            if (appSettings.enableLogs) Log.Write("ID продукта который пробуем кэшировать: " + FormMain.productId);
+            if (appSettings.enableLogs) Log.Write("Key ID родительского ключа, из которого пробуем кэшировать лицензию: " + FormMain.curentKeyId);
+            HaspStatus myDetachStatus = Hasp.Transfer(FormMain.standartData.actionForDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString()), FormMain.standartData.scopeForSpecificKeyId.Replace("{KEY_ID}", FormMain.curentKeyId), FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], myId, ref info);
+
+            if (myDetachStatus == HaspStatus.StatusOk)
+            {
+                // hasp_update
+                string ack = null;
+                HaspStatus myUpdateStatus = Hasp.Update(info, ref ack);
+
+                if (myUpdateStatus == HaspStatus.StatusOk)
+                {
+                    //handle success
+                    //MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Current status of the opperation is: {0} \nPlease, re-login in application, for using LOCALLY license.").Replace("{0}", myUpdateStatus.ToString()), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Successfully Detached!"));
+                    if (appSettings.enableLogs) Log.Write("Лицензия кэширована и применена успешно!");
+                    LicenseInfoRefresh();
+                }
+                else
+                {
+                    //handle error
+                    if (appSettings.enableLogs) Log.Write("Ошибка при применении полученной в результате кэширования лизензии, код ошибки: " + myUpdateStatus);
+                    if (appSettings.enableLogs) Log.Write("Полученная в результате кэширования лицензия (с приминением которой возникла ошибка): " + Environment.NewLine + info);
+                    MessageBox.Show(myUpdateStatus.ToString(), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Detaching apply update error!"));
+                }
+            }
+            else
+            {
+                if (appSettings.enableLogs) Log.Write("Ошибка при попытке кэшщирования лицензии, код ошибки: " + myDetachStatus);
+
+                if (myDetachStatus != HaspStatus.InvalidDuration) 
+                {
+                    if (appSettings.enableLogs) Log.Write("Пробуем повторно выполнить кэширование...");
+                    if (appSettings.enableLogs) Log.Write("Предварительно пробуем получить родительский ключ, из которого мы хотим кешировать лицензию...");
+                    parentKeyId = "";
+                    var tmpXmlGetInfoResult = XDocument.Parse(GetInfo(FormMain.standartData.scopeForNoLocal, FormMain.standartData.formatForGetAvailableLicenses));
+
+                    foreach (var elHasp in tmpXmlGetInfoResult.Root.Elements("hasp"))
+                    {
+                        foreach (var elFeatureLevel in elHasp.Elements("feature"))
+                        {
+                            if (elFeatureLevel.Attribute("id").Value == FormMain.featureIdAccounting ||
+                                elFeatureLevel.Attribute("id").Value == FormMain.featureIdStaff ||
+                                elFeatureLevel.Attribute("id").Value == FormMain.featureIdStock)
+                            {
+                                parentKeyId = elHasp.Attribute("id").Value;
+                                
+                                break;
+                            }
+                        }
+                        if (!String.IsNullOrEmpty(parentKeyId)) break;
+                    }
+                    
+                    if (appSettings.enableLogs) Log.Write("Родительский ключ с Key ID: " + parentKeyId);
+                    myDetachStatus = Hasp.Transfer(FormMain.standartData.actionForDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString()), FormMain.standartData.scopeForSpecificKeyId.Replace("{KEY_ID}", parentKeyId), FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], myId, ref info);
+                    if (appSettings.enableLogs) Log.Write("Результат повторной попытки кэширования лицензии: " + myDetachStatus);
+                }
+
+                if (myDetachStatus == HaspStatus.InvalidDuration)
+                {
+                    if (appSettings.enableLogs) Log.Write("Пробуем предварительно вернуть ранее кэшированную лицензию...");
+                    string myCancelDetachStatus = CancelDetachViaUrl(FormMain.productId, FormMain.curentKeyId);
+
+                    if (myCancelDetachStatus == HttpStatusCode.OK.ToString() || myCancelDetachStatus == HaspStatus.StatusOk.ToString())
+                    {
+                        if (appSettings.enableLogs) Log.Write("Возврат ранее кэшированной лицензии прошёл успешно! Код: " + myCancelDetachStatus);
+                        if (appSettings.enableLogs) Log.Write("Пробуем повторно выполнить кэширование лицензии...");
+                        if (appSettings.enableLogs) Log.Write("Key ID родительского ключа, из которого пробуем кэшировать лицензию: " + parentKeyId);
+                        
+                        myDetachStatus = Hasp.Transfer(FormMain.standartData.actionForDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString()), FormMain.standartData.scopeForSpecificKeyId.Replace("{KEY_ID}", parentKeyId), FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], myId, ref info);
+
+                        if (myDetachStatus == HaspStatus.StatusOk)
+                        {
+                            if (appSettings.enableLogs) Log.Write("Повторное кэширование лицензии после возврата ранее кэшированной лицензии прошло успешно! Код: " + myDetachStatus);
+                            // hasp_update
+                            string ack = null;
+                            HaspStatus myUpdateStatus = Hasp.Update(info, ref ack);
+
+                            if (myUpdateStatus == HaspStatus.StatusOk)
+                            {
+                                //handle success
+                                //MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Current status of the opperation is: {0} \nPlease, re-login in application, for using LOCALLY license.").Replace("{0}", myUpdateStatus.ToString()), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Successfully Detached!"));
+                                if (appSettings.enableLogs) Log.Write("Лицензия кэширована и применена успешно!");
+                                LicenseInfoRefresh();
+                            }
+                            else
+                            {
+                                //handle error
+                                if (appSettings.enableLogs) Log.Write("Ошибка при применении полученной в результате кэширования лизензии, код ошибки: " + myUpdateStatus);
+                                if (appSettings.enableLogs) Log.Write("Полученная в результате кэширования лицензия (с приминением которой возникла ошибка): " + Environment.NewLine + info);
+                                MessageBox.Show(myUpdateStatus.ToString(), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Detaching apply update error!"));
+                            }
+                        }
+                        else
+                        {
+                            //handle error
+                            if (appSettings.enableLogs) Log.Write("Ошибка при повторной попытки кэширования лицензии (после успешного возврата ранее кэшированной лицензии), код: " + myDetachStatus);
+                            MessageBox.Show(myDetachStatus.ToString(), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Re-Detaching error!"));
+                        }
+                    }
+                    else
+                    {
+                        //handle error
+                        if (appSettings.enableLogs) Log.Write("Ошибка возврата ранее кэшированной лицензии, код: " + myCancelDetachStatus);
+                        MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Status request: {0} \nSomething goes wrong... Please, try again later!").Replace("{0}", myCancelDetachStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Cancel Detaching error (In Re-Detach)!"));
+                    }
+                }
+                else if (myDetachStatus == HaspStatus.StatusOk) 
+                {
+                    if (appSettings.enableLogs) Log.Write("Повторная попытка кэширования завершилась успешно!");
+                    // hasp_update
+                    string ack = null;
+                    HaspStatus myUpdateStatus = Hasp.Update(info, ref ack);
+
+                    if (myUpdateStatus == HaspStatus.StatusOk)
+                    {
+                        //handle success
+                        //MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Current status of the opperation is: {0} \nPlease, re-login in application, for using LOCALLY license.").Replace("{0}", myUpdateStatus.ToString()), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Successfully Detached!"));
+                        if (appSettings.enableLogs) Log.Write("Лицензия кэширована и применена успешно!");
+                        LicenseInfoRefresh();
+                    }
+                    else
+                    {
+                        //handle error
+                        if (appSettings.enableLogs) Log.Write("Ошибка при применении полученной в результате повторной попытки кэширования лизензии, код ошибки: " + myUpdateStatus);
+                        if (appSettings.enableLogs) Log.Write("Полученная в результате кэширования лицензия (с приминением которой возникла ошибка): " + Environment.NewLine + info);
+                        MessageBox.Show(myUpdateStatus.ToString(), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Detaching apply update error!"));
+                    }
+                }
+                else
+                {
+                    //handle error
+                    if (appSettings.enableLogs) Log.Write("Ошибка при повторной попытке кэширования лицензии! Код: " + myDetachStatus);
+                    MessageBox.Show(myDetachStatus.ToString(), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Detaching error!"));
+                }
+            }
+        }
+
+        private void buttonCancelDetach_Click(object sender, EventArgs e)
+        {
+            if (appSettings.enableLogs) Log.Write("Пробуем вернуть ранее кэшированную лицензию...");
+            string myCancelDetachStatus = CancelDetachViaUrl(FormMain.productId, FormMain.curentKeyId);
+
+            if (myCancelDetachStatus == HttpStatusCode.OK.ToString())
+            {
+                //MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Current status of the opperation is: {0} \nPlease, re-login in application, for using CLOUD license.").Replace("{0}", myCancelDetachStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Successfully Canceled Detaching license!"));
+                if (appSettings.enableLogs) Log.Write("Возврат ранее кэшированной лицензии успешно произведён!");
+                LicenseInfoRefresh();
+            }
+            else
+            {
+                //handle error
+                if (appSettings.enableLogs) Log.Write("Ошибка при попытке возврата ранее кэшированной лицензии. Код: " + myCancelDetachStatus);
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Status request: {0} \nSomething goes wrong... Please, try again later!").Replace("{0}", myCancelDetachStatus), FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Cancel Detaching error!"));
+            }
+        }
+
+        private void buttonAddNewIbaStr_Click(object sender, EventArgs e)
+        {
+            if (appSettings.enableLogs) Log.Write("Пробуем добавить новую IBA строку доступа к лицензии в локальный АСС...");
+            string return_status = null;
+            SafeNet.Sentinel.AdminStatus myStatus = new SafeNet.Sentinel.AdminStatus();
+            SafeNet.Sentinel.AdminApi myAdminApiContext = new SafeNet.Sentinel.AdminApi(FormMain.standartData.accHost, Convert.ToUInt16(FormMain.standartData.accPort), FormMain.standartData.accPassword);
+            myAdminApiContext.connect();
+            if (appSettings.enableLogs) Log.Write("Добавляема строка IBA: " + textBoxAddNewIbaStr.Text);
+            myStatus = myAdminApiContext.adminSet(FormMain.standartData.actionForAddIbaStr.Replace("{IBA_STR}", textBoxAddNewIbaStr.Text), ref return_status);
+
+            if (XDocument.Parse(return_status).Root.Elements("admin_status").Descendants().FirstOrDefault(m => m.Name.LocalName == "text").Value != "SNTL_ADMIN_STATUS_OK")
+            {
+                //handle error
+                if (appSettings.enableLogs) Log.Write("Ошибка при добавлении IBA строки доступа к лицензии в АСС. Код: " + myStatus);
+                if (appSettings.enableLogs) Log.Write("Расширенный код ошибки: " + return_status);
+                MessageBox.Show(FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Something goes wrong...") +
+                    Environment.NewLine + FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Error: ") +
+                    Environment.NewLine + return_status,
+                    FormMain.standartData.ErrorMessageReplacer(FormMain.locale, "Adding IBA string error!"));
+            }
+            else 
+            {
+                if (appSettings.enableLogs) Log.Write("IBA строка доступа добавлена успешно!");
+                checkBoxAddNewIbaStr.Checked = false;
+                LicenseInfoRefresh();
+            }
+        }
+        #endregion
+
+        #region CheckBox
+        private void checkBoxAddNewIbaStr_CheckedChanged(object sender, EventArgs e)
+        {
+            textBoxAddNewIbaStr.Enabled = checkBoxAddNewIbaStr.Checked;
+            textBoxAddNewIbaStr.Text = "";
+        }
+        #endregion
+
+        #region TextBox
+        private void textBoxAddNewIbaStr_TextChanged(object sender, EventArgs e)
+        {
+            buttonAddNewIbaStr.Enabled = (textBoxAddNewIbaStr.Text != "") ? true : false;
         }
         #endregion
 
@@ -583,10 +744,24 @@ namespace Enterprise
             if (ckey(keyData, Keys.Alt, Keys.L)) { // Комбинация Alt+L
                 if (labelLicenseInfo.Visible) {
                     labelLicenseInfo.Visible = false;
+                    labelNumberOfDaysForDetach.Visible = false;
                     textBoxLicenseInfo.Visible = false;
+                    textBoxAddNewIbaStr.Visible = false;
+                    numericUpDownDaysForDetach.Visible = false;
+                    checkBoxAddNewIbaStr.Visible = false;
+                    buttonDetach.Visible = false;
+                    buttonCancelDetach.Visible = false;
+                    buttonAddNewIbaStr.Visible = false;
                 } else {
                     labelLicenseInfo.Visible = true;
+                    labelNumberOfDaysForDetach.Visible = true;
                     textBoxLicenseInfo.Visible = true;
+                    textBoxAddNewIbaStr.Visible = true;
+                    numericUpDownDaysForDetach.Visible = true;
+                    checkBoxAddNewIbaStr.Visible = true;
+                    buttonDetach.Visible = true;
+                    buttonCancelDetach.Visible = true;
+                    buttonAddNewIbaStr.Visible = true;
                 }
             }
 
@@ -608,6 +783,138 @@ namespace Enterprise
                     return false;
 
             return true;
+        }
+        #endregion
+
+        #region Detach methods
+        public static string CancelDetachViaUrl(string productId, string targetKeyId = "")
+        {
+            HttpClient httpClient = new HttpClient();
+            Uri fullUri = new Uri(FormMain.standartData.urlForCancelDetachLicense.Replace("{PROTOCOL}", FormMain.standartData.accProtocol).Replace("{HOST}", FormMain.standartData.accHost).Replace("{PORT}", FormMain.standartData.accPort).Replace("{KEY_ID}", targetKeyId).Replace("{VENDOR_ID}", FormMain.vendorId).Replace("{PRODUCT_ID}", productId));
+            HttpResponseMessage httpClientResponse = httpClient.GetAsync(fullUri).Result;
+
+            return httpClientResponse.StatusCode.ToString();
+        }
+
+        public static string GetInfo(string scope, string format)
+        {
+            string info = null;
+            HaspStatus getStatus;
+            getStatus = Hasp.GetInfo(scope, format, FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], ref info);
+            if (getStatus == HaspStatus.StatusOk)
+            {
+                return info;
+            }
+            else
+            {
+                return getStatus.ToString();
+            }
+        }
+
+        public void LicenseInfoRefresh() 
+        {
+            FormMain.ticTak();
+            if (!string.IsNullOrEmpty(FormMain.curentKeyId) && (FormMain.buttonAccountingEnabled == true || FormMain.buttonStockEnabled == true || FormMain.buttonStaffEnabled == true))
+            {
+                textBoxPK.Size = textBoxPKWithRadioButtonSize;
+                textBoxPK.Location = textBoxPKWithRadioButtonPoint;
+
+                radioButtonByKeyID.Visible = true;
+                radioButtonByPK.Visible = true;
+
+                buttonGetUpdateByKeyID.Visible = true;
+                buttonGetTrial.Visible = false;
+                buttonGetTrial.Location = buttonGetTrialDefaultPoint;
+
+                textBoxLicenseInfo.Text = "";
+                if (FormMain.xmlKeyInfo != null)
+                {
+                    textBoxLicenseInfo.Text += FormMain.xmlKeyInfo;
+
+                    FormMain.productId = "";
+                    foreach (var elProduct in FormMain.xmlKeyInfo.Root.Elements("hasp").Where(h => h.Descendants().FirstOrDefault(p => p.Name.LocalName == "id").Value == FormMain.curentKeyId))
+                    {
+                        foreach (var elProductLevel in elProduct.Elements("product"))
+                        {
+                            foreach (var elFeatureLevel in elProductLevel.Elements("feature"))
+                            {
+                                if (elFeatureLevel.Descendants().FirstOrDefault(i => i.Name.LocalName == "id").Value == FormMain.featureIdAccounting ||
+                                    elFeatureLevel.Descendants().FirstOrDefault(i => i.Name.LocalName == "id").Value == FormMain.featureIdStaff ||
+                                    elFeatureLevel.Descendants().FirstOrDefault(i => i.Name.LocalName == "id").Value == FormMain.featureIdStock)
+                                {
+                                    FormMain.productId = elProductLevel.Descendants().FirstOrDefault(j => j.Name.LocalName == "id").Value;
+                                    break;
+                                }
+                            }
+                            if (!String.IsNullOrEmpty(FormMain.productId)) break;
+                        }
+                        if (!String.IsNullOrEmpty(FormMain.productId)) break;
+                    }
+
+                    if (FormMain.xmlKeyInfo.Root.Elements("hasp").Where(h => h.Descendants().FirstOrDefault(p => p.Name.LocalName == "id").Value == FormMain.curentKeyId).Descendants().FirstOrDefault(d => d.Name.LocalName == "detachable").Value == "true" &&
+                        FormMain.xmlKeyInfo.Root.Elements("hasp").Where(h => h.Descendants().FirstOrDefault(p => p.Name.LocalName == "id").Value == FormMain.curentKeyId).Descendants().FirstOrDefault(d => d.Name.LocalName == "attached").Value == "false" &&
+                        FormMain.xmlKeyInfo.Root.Elements("hasp").Where(h => h.Descendants().FirstOrDefault(p => p.Name.LocalName == "id").Value == FormMain.curentKeyId).Descendants().FirstOrDefault(d => d.Name.LocalName == "recipient").Value == "false")
+                    {
+                        labelNumberOfDaysForDetach.Enabled = true;
+                        numericUpDownDaysForDetach.Enabled = true;
+                        numericUpDownDaysForDetach.Value = 0;
+                        buttonDetach.Enabled = true;
+                        buttonCancelDetach.Enabled = false;
+                    }
+                    else if (FormMain.xmlKeyInfo.Root.Elements("hasp").Where(h => h.Descendants().FirstOrDefault(p => p.Name.LocalName == "id").Value == FormMain.curentKeyId).Descendants().FirstOrDefault(d => d.Name.LocalName == "detachable").Value == "false" &&
+                        FormMain.xmlKeyInfo.Root.Elements("hasp").Where(h => h.Descendants().FirstOrDefault(p => p.Name.LocalName == "id").Value == FormMain.curentKeyId).Descendants().FirstOrDefault(d => d.Name.LocalName == "attached").Value == "true" &&
+                        FormMain.xmlKeyInfo.Root.Elements("hasp").Where(h => h.Descendants().FirstOrDefault(p => p.Name.LocalName == "id").Value == FormMain.curentKeyId).Descendants().FirstOrDefault(d => d.Name.LocalName == "recipient").Value == "true")
+                    {
+                        labelNumberOfDaysForDetach.Enabled = false;
+                        numericUpDownDaysForDetach.Enabled = false;
+                        numericUpDownDaysForDetach.Value = 0;
+                        buttonDetach.Enabled = false;
+                        buttonCancelDetach.Enabled = true;
+                    }
+                }
+            }
+            else if (!string.IsNullOrEmpty(FormMain.curentKeyId) && !(FormMain.buttonAccountingEnabled == true || FormMain.buttonStockEnabled == true || FormMain.buttonStaffEnabled == true))
+            {
+                textBoxPK.Size = textBoxPKWithRadioButtonSize;
+                textBoxPK.Location = textBoxPKWithRadioButtonPoint;
+
+                radioButtonByKeyID.Visible = true;
+                radioButtonByPK.Visible = true;
+
+                buttonGetUpdateByKeyID.Visible = true;
+                buttonGetTrial.Visible = true;
+                buttonGetTrial.Location = buttonGetTrialDefaultPoint;
+
+                textBoxLicenseInfo.Text = "";
+                if (FormMain.xmlKeyInfo != null)
+                {
+                    textBoxLicenseInfo.Text += FormMain.xmlKeyInfo;
+                    labelNumberOfDaysForDetach.Enabled = false;
+                    numericUpDownDaysForDetach.Enabled = false;
+                    numericUpDownDaysForDetach.Value = 0;
+                    buttonDetach.Enabled = false;
+                }
+            }
+            else
+            {
+                radioButtonByPK.Checked = true;
+
+                textBoxPK.Size = textBoxPKDefaultSize;
+                textBoxPK.Location = textBoxPKDefaultPoint;
+
+                radioButtonByKeyID.Visible = false;
+                radioButtonByPK.Visible = false;
+
+                buttonGetUpdateByKeyID.Visible = false;
+                buttonGetTrial.Visible = true;
+                buttonGetTrial.Location = buttonGetTrialVisiblePoint;
+
+                textBoxLicenseInfo.Text = "";
+                labelNumberOfDaysForDetach.Enabled = false;
+                numericUpDownDaysForDetach.Enabled = false;
+                numericUpDownDaysForDetach.Value = 0;
+                buttonDetach.Enabled = false;
+            }
         }
         #endregion
     }

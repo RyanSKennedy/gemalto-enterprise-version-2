@@ -17,11 +17,16 @@
   <buttonGetUpdateByKeyID>Check</buttonGetUpdateByKeyID>
   <buttonGetUpdateForApp>Request update for app</buttonGetUpdateForApp>
   <buttonGetTrial>Get Trial!</buttonGetTrial>
+  <buttonDetach>Cache</buttonDetach>
+  <buttonCancelDetach>Return</buttonCancelDetach>
+  <buttonAddNewIbaStr>Add</buttonAddNewIbaStr>
   <labelUpdateType>Activate/Update:</labelUpdateType>
   <labelLicenseInfo>License info:</labelLicenseInfo>
   <labelCurrentVersion>Current version application:</labelCurrentVersion>
+  <labelNumberOfDaysForDetach>Number of days for Cache:</labelNumberOfDaysForDetach>
   <radioButtonByPK>By PK:</radioButtonByPK>
   <radioButtonByKeyID>For exist key:</radioButtonByKeyID>
+  <checkBoxAddNewIbaStr>Add new IBA string:</checkBoxAddNewIbaStr>
   <!-- FormConfigInfo -->
   <FormConfigInfo>Settings</FormConfigInfo>
   <labelCurrentSettings>Current settings:</labelCurrentSettings>
@@ -608,6 +613,43 @@
     <error>
       <language type="origin" name="En">Invalid ProductKey!</language>
       <language type="translate" name="En">Invalid ProductKey!</language>
+    </error>
+    <!--  New Messages -->
+    <error>
+      <language type="origin" name="En">Detaching apply update error!</language>
+      <language type="translate" name="En">Detaching apply update error!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Re-Detaching error!</language>
+      <language type="translate" name="En">Re-Detaching error!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Status request: {0} \nSomething goes wrong... Please, try again later!</language>
+      <language type="translate" name="En">Status request: {0} \nSomething goes wrong... Please, try again later!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Cancel Detaching error (In Re-Detach)!</language>
+      <language type="translate" name="En">Cancel Detaching error (In Re-Detach)!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Detaching error!</language>
+      <language type="translate" name="En">Detaching error!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Cancel Detaching error!</language>
+      <language type="translate" name="En">Cancel Detaching error!</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Something goes wrong...</language>
+      <language type="translate" name="En">Something goes wrong...</language>
+    </error>
+    <error>
+      <language type="origin" name="En">Error: </language>
+      <language type="translate" name="En">Error: </language>
+    </error>
+    <error>
+      <language type="origin" name="En">Adding IBA string error!</language>
+      <language type="translate" name="En">Adding IBA string error!</language>
     </error>
     <!--  Other Messages -->
     <error>

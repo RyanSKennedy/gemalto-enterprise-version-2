@@ -24,9 +24,11 @@ namespace Enterprise
         public static string baseDir;
         public static string logFileName;
         public static string batchCode;
+        public static string vendorId;
         public static string kScope;
         public static string kFormat;
         public static string hInfo;
+        public static string productId;
         public static string eUrl;
         public static string aSentinelUpCall;
         public static string langState;
@@ -50,10 +52,11 @@ namespace Enterprise
         public static MultiLanguage alp;
         public static XDocument xmlKeyInfo;
         public static SentinelData standartData;
-        public static Dictionary<string, string> vCode = new Dictionary<string, string>(1);
+        public static Dictionary<KeyValuePair<string, string>, string> vCode = new Dictionary<KeyValuePair<string, string>, string>(1);
         static settings.enterprise appSettings = new settings.enterprise();
         FormAbout AboutWindow;
         FormConfigInfo ConfigInfoWindow;
+        FormMain mForm;
         #endregion
 
         #region Init / Load / Closing
@@ -81,15 +84,23 @@ namespace Enterprise
 
             // решаем откуда брать Vendor code
             //============================================= 
-            string tmpVCode = "", tmpBatchCode = "";
+            string tmpVCode = "", tmpBatchCode = "", tmpVId = "";
             foreach (var el in SentinelSettings.SentinelData.vendorCode) {
                 tmpVCode = el.Value;
-                tmpBatchCode = el.Key;
+                tmpBatchCode = el.Key.Key;
+                tmpVId = el.Key.Value;
             }
-            vCode.Add(appSettings.vendorCode == null || (String.IsNullOrEmpty(appSettings.vendorCode.InnerXml)) ? tmpBatchCode : appSettings.vendorCode.GetElementsByTagName("batchCode").Item(0).InnerXml, (appSettings.vendorCode == null || String.IsNullOrEmpty(appSettings.vendorCode.InnerXml)) ? tmpVCode : appSettings.vendorCode.GetElementsByTagName("vendorCode").Item(0).InnerXml);
+            vCode.Add(new KeyValuePair<string, string>(
+                appSettings.vendorCode == null || (String.IsNullOrEmpty(appSettings.vendorCode.InnerXml)) ? 
+                tmpBatchCode : appSettings.vendorCode.GetElementsByTagName("batchCode").Item(0).InnerXml,
+                appSettings.vendorCode == null || (String.IsNullOrEmpty(appSettings.vendorCode.InnerXml)) ?
+                tmpVId : appSettings.vendorCode.GetElementsByTagName("vendorId").Item(0).InnerXml), 
+                (appSettings.vendorCode == null || String.IsNullOrEmpty(appSettings.vendorCode.InnerXml)) ? 
+                tmpVCode : appSettings.vendorCode.GetElementsByTagName("vendorCode").Item(0).InnerXml);
             foreach (var el in vCode)
             {
-                batchCode = el.Key;
+                batchCode = el.Key.Key;
+                vendorId = el.Key.Value;
             }
             //=============================================
 
@@ -269,7 +280,7 @@ namespace Enterprise
 
             buttonAccounting.Visible = true;
             buttonStock.Visible = true;
-            buttonStaff.Visible = (currentVersion == " v.2.0") ? true : false; // Видимость/невидимость этой кнопки и есть разница между версией v1 и v2 приложения Enterprise
+            buttonStaff.Visible = (currentVersion.Contains("v.2.0")) ? true : false; // Видимость/невидимость этой кнопки и есть разница между версией v1 и v2 приложения Enterprise
 
             labelAccountingFID.Visible = false;
             labelAccountingFID.Text += featureIdAccounting;
@@ -290,7 +301,7 @@ namespace Enterprise
         {
             this.Text += currentVersion;
 
-            FormMain mForm = (FormMain)Application.OpenForms["FormMain"];
+            mForm = (FormMain)Application.OpenForms["FormMain"];
             bool isSetAlpFormMain = alp.SetLanguage(appSettings.language, baseDir + "\\language\\" + appSettings.language + ".alp", this.Controls, mForm);
 
             backgroundWorkerCheckKey.RunWorkerAsync();
@@ -319,7 +330,7 @@ namespace Enterprise
                                       "    <hasp id=\"" + listKeys[0].Key + "\" />" +
                                       "</haspscope>";
 
-                hStatus = Hasp.GetInfo(tmpScope, kFormat, vCode[batchCode], ref hInfo);
+                hStatus = Hasp.GetInfo(tmpScope, kFormat, vCode[vCode.Keys.Where(k => k.Key == batchCode).FirstOrDefault()], ref hInfo);
                 if (HaspStatus.StatusOk != hStatus)
                 {
                     keyIsConnected = false;
@@ -362,6 +373,7 @@ namespace Enterprise
                                 if (appSettings.enableLogs) Log.Write("Используем ключ с KeyID = " + elKeyId.Value);
                             } 
                             curentKeyId = elKeyId.Value;
+                            AboutWindow.textBoxLicenseInfo.Text = xmlKeyInfo.ToString();
                         }
                         foreach (XElement elProduct in elHasp.Elements("product"))
                         {
@@ -392,7 +404,7 @@ namespace Enterprise
             //MessageBox.Show("Should be run Accounting...");
 
             if (System.IO.File.Exists(baseDir + Path.DirectorySeparatorChar + "Accounting.exe")) {
-                string accountingParam = "vcode:" + vCode[batchCode] + " kid:" + curentKeyId + " fid:" + featureIdAccounting + " api:" + aIsEnabled + " language:" + language;
+                string accountingParam = "vcode:" + vCode[vCode.Keys.Where(k => k.Key == batchCode).FirstOrDefault()] + " kid:" + curentKeyId + " fid:" + featureIdAccounting + " api:" + aIsEnabled + " language:" + language;
                 System.Diagnostics.ProcessStartInfo accountingConfig = new System.Diagnostics.ProcessStartInfo(baseDir + Path.DirectorySeparatorChar + "Accounting.exe", accountingParam);
                 if (appSettings.enableLogs) Log.Write("Пробуем запустить Accounting.exe с параметрами: " + accountingParam);
                 try {
@@ -412,7 +424,7 @@ namespace Enterprise
             //MessageBox.Show("Should be run Stock...");
 
             if (System.IO.File.Exists(baseDir + Path.DirectorySeparatorChar + "Stock.exe")) {
-                string stockParam = "vcode:" + vCode[batchCode] + " kid:" + curentKeyId + " fid:" + featureIdStock + " api:" + aIsEnabled + " language:" + language;
+                string stockParam = "vcode:" + vCode[vCode.Keys.Where(k => k.Key == batchCode).FirstOrDefault()] + " kid:" + curentKeyId + " fid:" + featureIdStock + " api:" + aIsEnabled + " language:" + language;
                 System.Diagnostics.ProcessStartInfo stockConfig = new System.Diagnostics.ProcessStartInfo(baseDir + Path.DirectorySeparatorChar + "Stock.exe", stockParam);
                 if (appSettings.enableLogs) Log.Write("Пробуем запустить Stock.exe с параметрами: " + stockParam);
                 try {
@@ -432,7 +444,7 @@ namespace Enterprise
             //MessageBox.Show("Should be run Staff...");
 
             if (System.IO.File.Exists(baseDir + Path.DirectorySeparatorChar + "Staff.exe")) {
-                string staffParam = "vcode:" + vCode[batchCode] + " kid:" + curentKeyId + " fid:" + featureIdStaff + " api:" + aIsEnabled + " language:" + language;
+                string staffParam = "vcode:" + vCode[vCode.Keys.Where(k => k.Key == batchCode).FirstOrDefault()] + " kid:" + curentKeyId + " fid:" + featureIdStaff + " api:" + aIsEnabled + " language:" + language;
                 System.Diagnostics.ProcessStartInfo staffConfig = new System.Diagnostics.ProcessStartInfo(baseDir + Path.DirectorySeparatorChar + "Staff.exe", staffParam);
                 if (appSettings.enableLogs) Log.Write("Пробуем запустить Staff.exe с параметрами: " + staffParam);
                 try {
@@ -515,7 +527,7 @@ namespace Enterprise
             "</haspformat>";
             
             string info = null;
-            HaspStatus status = Hasp.GetInfo(scope, format, vCode[batchCode], ref info);
+            HaspStatus status = Hasp.GetInfo(scope, format, vCode[vCode.Keys.Where(k => k.Key == batchCode).FirstOrDefault()], ref info);
 
             if (HaspStatus.StatusOk != status)
             {
@@ -564,6 +576,57 @@ namespace Enterprise
             );
 
             return listKeys;
+        }
+
+        // Функция для обновления информации о лицензии в окне About и для FormMain переменных
+        public static void ticTak() 
+        {
+            var listKeys = GetKeyListWithPrioritySort();
+
+            if (listKeys != null && listKeys.Count() > 0)
+            {
+                string tmpScope = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>" +
+                                      "<haspscope>" +
+                                      "    <hasp id=\"" + listKeys[0].Key + "\" />" +
+                                      "</haspscope>";
+
+                HaspStatus hStatusTmp = Hasp.GetInfo(tmpScope, kFormat, vCode[vCode.Keys.Where(k => k.Key == batchCode).FirstOrDefault()], ref hInfo);
+                if (HaspStatus.StatusOk != hStatusTmp)
+                {
+                    keyIsConnected = false;
+                    curentKeyId = "";
+                    hInfo = "";
+                }
+                else
+                {
+                    xmlKeyInfo = XDocument.Parse(hInfo);
+                    keyIsConnected = true;
+                }
+            }
+            else
+            {
+                keyIsConnected = false;
+                curentKeyId = "";
+                hInfo = "";
+            }
+
+            if (keyIsConnected == true)
+            {
+                if (xmlKeyInfo != null)
+                {
+                    foreach (XElement elHasp in xmlKeyInfo.Root.Elements())
+                    {
+                        foreach (XElement elKeyId in elHasp.Elements("id"))
+                        {
+                            if (string.IsNullOrEmpty(curentKeyId) && !string.IsNullOrEmpty(elKeyId.Value))
+                            {
+                                if (appSettings.enableLogs) Log.Write("Используем ключ с KeyID = " + elKeyId.Value);
+                            }
+                            curentKeyId = elKeyId.Value;
+                        }
+                    }
+                }
+            }
         }
         #endregion
     }

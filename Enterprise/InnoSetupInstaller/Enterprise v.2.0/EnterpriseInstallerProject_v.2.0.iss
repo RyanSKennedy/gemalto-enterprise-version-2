@@ -36,6 +36,7 @@ Source: "C:\Users\ryansk\Documents\Visual Studio 2017\Projects\gemalto-enterpris
 Source: "C:\Users\ryansk\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Enterprise.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\ryansk\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\Enterprise.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\ryansk\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_net_windows.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\Users\ryansk\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\sntl_adminapi_net_windows.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\ryansk\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_rt.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\ryansk\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_windows_110659.dll"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\Users\ryansk\Documents\Visual Studio 2017\Projects\gemalto-enterprise-version-2\Enterprise\Enterprise\bin\Enterprise v.2.0\hasp_windows_demo.dll"; DestDir: "{app}"; Flags: ignoreversion
