@@ -24,9 +24,11 @@
   <labelLicenseInfo>License info:</labelLicenseInfo>
   <labelCurrentVersion>Current version application:</labelCurrentVersion>
   <labelNumberOfDaysForDetach>Number of days for Cache:</labelNumberOfDaysForDetach>
+  <labelMultipleSeatsDetach>Number of seats:</labelMultipleSeatsDetach>
   <radioButtonByPK>By PK:</radioButtonByPK>
   <radioButtonByKeyID>For exist key:</radioButtonByKeyID>
   <checkBoxAddNewIbaStr>Add new IBA string:</checkBoxAddNewIbaStr>
+  <checkBoxMultipleSeatsDetach>Multiple Seats for Cache</checkBoxMultipleSeatsDetach>
   <!-- FormConfigInfo -->
   <FormConfigInfo>Settings</FormConfigInfo>
   <labelCurrentSettings>Current settings:</labelCurrentSettings>

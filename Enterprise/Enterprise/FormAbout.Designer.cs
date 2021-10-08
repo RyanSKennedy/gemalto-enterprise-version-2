@@ -47,13 +47,17 @@
             this.buttonAddNewIbaStr = new System.Windows.Forms.Button();
             this.checkBoxAddNewIbaStr = new System.Windows.Forms.CheckBox();
             this.textBoxAddNewIbaStr = new System.Windows.Forms.TextBox();
+            this.checkBoxMultipleSeatsDetach = new System.Windows.Forms.CheckBox();
+            this.numericUpDownMultipleSeatsDetach = new System.Windows.Forms.NumericUpDown();
+            this.labelMultipleSeatsDetach = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDaysForDetach)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMultipleSeatsDetach)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonGetUpdateForApp
             // 
             this.buttonGetUpdateForApp.Font = new System.Drawing.Font("Microsoft Sans Serif", 7.8F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.buttonGetUpdateForApp.Location = new System.Drawing.Point(10, 254);
+            this.buttonGetUpdateForApp.Location = new System.Drawing.Point(10, 314);
             this.buttonGetUpdateForApp.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.buttonGetUpdateForApp.Name = "buttonGetUpdateForApp";
             this.buttonGetUpdateForApp.Size = new System.Drawing.Size(354, 22);
@@ -159,7 +163,7 @@
             // labelCurrentVersion
             // 
             this.labelCurrentVersion.AutoSize = true;
-            this.labelCurrentVersion.Location = new System.Drawing.Point(11, 279);
+            this.labelCurrentVersion.Location = new System.Drawing.Point(11, 339);
             this.labelCurrentVersion.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelCurrentVersion.Name = "labelCurrentVersion";
             this.labelCurrentVersion.Size = new System.Drawing.Size(135, 13);
@@ -200,9 +204,19 @@
             0,
             0,
             0});
+            this.numericUpDownDaysForDetach.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.numericUpDownDaysForDetach.Name = "numericUpDownDaysForDetach";
             this.numericUpDownDaysForDetach.Size = new System.Drawing.Size(45, 20);
             this.numericUpDownDaysForDetach.TabIndex = 13;
+            this.numericUpDownDaysForDetach.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
             this.numericUpDownDaysForDetach.Visible = false;
             // 
             // labelNumberOfDaysForDetach
@@ -233,7 +247,7 @@
             // buttonAddNewIbaStr
             // 
             this.buttonAddNewIbaStr.Enabled = false;
-            this.buttonAddNewIbaStr.Location = new System.Drawing.Point(299, 213);
+            this.buttonAddNewIbaStr.Location = new System.Drawing.Point(299, 241);
             this.buttonAddNewIbaStr.Name = "buttonAddNewIbaStr";
             this.buttonAddNewIbaStr.Size = new System.Drawing.Size(65, 22);
             this.buttonAddNewIbaStr.TabIndex = 15;
@@ -245,7 +259,7 @@
             // checkBoxAddNewIbaStr
             // 
             this.checkBoxAddNewIbaStr.AutoSize = true;
-            this.checkBoxAddNewIbaStr.Location = new System.Drawing.Point(12, 216);
+            this.checkBoxAddNewIbaStr.Location = new System.Drawing.Point(12, 244);
             this.checkBoxAddNewIbaStr.Name = "checkBoxAddNewIbaStr";
             this.checkBoxAddNewIbaStr.Size = new System.Drawing.Size(119, 17);
             this.checkBoxAddNewIbaStr.TabIndex = 16;
@@ -257,18 +271,65 @@
             // textBoxAddNewIbaStr
             // 
             this.textBoxAddNewIbaStr.Enabled = false;
-            this.textBoxAddNewIbaStr.Location = new System.Drawing.Point(168, 214);
+            this.textBoxAddNewIbaStr.Location = new System.Drawing.Point(168, 242);
             this.textBoxAddNewIbaStr.Name = "textBoxAddNewIbaStr";
             this.textBoxAddNewIbaStr.Size = new System.Drawing.Size(126, 20);
             this.textBoxAddNewIbaStr.TabIndex = 17;
             this.textBoxAddNewIbaStr.Visible = false;
             this.textBoxAddNewIbaStr.TextChanged += new System.EventHandler(this.textBoxAddNewIbaStr_TextChanged);
             // 
+            // checkBoxMultipleSeatsDetach
+            // 
+            this.checkBoxMultipleSeatsDetach.AutoSize = true;
+            this.checkBoxMultipleSeatsDetach.Location = new System.Drawing.Point(11, 218);
+            this.checkBoxMultipleSeatsDetach.Name = "checkBoxMultipleSeatsDetach";
+            this.checkBoxMultipleSeatsDetach.Size = new System.Drawing.Size(141, 17);
+            this.checkBoxMultipleSeatsDetach.TabIndex = 18;
+            this.checkBoxMultipleSeatsDetach.Text = "Multiple Seats for Cache";
+            this.checkBoxMultipleSeatsDetach.UseVisualStyleBackColor = true;
+            this.checkBoxMultipleSeatsDetach.Visible = false;
+            this.checkBoxMultipleSeatsDetach.CheckedChanged += new System.EventHandler(this.checkBoxMultipleSeatsDetach_CheckedChanged);
+            // 
+            // numericUpDownMultipleSeatsDetach
+            // 
+            this.numericUpDownMultipleSeatsDetach.Enabled = false;
+            this.numericUpDownMultipleSeatsDetach.Location = new System.Drawing.Point(261, 215);
+            this.numericUpDownMultipleSeatsDetach.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownMultipleSeatsDetach.Name = "numericUpDownMultipleSeatsDetach";
+            this.numericUpDownMultipleSeatsDetach.Size = new System.Drawing.Size(103, 20);
+            this.numericUpDownMultipleSeatsDetach.TabIndex = 19;
+            this.numericUpDownMultipleSeatsDetach.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numericUpDownMultipleSeatsDetach.Visible = false;
+            // 
+            // labelMultipleSeatsDetach
+            // 
+            this.labelMultipleSeatsDetach.AutoSize = true;
+            this.labelMultipleSeatsDetach.Enabled = false;
+            this.labelMultipleSeatsDetach.Location = new System.Drawing.Point(158, 219);
+            this.labelMultipleSeatsDetach.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelMultipleSeatsDetach.Name = "labelMultipleSeatsDetach";
+            this.labelMultipleSeatsDetach.Size = new System.Drawing.Size(87, 13);
+            this.labelMultipleSeatsDetach.TabIndex = 20;
+            this.labelMultipleSeatsDetach.Text = "Number of seats:";
+            this.labelMultipleSeatsDetach.Visible = false;
+            this.labelMultipleSeatsDetach.Click += new System.EventHandler(this.label1_Click);
+            // 
             // FormAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(374, 301);
+            this.ClientSize = new System.Drawing.Size(374, 361);
+            this.Controls.Add(this.labelMultipleSeatsDetach);
+            this.Controls.Add(this.numericUpDownMultipleSeatsDetach);
+            this.Controls.Add(this.checkBoxMultipleSeatsDetach);
             this.Controls.Add(this.textBoxAddNewIbaStr);
             this.Controls.Add(this.checkBoxAddNewIbaStr);
             this.Controls.Add(this.buttonAddNewIbaStr);
@@ -289,14 +350,15 @@
             this.Controls.Add(this.buttonGetUpdateForApp);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
-            this.MaximumSize = new System.Drawing.Size(390, 340);
-            this.MinimumSize = new System.Drawing.Size(390, 340);
+            this.MaximumSize = new System.Drawing.Size(390, 400);
+            this.MinimumSize = new System.Drawing.Size(390, 400);
             this.Name = "FormAbout";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormAbout_FormClosing);
             this.Load += new System.EventHandler(this.FormAbout_Load);
             ((System.ComponentModel.ISupportInitialize)(this.numericUpDownDaysForDetach)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDownMultipleSeatsDetach)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -322,5 +384,8 @@
         private System.Windows.Forms.CheckBox checkBoxAddNewIbaStr;
         private System.Windows.Forms.TextBox textBoxAddNewIbaStr;
         public System.Windows.Forms.TextBox textBoxLicenseInfo;
+        private System.Windows.Forms.CheckBox checkBoxMultipleSeatsDetach;
+        private System.Windows.Forms.NumericUpDown numericUpDownMultipleSeatsDetach;
+        private System.Windows.Forms.Label labelMultipleSeatsDetach;
     }
 }

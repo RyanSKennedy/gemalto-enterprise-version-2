@@ -24,9 +24,11 @@
   <labelLicenseInfo>О лицензии:</labelLicenseInfo>
   <labelCurrentVersion>Текущая версия приложения:</labelCurrentVersion>
   <labelNumberOfDaysForDetach>Время кэширования (в днях):</labelNumberOfDaysForDetach>
+  <labelMultipleSeatsDetach>Кол-во процессов:</labelMultipleSeatsDetach>
   <radioButtonByPK>Через PK:</radioButtonByPK>
   <radioButtonByKeyID>Для существующего ключа:</radioButtonByKeyID>
   <checkBoxAddNewIbaStr>Добавить IBA лицензию:</checkBoxAddNewIbaStr>
+  <checkBoxMultipleSeatsDetach>Кэш N процессов</checkBoxMultipleSeatsDetach>
   <!-- FormConfigInfo -->
   <FormConfigInfo>Настройки</FormConfigInfo>
   <labelCurrentSettings>Используемые настройки:</labelCurrentSettings>

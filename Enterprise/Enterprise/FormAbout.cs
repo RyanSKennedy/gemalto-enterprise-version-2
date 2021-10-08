@@ -537,10 +537,14 @@ namespace Enterprise
 
             string info = null;
             int detachingTime = (Convert.ToInt32(numericUpDownDaysForDetach.Value) * 24 * 60 * 60);
+            int detachingNumberOfSeats = checkBoxMultipleSeatsDetach.Checked ? Convert.ToInt32(numericUpDownMultipleSeatsDetach.Value) : 1;
             if (appSettings.enableLogs) Log.Write("Время кэширования лицензии (в днях): " + numericUpDownDaysForDetach.Value);
+            if (appSettings.enableLogs) Log.Write("Количество Seats для кэширования (в шт.): " + detachingNumberOfSeats.ToString());
             if (appSettings.enableLogs) Log.Write("ID продукта который пробуем кэшировать: " + FormMain.productId);
             if (appSettings.enableLogs) Log.Write("Key ID родительского ключа, из которого пробуем кэшировать лицензию: " + FormMain.curentKeyId);
-            HaspStatus myDetachStatus = Hasp.Transfer(FormMain.standartData.actionForDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString()), FormMain.standartData.scopeForSpecificKeyId.Replace("{KEY_ID}", FormMain.curentKeyId), FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], myId, ref info);
+            string action = checkBoxMultipleSeatsDetach.Checked ? FormMain.standartData.actionForMultipleDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString()).Replace("{NUMBER_OF_SEATS}", detachingNumberOfSeats.ToString()) : FormMain.standartData.actionForDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString());
+
+            HaspStatus myDetachStatus = Hasp.Transfer(action, FormMain.standartData.scopeForSpecificKeyId.Replace("{KEY_ID}", FormMain.curentKeyId), FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], myId, ref info);
 
             if (myDetachStatus == HaspStatus.StatusOk)
             {
@@ -591,7 +595,10 @@ namespace Enterprise
                     }
                     
                     if (appSettings.enableLogs) Log.Write("Родительский ключ с Key ID: " + parentKeyId);
-                    myDetachStatus = Hasp.Transfer(FormMain.standartData.actionForDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString()), FormMain.standartData.scopeForSpecificKeyId.Replace("{KEY_ID}", parentKeyId), FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], myId, ref info);
+                    string actionSecondLevel = checkBoxMultipleSeatsDetach.Checked ? FormMain.standartData.actionForMultipleDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString()).Replace("{NUMBER_OF_SEATS}", detachingNumberOfSeats.ToString()) : FormMain.standartData.actionForDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString());
+
+                    myDetachStatus = Hasp.Transfer(actionSecondLevel, FormMain.standartData.scopeForSpecificKeyId.Replace("{KEY_ID}", parentKeyId), FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], myId, ref info);
+
                     if (appSettings.enableLogs) Log.Write("Результат повторной попытки кэширования лицензии: " + myDetachStatus);
                 }
 
@@ -605,8 +612,9 @@ namespace Enterprise
                         if (appSettings.enableLogs) Log.Write("Возврат ранее кэшированной лицензии прошёл успешно! Код: " + myCancelDetachStatus);
                         if (appSettings.enableLogs) Log.Write("Пробуем повторно выполнить кэширование лицензии...");
                         if (appSettings.enableLogs) Log.Write("Key ID родительского ключа, из которого пробуем кэшировать лицензию: " + parentKeyId);
-                        
-                        myDetachStatus = Hasp.Transfer(FormMain.standartData.actionForDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString()), FormMain.standartData.scopeForSpecificKeyId.Replace("{KEY_ID}", parentKeyId), FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], myId, ref info);
+                        string actionLastLevel = checkBoxMultipleSeatsDetach.Checked ? FormMain.standartData.actionForMultipleDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString()).Replace("{NUMBER_OF_SEATS}", detachingNumberOfSeats.ToString()) : FormMain.standartData.actionForDetach.Replace("{PRODUCT_ID}", FormMain.productId).Replace("{NUMBER_OF_SECONDS}", detachingTime.ToString());
+
+                        myDetachStatus = Hasp.Transfer(actionLastLevel, FormMain.standartData.scopeForSpecificKeyId.Replace("{KEY_ID}", parentKeyId), FormMain.vCode[FormMain.vCode.Keys.Where(k => k.Key == FormMain.batchCode).FirstOrDefault()], myId, ref info);
 
                         if (myDetachStatus == HaspStatus.StatusOk)
                         {
@@ -745,20 +753,26 @@ namespace Enterprise
                 if (labelLicenseInfo.Visible) {
                     labelLicenseInfo.Visible = false;
                     labelNumberOfDaysForDetach.Visible = false;
+                    labelMultipleSeatsDetach.Visible = false;
                     textBoxLicenseInfo.Visible = false;
                     textBoxAddNewIbaStr.Visible = false;
                     numericUpDownDaysForDetach.Visible = false;
+                    numericUpDownMultipleSeatsDetach.Visible = false;
                     checkBoxAddNewIbaStr.Visible = false;
+                    checkBoxMultipleSeatsDetach.Visible = false;
                     buttonDetach.Visible = false;
                     buttonCancelDetach.Visible = false;
                     buttonAddNewIbaStr.Visible = false;
                 } else {
                     labelLicenseInfo.Visible = true;
                     labelNumberOfDaysForDetach.Visible = true;
+                    labelMultipleSeatsDetach.Visible = true;
                     textBoxLicenseInfo.Visible = true;
                     textBoxAddNewIbaStr.Visible = true;
                     numericUpDownDaysForDetach.Visible = true;
+                    numericUpDownMultipleSeatsDetach.Visible = true;
                     checkBoxAddNewIbaStr.Visible = true;
+                    checkBoxMultipleSeatsDetach.Visible = true;
                     buttonDetach.Visible = true;
                     buttonCancelDetach.Visible = true;
                     buttonAddNewIbaStr.Visible = true;
@@ -857,7 +871,7 @@ namespace Enterprise
                     {
                         labelNumberOfDaysForDetach.Enabled = true;
                         numericUpDownDaysForDetach.Enabled = true;
-                        numericUpDownDaysForDetach.Value = 0;
+                        numericUpDownDaysForDetach.Value = 1;
                         buttonDetach.Enabled = true;
                         buttonCancelDetach.Enabled = false;
                     }
@@ -866,8 +880,26 @@ namespace Enterprise
                         FormMain.xmlKeyInfo.Root.Elements("hasp").Where(h => h.Descendants().FirstOrDefault(p => p.Name.LocalName == "id").Value == FormMain.curentKeyId).Descendants().FirstOrDefault(d => d.Name.LocalName == "recipient").Value == "true")
                     {
                         labelNumberOfDaysForDetach.Enabled = false;
+                        labelMultipleSeatsDetach.Enabled = false;
                         numericUpDownDaysForDetach.Enabled = false;
-                        numericUpDownDaysForDetach.Value = 0;
+                        numericUpDownMultipleSeatsDetach.Enabled = false;
+                        numericUpDownDaysForDetach.Value = 1;
+                        numericUpDownMultipleSeatsDetach.Value = 1;
+                        checkBoxMultipleSeatsDetach.Checked = false;
+                        buttonDetach.Enabled = false;
+                        buttonCancelDetach.Enabled = true;
+                    }
+                    else if (FormMain.xmlKeyInfo.Root.Elements("hasp").Where(h => h.Descendants().FirstOrDefault(p => p.Name.LocalName == "id").Value == FormMain.curentKeyId).Descendants().FirstOrDefault(d => d.Name.LocalName == "detachable").Value == "true" &&
+                        FormMain.xmlKeyInfo.Root.Elements("hasp").Where(h => h.Descendants().FirstOrDefault(p => p.Name.LocalName == "id").Value == FormMain.curentKeyId).Descendants().FirstOrDefault(d => d.Name.LocalName == "attached").Value == "true" &&
+                        FormMain.xmlKeyInfo.Root.Elements("hasp").Where(h => h.Descendants().FirstOrDefault(p => p.Name.LocalName == "id").Value == FormMain.curentKeyId).Descendants().FirstOrDefault(d => d.Name.LocalName == "recipient").Value == "true")
+                    {
+                        labelNumberOfDaysForDetach.Enabled = false;
+                        labelMultipleSeatsDetach.Enabled = false;
+                        numericUpDownDaysForDetach.Enabled = false;
+                        numericUpDownMultipleSeatsDetach.Enabled = false;
+                        numericUpDownDaysForDetach.Value = 1;
+                        numericUpDownMultipleSeatsDetach.Value = 1;
+                        checkBoxMultipleSeatsDetach.Checked = false;
                         buttonDetach.Enabled = false;
                         buttonCancelDetach.Enabled = true;
                     }
@@ -891,7 +923,7 @@ namespace Enterprise
                     textBoxLicenseInfo.Text += FormMain.xmlKeyInfo;
                     labelNumberOfDaysForDetach.Enabled = false;
                     numericUpDownDaysForDetach.Enabled = false;
-                    numericUpDownDaysForDetach.Value = 0;
+                    numericUpDownDaysForDetach.Value = 1;
                     buttonDetach.Enabled = false;
                 }
             }
@@ -912,10 +944,26 @@ namespace Enterprise
                 textBoxLicenseInfo.Text = "";
                 labelNumberOfDaysForDetach.Enabled = false;
                 numericUpDownDaysForDetach.Enabled = false;
-                numericUpDownDaysForDetach.Value = 0;
+                numericUpDownDaysForDetach.Value = 1;
                 buttonDetach.Enabled = false;
             }
         }
         #endregion
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void checkBoxMultipleSeatsDetach_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxMultipleSeatsDetach.Checked) {
+                labelMultipleSeatsDetach.Enabled = true;
+                numericUpDownMultipleSeatsDetach.Enabled = true;
+            } else {
+                labelMultipleSeatsDetach.Enabled = false;
+                numericUpDownMultipleSeatsDetach.Enabled = false;
+            }
+        }
     }
 }

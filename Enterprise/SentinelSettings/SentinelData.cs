@@ -135,6 +135,14 @@ namespace SentinelSettings
                                                "   </product>" +
                                                "</detach>";
 
+        public string actionForMultipleDetach = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
+                                               "<network_detach>" +
+                                               "   <product id=\"{PRODUCT_ID}\">" +
+                                               "      <duration>{NUMBER_OF_SECONDS}</duration>" +
+                                               "      <seats>{NUMBER_OF_SEATS}</seats>" + 
+                                               "   </product>" +
+                                               "</network_detach>";
+
         public string actionForCancelDetach = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
                                                      "<cancel>" +
                                                      "   <hasp id=\"{KEY_ID}\"/>" +
